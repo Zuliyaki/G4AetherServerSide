@@ -1,4 +1,4 @@
-package packages;
+package entities;
 
 public class Patient extends User {
 

@@ -1,4 +1,4 @@
-package packages;
+package entities;
 
 public class Treatment {
     private Diagnosis diagnosis;
