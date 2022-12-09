@@ -11,8 +11,7 @@ public class Patient extends User {
     private String mbti;
     private Psychologist psychologist;
     
-    @OneToMany(mappedBy = "patient")
-    private Set <Diagnosis> diagnoses;
+   
 
     /**
      * Empty constructor

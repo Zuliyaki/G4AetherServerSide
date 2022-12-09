@@ -1,6 +1,7 @@
 package entities;
 
 import java.io.Serializable;
+import java.util.Objects;
 import javax.persistence.*;
 
 @Entity
@@ -74,4 +75,41 @@ public class Treatment implements Serializable{
     public EnumDayTime getDayTime() {
         return dayTime;
     }
+    //HASHCODE
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 29 * hash + Objects.hashCode(this.treatmentId);
+        hash = 29 * hash + Objects.hashCode(this.diagnosis);
+        hash = 29 * hash + Objects.hashCode(this.medication);
+        hash = 29 * hash + Objects.hashCode(this.day);
+        hash = 29 * hash + Objects.hashCode(this.dayTime);
+        return hash;
+    }
+    //EQUALS
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Treatment other = (Treatment) obj;
+        if (!Objects.equals(this.treatmentId, other.treatmentId)) {
+            return false;
+        }
+        return true;
+    }
+    // to string
+    @Override
+    public String toString() {
+        return "Treatment{" + "treatmentId=" + treatmentId + ", diagnosis=" + diagnosis + ", medication=" + medication + ", day=" + day + ", dayTime=" + dayTime + '}';
+    }
+    
+    
+    
 }

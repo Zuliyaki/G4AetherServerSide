@@ -1,6 +1,7 @@
 package entities;
 
 import java.io.Serializable;
+import java.util.Objects;
 import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -74,4 +75,45 @@ public class Medication implements Serializable{
     public EnumMedType getTypeOfMedication() {
         return typeOfMedication;
     }
+    
+    //HASHCODE
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 29 * hash + Objects.hashCode(this.id);
+        hash = 29 * hash + Objects.hashCode(this.medicationName);
+        hash = 29 * hash + Objects.hashCode(this.description);
+        hash = 29 * hash + Objects.hashCode(this.typeOfMedication);
+        hash = 29 * hash + Objects.hashCode(this.treatments);
+        return hash;
+    }
+    //EQUALS 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Medication other = (Medication) obj;
+        if (!Objects.equals(this.medicationName, other.medicationName)) {
+            return false;
+        }
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "Medication{" + "id=" + id + ", medicationName=" + medicationName + ", description=" + description + ", typeOfMedication=" + typeOfMedication + ", treatments=" + treatments + '}';
+    }
+    
+        
+    
 }

@@ -3,6 +3,7 @@ package entities;
 import java.io.Serializable;
 
 import java.util.Date;
+import java.util.Objects;
 import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -114,4 +115,46 @@ public class Diagnosis implements Serializable{
     public Boolean getOnTherapy() {
         return onTherapy;
     }
+    //HASCODE
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 71 * hash + Objects.hashCode(this.id);
+        hash = 71 * hash + Objects.hashCode(this.diagnosisDate);
+        hash = 71 * hash + Objects.hashCode(this.lastDiagnosisChangeDate);
+        hash = 71 * hash + Objects.hashCode(this.patient);
+        hash = 71 * hash + Objects.hashCode(this.psychologist);
+        hash = 71 * hash + Objects.hashCode(this.mentalDisease);
+        hash = 71 * hash + Objects.hashCode(this.treatments);
+        hash = 71 * hash + Objects.hashCode(this.onTherapy);
+        return hash;
+    }
+    //EQUALS
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Diagnosis other = (Diagnosis) obj;
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
+        if (!Objects.equals(this.mentalDisease, other.mentalDisease)) {
+            return false;
+        }
+        return true;
+    }
+    //TO STRING
+    @Override
+    public String toString() {
+        return "Diagnosis{" + "id=" + id + ", diagnosisDate=" + diagnosisDate + ", lastDiagnosisChangeDate=" + lastDiagnosisChangeDate + ", patient=" + patient + ", psychologist=" + psychologist + ", mentalDisease=" + mentalDisease + ", treatments=" + treatments + ", onTherapy=" + onTherapy + '}';
+    }
+    
+    
 }
