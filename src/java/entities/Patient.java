@@ -1,14 +1,26 @@
 package entities;
 
-public class Patient extends User {
+import java.util.Set;
+import javax.persistence.*;
 
+
+ @Entity
+public class Patient extends User {
+     
+     
     private String mbti;
     private Psychologist psychologist;
+    
+    @OneToMany(mappedBy = "patient")
+    private Set <Diagnosis> diagnoses;
 
     /**
      * Empty constructor
      */
+   
     public Patient() {
+        
+ 
     }
 
     /**
