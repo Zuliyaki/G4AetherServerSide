@@ -1,9 +1,23 @@
 package entities;
 
-public class Treatment {
+import java.io.Serializable;
+import javax.persistence.*;
+
+@Entity
+@Table(name= "treatment", schema= "aether" )
+public class Treatment implements Serializable{
+    private static final long serialVersionUID = 1L;
+    @EmbeddedId
+    private TreatmentId treatmentId;
+    @ManyToOne
+    @MapsId("diagnosisId")
     private Diagnosis diagnosis;
+    @MapsId("medicationId")
+    @ManyToOne
     private Medication medication;
+    @Enumerated(EnumType.STRING)
     private EnumDay day;
+    @Enumerated(EnumType.STRING)
     private EnumDayTime dayTime;
     
     /**

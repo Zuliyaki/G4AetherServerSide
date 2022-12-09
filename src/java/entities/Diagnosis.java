@@ -3,14 +3,30 @@ package entities;
 import java.io.Serializable;
 
 import java.util.Date;
+import java.util.Set;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
+
+
+@Entity
+@Table(name= "diagnosis", schema= "aether" )
 public class Diagnosis implements Serializable{
+    private static final long serialVersionUID = 1L;
+    @Id
     private String id;
     private Date diagnosisDate;
+    @Temporal(TemporalType.DATE)
     private Date lastDiagnosisChangeDate;
+    @ManyToOne
     private Patient patient;
+    @ManyToOne
     private Psychologist psychologist;
+    @ManyToOne
     private MentalDisease mentalDisease;
+    @OneToMany(mappedBy = "diagnosis")
+    private Set<Treatment> treatments;
+    @NotNull
     private Boolean onTherapy;
     
     /**
