@@ -10,7 +10,6 @@ import javax.validation.constraints.NotNull;
 ;
 
 @Entity
-@Table(name = "psychologist", schema = "aether")
 @DiscriminatorValue("psychologist")
 public class Psychologist extends User{
     

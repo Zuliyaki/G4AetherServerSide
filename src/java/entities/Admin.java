@@ -8,7 +8,6 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "admin", schema = "aether")
 @DiscriminatorValue("admin")
 public class Admin extends User {
     
