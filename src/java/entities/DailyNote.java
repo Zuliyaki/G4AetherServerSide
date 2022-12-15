@@ -48,7 +48,7 @@ public class DailyNote implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * Daily note id
+     * Auto generated daily note id
      */
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
