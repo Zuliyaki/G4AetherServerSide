@@ -6,16 +6,16 @@ import java.time.LocalDate;
 
 import java.util.Date;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Table(name = "user", schema = "aether")
+@DiscriminatorColumn(name = "user_type",
+        discriminatorType = DiscriminatorType.STRING)
+@XmlRootElement
 public class User implements Serializable {
 
     @Id
@@ -31,6 +31,8 @@ public class User implements Serializable {
     private Integer phoneNumber;
     @NotNull
     private String email;
+    @NotNull
+    private EnumUserType userType;
 
     /**
      * Empty constructor

@@ -21,9 +21,12 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 @Entity
 @Table(name = "mentaldisease", schema = "aether")
+@XmlRootElement
 public class MentalDisease implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -56,7 +59,7 @@ public class MentalDisease implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date mdAddDate;
 
-    @OneToMany(mappedBy = "mentaldisease")
+    @OneToMany(mappedBy = "mentalDisease")
     private Set<Diagnosis> diagnosis;
 
     /**
@@ -145,6 +148,7 @@ public class MentalDisease implements Serializable {
         this.mdAddDate = mdAddDate;
     }
 
+    @XmlTransient
     public Set<Diagnosis> getDiagnosis() {
         return diagnosis;
     }

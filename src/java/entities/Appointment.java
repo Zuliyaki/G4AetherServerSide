@@ -13,10 +13,12 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
+import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity
 @Table(name = "appointment", schema = "aether")
 @DiscriminatorValue("appointment")
+@XmlRootElement
 public class Appointment implements Serializable {
 
     private static final long serialVersionUID = 1L;

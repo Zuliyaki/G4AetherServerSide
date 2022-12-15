@@ -72,7 +72,7 @@ public class DailyNote implements Serializable {
      * Enum for the note if was readen or not
      */
     @Enumerated(EnumType.STRING)
-    private Status noteStatus;
+    private EnumReadedStatus noteStatus;
     /**
      * Date of creation of the note
      */
@@ -109,7 +109,7 @@ public class DailyNote implements Serializable {
      * @param dayScore
      * @param noteReadable
      */
-    public DailyNote(Patient patient, Status noteStatus, Date noteDate, Date noteDateLastEdited,
+    public DailyNote(Patient patient, EnumReadedStatus noteStatus, Date noteDate, Date noteDateLastEdited,
             Double dayScore, Boolean noteReadable) {
         this.patient = patient;
         this.noteStatus = noteStatus;
@@ -179,7 +179,7 @@ public class DailyNote implements Serializable {
      *
      * @param noteStatus
      */
-    public void setNoteStatus(Status noteStatus) {
+    public void setNoteStatus(EnumReadedStatus noteStatus) {
         this.noteStatus = noteStatus;
     }
 
@@ -188,7 +188,7 @@ public class DailyNote implements Serializable {
      *
      * @return
      */
-    public Status getNoteStatus() {
+    public EnumReadedStatus getNoteStatus() {
         return noteStatus;
     }
 

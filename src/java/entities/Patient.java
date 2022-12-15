@@ -4,10 +4,12 @@ import java.util.Date;
 import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 @Entity
-@Table(name = "patient", schema = "aether")
 @DiscriminatorValue("patient")
+@XmlRootElement
 public class Patient extends User {
 
     @Column(name = "mbti")
@@ -55,6 +57,7 @@ public class Patient extends User {
         this.mbti = mbti;
     }
 
+    @XmlTransient
     public Set<DailyNote> getDailyNotes() {
         return dailyNotes;
     }
@@ -63,6 +66,7 @@ public class Patient extends User {
         this.dailyNotes = dailyNotes;
     }
 
+    @XmlTransient
     public Set<Diagnosis> getDiagnosises() {
         return diagnosises;
     }
@@ -79,6 +83,7 @@ public class Patient extends User {
         this.psychologist = psychologist;
     }
 
+    @XmlTransient
     public Set<Appointment> getAppointments() {
         return appointments;
     }

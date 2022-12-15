@@ -1,6 +1,6 @@
 package entities;
 
-public enum Status {
+public enum EnumReadedStatus {
     READED,
     NOTREADED;
 }

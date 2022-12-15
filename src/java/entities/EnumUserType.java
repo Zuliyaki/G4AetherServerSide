@@ -3,7 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package services;
+package entities;
+
 /**
- * This package contains the services of the entities
+ *
+ * @author unaib
  */
+public enum EnumUserType {
+    PATIENT,
+    PSYCHOLOGIST,
+    ADMIN
+}

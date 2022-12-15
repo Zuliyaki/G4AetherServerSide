@@ -1,14 +1,14 @@
 package entities;
 
 import java.util.Set;
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 @Entity
 @DiscriminatorValue("admin")
+@XmlRootElement
 public class Admin extends User {
     
     @NotNull
@@ -43,6 +43,7 @@ public class Admin extends User {
         this.admin = admin;
     }
 
+    @XmlTransient
     public Set<MentalDisease> getMentalDisease() {
         return mentalDisease;
     }

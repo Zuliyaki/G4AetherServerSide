@@ -4,9 +4,11 @@ import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity
 @Table(name = "treatment", schema = "aether")
+@XmlRootElement
 public class Treatment implements Serializable {
 
     private static final long serialVersionUID = 1L;
