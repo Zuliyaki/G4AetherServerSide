@@ -12,16 +12,37 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
  * @author unaib
  */
+@NamedQueries({
+    @NamedQuery(
+            name = "getAllNotesByPatient", query = "SELECT dn FROM dailynote dn WHERE dn.user.id=:idUser"
+    ),
+    @NamedQuery(
+            name = "createNewDailyNote", query = "INSERT INTO dailynote VALUES (:patient, :noteText, :noteComment, :noteStatus, :noteDate, :noteDateLastEdited, :dayScore, :noteReadable)"
+    ),
+    @NamedQuery(
+            name = "modifyDailyNote", query = "UPDATE WHERE dn.patient.id=:idPatient and dn.dailynote.id=:idNote"
+    ),
+    @NamedQuery(
+            name = "deleteDailyNote", query = ""
+    ),
+    @NamedQuery(
+            name = "addCommentOnDailyNote", query = ""
+    )
+})
 @Entity
-@Table(name = "dailynotes", schema = "aether")
+@Table(name = "dailynote", schema = "aether")
+@XmlRootElement
 public class DailyNote implements Serializable {
 
     private static final long serialVersionUID = 1L;

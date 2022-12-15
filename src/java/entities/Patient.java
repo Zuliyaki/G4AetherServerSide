@@ -10,11 +10,12 @@ public class Patient extends User {
     /**
      * Collection of all notes
      */
-    @OneToMany(mappedBy="id")
+    @OneToMany(mappedBy = "id")
     private Set<DailyNote> dailyNotes;
 
     //Cosntructor
     /**
+     * 1
      * Empty constructor
      */
     public Patient() {
