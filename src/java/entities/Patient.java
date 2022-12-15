@@ -7,6 +7,7 @@ public class Patient extends User {
 
     private String mbti;
     private Psychologist psychologist;
+    
     /**
      * Collection of all notes
      */
