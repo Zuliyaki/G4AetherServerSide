@@ -15,6 +15,7 @@ import javax.validation.constraints.NotNull;
 public class Diagnosis implements Serializable{
     private static final long serialVersionUID = 1L;
     @Id
+    @NotNull
     private String id;
     private Date diagnosisDate;
     @Temporal(TemporalType.DATE)

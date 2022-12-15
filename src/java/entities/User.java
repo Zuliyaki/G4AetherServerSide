@@ -8,16 +8,27 @@ import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.validation.constraints.NotNull;
 
 @Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+
 public class User implements Serializable {
 
     @Id
+    @NotNull
     private String dni;
+    @NotNull
     private String fullName;
+    @NotNull
     private Date birthDate;
+    @NotNull
     private String password;
+    @NotNull
     private Integer phoneNumber;
+    @NotNull
     private String email;
 
     /**

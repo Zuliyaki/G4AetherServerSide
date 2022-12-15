@@ -3,24 +3,35 @@ package entities;
 import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name= "treatment", schema= "aether" )
-public class Treatment implements Serializable{
+@Table(name = "treatment", schema = "aether")
+public class Treatment implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @EmbeddedId
+    @NotNull
     private TreatmentId treatmentId;
+    
     @ManyToOne
+    @NotNull
     @MapsId("diagnosisId")
     private Diagnosis diagnosis;
-    @MapsId("medicationId")
+
     @ManyToOne
+    @NotNull
+    @MapsId("medicationId")
     private Medication medication;
-    @Enumerated(EnumType.STRING)
-    private EnumDay day;
-    @Enumerated(EnumType.STRING)
-    private EnumDayTime dayTime;
     
+    @Enumerated(EnumType.STRING)
+    @NotNull
+    private EnumDay day;
+    
+    @Enumerated(EnumType.STRING)
+    @NotNull
+    private EnumDayTime dayTime;
+
     /**
      * Empty constructor
      */
@@ -29,7 +40,7 @@ public class Treatment implements Serializable{
     }
 
     /**
-     *Costructor with parameters
+     * Costructor with parameters
      *
      * @param diagnosis
      * @param medication
@@ -75,6 +86,7 @@ public class Treatment implements Serializable{
     public EnumDayTime getDayTime() {
         return dayTime;
     }
+
     //HASHCODE
     @Override
     public int hashCode() {
@@ -86,6 +98,7 @@ public class Treatment implements Serializable{
         hash = 29 * hash + Objects.hashCode(this.dayTime);
         return hash;
     }
+
     //EQUALS
     @Override
     public boolean equals(Object obj) {
@@ -104,12 +117,11 @@ public class Treatment implements Serializable{
         }
         return true;
     }
+
     // to string
     @Override
     public String toString() {
         return "Treatment{" + "treatmentId=" + treatmentId + ", diagnosis=" + diagnosis + ", medication=" + medication + ", day=" + day + ", dayTime=" + dayTime + '}';
     }
-    
-    
-    
+
 }
