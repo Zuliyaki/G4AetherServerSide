@@ -1,14 +1,25 @@
 package entities;
 
-public class Patient extends User {
+import java.util.Set;
+import javax.persistence.*;
 
+
+ @Entity
+public class Patient extends User {
+     
+     
     private String mbti;
     private Psychologist psychologist;
+    
+   
 
     /**
      * Empty constructor
      */
+   
     public Patient() {
+        
+ 
     }
 
     /**
