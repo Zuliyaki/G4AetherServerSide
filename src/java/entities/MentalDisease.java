@@ -14,6 +14,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -29,9 +31,11 @@ public class MentalDisease implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long idMentalDisease;
 
+    @NotNull
     @ManyToOne
-    private Admin admin;
+    private Admin mdadmin;
 
+    @NotNull
     @Enumerated(EnumType.STRING)
     private EnumMentalDisease mdType;
 
@@ -47,6 +51,7 @@ public class MentalDisease implements Serializable {
     @Column(name = "sympton")
     private String mdSympton;
 
+    @NotNull
     @Temporal(TemporalType.TIMESTAMP)
     private Date mdAddDate;
 
@@ -63,7 +68,7 @@ public class MentalDisease implements Serializable {
      * Costructor with parameters
      *
      * @param idMentalDisease
-     * @param admin
+     * @param mdadmin
      * @param mdType
      * @param mdName
      * @param mdDescription
@@ -71,9 +76,9 @@ public class MentalDisease implements Serializable {
      * @param mdAddDate
      * @param diagnosis
      */
-    public MentalDisease(Long idMentalDisease, Admin admin, EnumMentalDisease mdType, String mdName, String mdDescription, String mdSympton, Date mdAddDate, Set<Diagnosis> diagnosis) {
+    public MentalDisease(Long idMentalDisease, Admin mdadmin, EnumMentalDisease mdType, String mdName, String mdDescription, String mdSympton, Date mdAddDate, Set<Diagnosis> diagnosis) {
         this.idMentalDisease = idMentalDisease;
-        this.admin = admin;
+        this.mdadmin = mdadmin;
         this.mdType = mdType;
         this.mdName = mdName;
         this.mdDescription = mdDescription;
@@ -92,11 +97,11 @@ public class MentalDisease implements Serializable {
     }
 
     public Admin getAdmin() {
-        return admin;
+        return mdadmin;
     }
 
     public void setAdmin(Admin admin) {
-        this.admin = admin;
+        this.mdadmin = mdadmin;
     }
 
     public EnumMentalDisease getMdType() {
