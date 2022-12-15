@@ -15,7 +15,8 @@ public class Patient extends User {
      */
     @OneToMany(mappedBy = "id")
     private Set<DailyNote> dailyNotes;
-
+    @OneToMany(mappedBy = "patient")
+    private Set<Diagnosis> diagnosises;
     //Cosntructor
     /**
      * 1
