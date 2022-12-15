@@ -1,10 +1,12 @@
 package entities;
 
 import java.util.Set;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 
+@Entity
 public class Patient extends User {
-
+     
+     
     private String mbti;
     private Psychologist psychologist;
     
@@ -19,7 +21,10 @@ public class Patient extends User {
      * 1
      * Empty constructor
      */
+   
     public Patient() {
+        
+ 
     }
 
     /**
