@@ -15,7 +15,7 @@ public class Admin extends User {
     @NotNull
     private Boolean admin;
 
-    @OneToMany
+    @OneToMany(mappedBy = "mdadmin")
     private Set<MentalDisease> mentalDisease;
 
     /**
