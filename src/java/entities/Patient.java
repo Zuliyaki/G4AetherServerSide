@@ -1,61 +1,58 @@
 package entities;
 
+import java.util.Date;
 import java.util.Set;
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
+@Table(name = "patient", schema = "aether")
+@DiscriminatorValue("patient")
 public class Patient extends User {
-     
-     
+
+    @Column(name = "mbti")
     private String mbti;
-    private Psychologist psychologist;
-    
-    /**
-     * Collection of all notes
-     */
+
     @OneToMany(mappedBy = "id")
     private Set<DailyNote> dailyNotes;
+
     @OneToMany(mappedBy = "patient")
     private Set<Diagnosis> diagnosises;
-    //Cosntructor
-    /**
-     * 1
-     * Empty constructor
-     */
-   
+
+    @NotNull
+    @ManyToOne
+    private Psychologist psychologist;
+
+    @OneToMany(mappedBy = "patient")
+    private Set<Appointment> appointments;
+
     public Patient() {
-        
- 
+        super();
     }
 
-    /**
-     * Costructor with parameters
-     *
-     * @param mbti
-     * @param psychologist
-     * @param dailyNotes
-     */
-    public Patient(String mbti, Psychologist psychologist, Set<DailyNote> dailyNotes) {
+    public Patient(String mbti, Set<DailyNote> dailyNotes, Set<Diagnosis> diagnosises, Psychologist psychologist, Set<Appointment> appointments) {
         this.mbti = mbti;
-        this.psychologist = psychologist;
         this.dailyNotes = dailyNotes;
+        this.diagnosises = diagnosises;
+        this.psychologist = psychologist;
+        this.appointments = appointments;
     }
 
-    //Getters & Setters
-    public void setMbti(String mbti) {
+    public Patient(String mbti, Set<DailyNote> dailyNotes, Set<Diagnosis> diagnosises, Psychologist psychologist, Set<Appointment> appointments, String dni, String fullName, Date birthDate, String password, Integer phoneNumber, String email) {
+        super(dni, fullName, birthDate, password, phoneNumber, email);
         this.mbti = mbti;
+        this.dailyNotes = dailyNotes;
+        this.diagnosises = diagnosises;
+        this.psychologist = psychologist;
+        this.appointments = appointments;
     }
 
     public String getMbti() {
         return mbti;
     }
 
-    public void setPsychologist(Psychologist psychologist) {
-        this.psychologist = psychologist;
-    }
-
-    public Psychologist getPsychologist() {
-        return psychologist;
+    public void setMbti(String mbti) {
+        this.mbti = mbti;
     }
 
     public Set<DailyNote> getDailyNotes() {
@@ -66,4 +63,27 @@ public class Patient extends User {
         this.dailyNotes = dailyNotes;
     }
 
+    public Set<Diagnosis> getDiagnosises() {
+        return diagnosises;
+    }
+
+    public void setDiagnosises(Set<Diagnosis> diagnosises) {
+        this.diagnosises = diagnosises;
+    }
+
+    public Psychologist getPsychologist() {
+        return psychologist;
+    }
+
+    public void setPsychologist(Psychologist psychologist) {
+        this.psychologist = psychologist;
+    }
+
+    public Set<Appointment> getAppointments() {
+        return appointments;
+    }
+
+    public void setAppointments(Set<Appointment> appointments) {
+        this.appointments = appointments;
+    }
 }

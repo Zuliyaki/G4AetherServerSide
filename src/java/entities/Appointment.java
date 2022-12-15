@@ -2,6 +2,7 @@ package entities;
 
 import java.io.Serializable;
 import java.util.Date;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,7 +15,8 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "appointments", schema = "aether")
+@Table(name = "appointment", schema = "aether")
+@DiscriminatorValue("appointment")
 public class Appointment implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -31,7 +33,7 @@ public class Appointment implements Serializable {
     @ManyToOne
     private Patient patient;
 
-    @OneToMany
+    @ManyToOne
     private Psychologist psychologist;
 
     /**
