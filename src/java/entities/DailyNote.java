@@ -3,22 +3,94 @@ package entities;
 import java.io.Serializable;
 
 import java.util.Date;
+import java.util.Objects;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.xml.bind.annotation.XmlRootElement;
 
+/**
+ *
+ * @author unaib
+ */
+@NamedQueries({
+    @NamedQuery(
+            name = "getAllNotesByPatient", query = "SELECT dn FROM dailynote dn WHERE dn.user.id=:idUser"
+    ),
+    @NamedQuery(
+            name = "createNewDailyNote", query = "INSERT INTO dailynote VALUES (:patient, :noteText, :noteComment, :noteStatus, :noteDate, :noteDateLastEdited, :dayScore, :noteReadable)"
+    ),
+    @NamedQuery(
+            name = "modifyDailyNote", query = "UPDATE WHERE dn.patient.id=:idPatient and dn.dailynote.id=:idNote"
+    ),
+    @NamedQuery(
+            name = "deleteDailyNote", query = ""
+    ),
+    @NamedQuery(
+            name = "addCommentOnDailyNote", query = ""
+    )
+})
 @Entity
-//@Table(name = "dailyNotes")
+@Table(name = "dailynote", schema = "aether")
+@XmlRootElement
 public class DailyNote implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
+    /**
+     * Auto generated daily note id
+     */
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+    /**
+     * Patient that wrote the note
+     */
+    @ManyToOne
     private Patient patient;
+    /**
+     * Content of the note
+     */
     private String noteText;
+    /**
+     * Comment the psychologist can do about the note
+     */
     private String noteComment;
+    /**
+     * Enum for the note if was readen or not
+     */
+    @Enumerated(EnumType.STRING)
     private Status noteStatus;
+    /**
+     * Date of creation of the note
+     */
+    @Temporal(TemporalType.TIMESTAMP)
     private Date noteDate;
+    /**
+     * Date of the last time the note was edited
+     */
+    @Temporal(TemporalType.TIMESTAMP)
     private Date noteDateLastEdited;
+    /**
+     * Score of the day [1-100] depending how it was
+     */
     private Double dayScore;
+    /**
+     * Lets the patient choose if the psychologist can read the note
+     */
     private Boolean noteReadable;
 
+    //Costructors
     /**
      * Empty constructor
      */
@@ -36,7 +108,7 @@ public class DailyNote implements Serializable {
      * @param noteReadable
      */
     public DailyNote(Patient patient, Status noteStatus, Date noteDate, Date noteDateLastEdited,
-                      Double dayScore, Boolean noteReadable) {
+            Double dayScore, Boolean noteReadable) {
         this.patient = patient;
         this.noteStatus = noteStatus;
         this.noteDate = noteDate;
@@ -47,6 +119,7 @@ public class DailyNote implements Serializable {
 
     //Getters & Setters
     /**
+     * Sets the patient
      *
      * @param patient
      */
@@ -55,6 +128,7 @@ public class DailyNote implements Serializable {
     }
 
     /**
+     * Get the patient
      *
      * @return
      */
@@ -63,6 +137,7 @@ public class DailyNote implements Serializable {
     }
 
     /**
+     * Sets the note text
      *
      * @param noteText
      */
@@ -71,6 +146,7 @@ public class DailyNote implements Serializable {
     }
 
     /**
+     * Gets the note text
      *
      * @return
      */
@@ -79,22 +155,25 @@ public class DailyNote implements Serializable {
     }
 
     /**
+     * Sets the note coment
      *
      * @param noteComent
      */
     public void setNoteComent(String noteComent) {
         this.noteComment = noteComent;
     }
-    
+
     /**
+     * Gets the note coment
      *
      * @return
      */
     public String getNoteComent() {
         return noteComment;
     }
-    
+
     /**
+     * Sets the note status
      *
      * @param noteStatus
      */
@@ -103,6 +182,7 @@ public class DailyNote implements Serializable {
     }
 
     /**
+     * Gets the note status
      *
      * @return
      */
@@ -111,6 +191,8 @@ public class DailyNote implements Serializable {
     }
 
     /**
+     * Sets the note date
+     *
      * @param noteDate
      */
     public void setNoteDate(Date noteDate) {
@@ -118,14 +200,16 @@ public class DailyNote implements Serializable {
     }
 
     /**
+     * Gets the note date
      *
      * @return
      */
     public Date getNoteDate() {
         return noteDate;
     }
-    
+
     /**
+     * Sets the last time the note was edited
      *
      * @param noteDateLastEdited
      */
@@ -134,14 +218,16 @@ public class DailyNote implements Serializable {
     }
 
     /**
+     * Gets the last time the note was edited
      *
      * @return
      */
     public Date getNoteDateLastEdited() {
         return noteDateLastEdited;
     }
-    
+
     /**
+     * Sets the day score
      *
      * @param dayScore
      */
@@ -150,6 +236,7 @@ public class DailyNote implements Serializable {
     }
 
     /**
+     * Gets the day score
      *
      * @return
      */
@@ -158,6 +245,7 @@ public class DailyNote implements Serializable {
     }
 
     /**
+     * Sets if the note is readable by the psychologist
      *
      * @param noteReadable
      */
@@ -166,10 +254,65 @@ public class DailyNote implements Serializable {
     }
 
     /**
+     * Gets if the note is readable by the psychologist
      *
      * @return
      */
     public Boolean getNoteReadable() {
         return noteReadable;
     }
+
+    /**
+     * Sets the note id
+     *
+     * @param id
+     */
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    /**
+     * Gets the note id
+     *
+     * @return
+     */
+    public Long getId() {
+        return id;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 73 * hash + Objects.hashCode(this.id);
+        hash = 73 * hash + Objects.hashCode(this.noteDate);
+        return hash;
+    }
+
+    /**
+     * Checks if two DailyNotes are the same
+     *
+     * @param obj
+     * @return Return if the two objects are the same
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final DailyNote other = (DailyNote) obj;
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
+        if (!Objects.equals(this.noteDate, other.noteDate)) {
+            return false;
+        }
+        return true;
+    }
+
 }

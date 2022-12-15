@@ -1,6 +1,6 @@
 package entities;
 
-import javax.persistence.Entity;
+import javax.persistence.Entity;;
 
 @Entity
 public class Psychologist extends User{
