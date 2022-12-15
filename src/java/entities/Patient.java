@@ -4,7 +4,8 @@ public class Patient extends User {
 
     private String mbti;
     private Psychologist psychologist;
-
+    
+  
     /**
      * Empty constructor
      */
