@@ -24,6 +24,8 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author unaib
  */
+@Entity
+@Table(name = "dailynote", schema = "aether")
 /*@NamedQueries({
     @NamedQuery(
             name = "getAllNotesByPatient", query = "SELECT dn FROM dailynote dn WHERE dn.user.id=:idUser"
@@ -41,8 +43,6 @@ import javax.xml.bind.annotation.XmlRootElement;
             name = "addCommentOnDailyNote", query = ""
     )
 })*/
-@Entity
-@Table(name = "dailynote", schema = "aether")
 @XmlRootElement
 public class DailyNote implements Serializable {
 

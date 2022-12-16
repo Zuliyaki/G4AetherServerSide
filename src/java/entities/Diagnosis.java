@@ -19,6 +19,7 @@ public class Diagnosis implements Serializable{
     @Id
     @NotNull
     private String id;
+     @Temporal(TemporalType.DATE)
     private Date diagnosisDate;
     @Temporal(TemporalType.DATE)
     private Date lastDiagnosisChangeDate;

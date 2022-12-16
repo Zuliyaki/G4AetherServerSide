@@ -10,7 +10,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
-@MappedSuperclass
+@Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Table(name = "user", schema = "aether")
 @DiscriminatorColumn(name = "user_type",
@@ -19,11 +19,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class User implements Serializable {
 
     @Id
-    @NotNull
     private String dni;
     @NotNull
     private String fullName;
-    @NotNull
+    @Temporal(TemporalType.DATE)
     private Date birthDate;
     @NotNull
     private String password;
@@ -31,7 +30,7 @@ public class User implements Serializable {
     private Integer phoneNumber;
     @NotNull
     private String email;
-    @NotNull
+    @Enumerated(EnumType.STRING)
     private EnumUserType userType;
 
     /**
