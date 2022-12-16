@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity
 @Table(name = "appointment", schema = "aether")
-@DiscriminatorValue("appointment")
+//@DiscriminatorValue("appointment")
 @XmlRootElement
 public class Appointment implements Serializable {
 

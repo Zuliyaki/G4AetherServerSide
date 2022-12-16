@@ -9,7 +9,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 @Entity
 @DiscriminatorValue("psychologist")
-@XmlRootElement
+//@XmlRootElement
 public class Psychologist extends User {
 
     @NotNull
