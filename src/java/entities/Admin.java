@@ -10,7 +10,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @DiscriminatorValue("admin")
 @XmlRootElement
 public class Admin extends User {
-    
+
     @NotNull
     private Boolean admin;
 

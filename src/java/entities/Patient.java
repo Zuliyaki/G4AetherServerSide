@@ -15,7 +15,7 @@ public class Patient extends User {
     @Column(name = "mbti")
     private String mbti;
 
-    @OneToMany(mappedBy = "patient")
+    @OneToMany(mappedBy = "dnPatient")
     private Set<DailyNote> dailyNotes;
     
     @OneToMany(mappedBy = "patient")
