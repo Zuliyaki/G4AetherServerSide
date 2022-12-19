@@ -52,7 +52,7 @@ public class MentalDisease implements Serializable {
     private String mdDescription;
 
     @NotNull
-    @Column(name = "sympton")
+    @Column(name = "symptons")
     private String mdSympton;
 
     @NotNull

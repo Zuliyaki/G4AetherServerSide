@@ -9,17 +9,16 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
-
-
 @Entity
-@Table(name= "diagnosis", schema= "aether" )
+@Table(name = "diagnosis", schema = "aether")
 @XmlRootElement
-public class Diagnosis implements Serializable{
+public class Diagnosis implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @NotNull
     private String id;
-     @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.DATE)
     private Date diagnosisDate;
     @Temporal(TemporalType.DATE)
     private Date lastDiagnosisChangeDate;
@@ -33,7 +32,7 @@ public class Diagnosis implements Serializable{
     private Set<Treatment> treatments;
     @NotNull
     private Boolean onTherapy;
-    
+
     /**
      * Empty constructor
      */
@@ -42,7 +41,7 @@ public class Diagnosis implements Serializable{
     }
 
     /**
-     *Costructor with parameters
+     * Costructor with parameters
      *
      * @param id
      * @param diagnosisDate
@@ -53,7 +52,7 @@ public class Diagnosis implements Serializable{
      * @param onTherapy
      */
     public Diagnosis(String id, Date diagnosisDate, Date lastDiagnosisChangeDate, Patient patient,
-                     Psychologist psychologist, MentalDisease mentalDisease, Boolean onTherapy) {
+            Psychologist psychologist, MentalDisease mentalDisease, Boolean onTherapy) {
         this.id = id;
         this.diagnosisDate = diagnosisDate;
         this.lastDiagnosisChangeDate = lastDiagnosisChangeDate;
@@ -119,6 +118,7 @@ public class Diagnosis implements Serializable{
     public Boolean getOnTherapy() {
         return onTherapy;
     }
+
     //HASCODE
     @Override
     public int hashCode() {
@@ -133,6 +133,7 @@ public class Diagnosis implements Serializable{
         hash = 71 * hash + Objects.hashCode(this.onTherapy);
         return hash;
     }
+
     //EQUALS
     @Override
     public boolean equals(Object obj) {
@@ -154,11 +155,11 @@ public class Diagnosis implements Serializable{
         }
         return true;
     }
+
     //TO STRING
     @Override
     public String toString() {
         return "Diagnosis{" + "id=" + id + ", diagnosisDate=" + diagnosisDate + ", lastDiagnosisChangeDate=" + lastDiagnosisChangeDate + ", patient=" + patient + ", psychologist=" + psychologist + ", mentalDisease=" + mentalDisease + ", treatments=" + treatments + ", onTherapy=" + onTherapy + '}';
     }
-    
-    
+
 }
