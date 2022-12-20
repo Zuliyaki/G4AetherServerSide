@@ -76,12 +76,12 @@ public class DailyNote implements Serializable {
     /**
      * Date of creation of the note
      */
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date dnNoteDate;
     /**
      * Date of the last time the note was edited
      */
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date dnNoteDateLastEdited;
     /**
      * Score of the day [1-100] depending how it was

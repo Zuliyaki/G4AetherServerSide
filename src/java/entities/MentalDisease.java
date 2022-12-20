@@ -56,7 +56,7 @@ public class MentalDisease implements Serializable {
     private String mdSympton;
 
     @NotNull
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date mdAddDate;
 
     @OneToMany(mappedBy = "mentalDisease")
