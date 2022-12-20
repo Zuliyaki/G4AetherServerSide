@@ -76,7 +76,7 @@ public class Appointment implements Serializable {
      * 
      * @param idMentalDisease 
      */
-    public void setidAppointment(Long idMentalDisease) {
+    public void setidAppointment(Long idAppointment) {
         this.idAppointment = idAppointment;
     }
 

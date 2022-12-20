@@ -9,6 +9,23 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity
 @Table(name= "medication", schema= "aether" )
+/*@NamedQueries({
+    @NamedQuery(
+            name = "getAllNotesByPatient", query = "SELECT dn FROM dailynote dn WHERE dn.user.id=:idUser"
+    ),
+    @NamedQuery(
+            name = "createNewDailyNote", query = "INSERT INTO dailynote VALUES (:dnPatient, :dnNoteText, :noteComment, :dnNoteStatus, :dnNoteDate, :dnNoteDateLastEdited, :dnDayScore, :dnNoteReadable)"
+    ),
+    @NamedQuery(
+            name = "modifyDailyNote", query = "UPDATE WHERE dn.dnPatient.id=:idPatient and dn.dailynote.id=:idNote"
+    ),
+    @NamedQuery(
+            name = "deleteDailyNote", query = ""
+    ),
+    @NamedQuery(
+            name = "addCommentOnDailyNote", query = ""
+    )
+*/
 @XmlRootElement
 public class Medication implements Serializable{
     private static final long serialVersionUID = 1L;

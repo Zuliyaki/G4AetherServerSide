@@ -9,6 +9,9 @@ import java.io.Serializable;
 import java.util.Objects;
 import java.util.logging.Logger;
 import javax.persistence.Embeddable;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -19,6 +22,13 @@ public class TreatmentId implements Serializable {
 
     private String diagnosisId;
     private Integer medicationId;
+    
+    @Enumerated(EnumType.STRING)
+    private EnumDay day;
+
+    @Enumerated(EnumType.STRING)
+
+    private EnumDayTime dayTime;
 
     public TreatmentId() {
     }
@@ -27,7 +37,7 @@ public class TreatmentId implements Serializable {
         this.diagnosisId = diagnosisId;
         this.medicationId = medicationId;
     }
-    
+
     //GETTERS AND SETTERS
     public String getDiagnosisId() {
         return diagnosisId;
@@ -44,6 +54,7 @@ public class TreatmentId implements Serializable {
     public void setMedicationId(Integer medicationId) {
         this.medicationId = medicationId;
     }
+
     //HASHCODE
     @Override
     public int hashCode() {
@@ -52,6 +63,7 @@ public class TreatmentId implements Serializable {
         hash = 79 * hash + Objects.hashCode(this.medicationId);
         return hash;
     }
+
     //EQUALS
     @Override
     public boolean equals(Object obj) {
@@ -74,7 +86,4 @@ public class TreatmentId implements Serializable {
         return true;
     }
 
-    
-    
-    
 }
