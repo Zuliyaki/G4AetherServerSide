@@ -26,10 +26,12 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Entity
 @Table(name = "dailynote", schema = "aether")
-/*@NamedQueries({
+@NamedQueries({
     @NamedQuery(
-            name = "getAllNotesByPatient", query = "SELECT dn FROM dailynote dn WHERE dn.user.id=:idUser"
-    ),
+            name = "getAllNotesByPatient", query = "SELECT dn FROM dailynote dn, user us WHERE us.dni=:idUser"
+    )
+})  
+/*,
     @NamedQuery(
             name = "createNewDailyNote", query = "INSERT INTO dailynote VALUES (:dnPatient, :dnNoteText, :noteComment, :dnNoteStatus, :dnNoteDate, :dnNoteDateLastEdited, :dnDayScore, :dnNoteReadable)"
     ),
