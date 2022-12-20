@@ -2,8 +2,6 @@ package entities;
 
 import java.io.Serializable;
 
-import java.time.LocalDate;
-
 import java.util.Date;
 
 import javax.persistence.*;
@@ -30,8 +28,6 @@ public class User implements Serializable {
     private Integer phoneNumber;
     @NotNull
     private String email;
-    @Enumerated(EnumType.STRING)
-    private EnumUserType userType;
 
     /**
      * Empty constructor
