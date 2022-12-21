@@ -20,7 +20,7 @@ import javax.validation.constraints.NotNull;
 @Embeddable
 public class TreatmentId implements Serializable {
 
-    private String diagnosisId;
+    private Integer diagnosisId;
     private Integer medicationId;
     
     @Enumerated(EnumType.STRING)
@@ -29,20 +29,29 @@ public class TreatmentId implements Serializable {
     @Enumerated(EnumType.STRING)
     private EnumDayTime dayTime;
 
+    
+    //CONSTRUCTOR
+
     public TreatmentId() {
     }
-
-    public TreatmentId(String diagnosisId, Integer medicationId) {
+    
+    
+    
+    public TreatmentId(Integer diagnosisId, Integer medicationId, EnumDay day, EnumDayTime dayTime) {
         this.diagnosisId = diagnosisId;
         this.medicationId = medicationId;
+        this.day = day;
+        this.dayTime = dayTime;
     }
 
+  
+
     //GETTERS AND SETTERS
-    public String getDiagnosisId() {
+    public Integer getDiagnosisId() {
         return diagnosisId;
     }
 
-    public void setDiagnosisId(String diagnosisId) {
+    public void setDiagnosisId(Integer diagnosisId) {
         this.diagnosisId = diagnosisId;
     }
 
@@ -52,6 +61,22 @@ public class TreatmentId implements Serializable {
 
     public void setMedicationId(Integer medicationId) {
         this.medicationId = medicationId;
+    }
+
+    public EnumDay getDay() {
+        return day;
+    }
+
+    public void setDay(EnumDay day) {
+        this.day = day;
+    }
+
+    public EnumDayTime getDayTime() {
+        return dayTime;
+    }
+
+    public void setDayTime(EnumDayTime dayTime) {
+        this.dayTime = dayTime;
     }
 
     //HASHCODE

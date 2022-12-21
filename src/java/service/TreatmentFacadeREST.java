@@ -36,7 +36,7 @@ public class TreatmentFacadeREST extends AbstractFacade<Treatment> {
     private TreatmentId getPrimaryKey(PathSegment pathSegment) {
         /*
          * pathSemgent represents a URI path segment and any associated matrix parameters.
-         * URI path part is supposed to be in form of 'somePath;diagnosisId=diagnosisIdValue;medicationId=medicationIdValue'.
+         * URI path part is supposed to be in form of 'somePath;diagnosisId=diagnosisIdValue;medicationId=medicationIdValue;day=dayValue;dayTime=dayTimeValue'.
          * Here 'somePath' is a result of getPath() method invocation and
          * it is ignored in the following code.
          * Matrix parameters are used as field names to build a primary key instance.
@@ -45,11 +45,19 @@ public class TreatmentFacadeREST extends AbstractFacade<Treatment> {
         javax.ws.rs.core.MultivaluedMap<String, String> map = pathSegment.getMatrixParameters();
         java.util.List<String> diagnosisId = map.get("diagnosisId");
         if (diagnosisId != null && !diagnosisId.isEmpty()) {
-            key.setDiagnosisId(diagnosisId.get(0));
+            key.setDiagnosisId(new java.lang.Integer(diagnosisId.get(0)));
         }
         java.util.List<String> medicationId = map.get("medicationId");
         if (medicationId != null && !medicationId.isEmpty()) {
             key.setMedicationId(new java.lang.Integer(medicationId.get(0)));
+        }
+        java.util.List<String> day = map.get("day");
+        if (day != null && !day.isEmpty()) {
+            key.setDay(entities.EnumDay.valueOf(day.get(0)));
+        }
+        java.util.List<String> dayTime = map.get("dayTime");
+        if (dayTime != null && !dayTime.isEmpty()) {
+            key.setDayTime(entities.EnumDayTime.valueOf(dayTime.get(0)));
         }
         return key;
     }

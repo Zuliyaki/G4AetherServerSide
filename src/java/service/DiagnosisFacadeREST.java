@@ -45,20 +45,20 @@ public class DiagnosisFacadeREST extends AbstractFacade<Diagnosis> {
     @PUT
     @Path("{id}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void edit(@PathParam("id") String id, Diagnosis entity) {
+    public void edit(@PathParam("id") Integer id, Diagnosis entity) {
         super.edit(entity);
     }
 
     @DELETE
     @Path("{id}")
-    public void remove(@PathParam("id") String id) {
+    public void remove(@PathParam("id") Integer id) {
         super.remove(super.find(id));
     }
 
     @GET
     @Path("{id}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Diagnosis find(@PathParam("id") String id) {
+    public Diagnosis find(@PathParam("id") Integer id) {
         return super.find(id);
     }
 
