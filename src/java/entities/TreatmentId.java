@@ -20,46 +20,40 @@ import javax.validation.constraints.NotNull;
 @Embeddable
 public class TreatmentId implements Serializable {
 
-    private Integer diagnosisId;
-    private Integer medicationId;
-    
+    private Long diagnosisId;
+    private Long medicationId;
+
     @Enumerated(EnumType.STRING)
     private EnumDay day;
 
     @Enumerated(EnumType.STRING)
     private EnumDayTime dayTime;
 
-    
     //CONSTRUCTOR
-
     public TreatmentId() {
     }
-    
-    
-    
-    public TreatmentId(Integer diagnosisId, Integer medicationId, EnumDay day, EnumDayTime dayTime) {
+
+    public TreatmentId(Long diagnosisId, Long medicationId, EnumDay day, EnumDayTime dayTime) {
         this.diagnosisId = diagnosisId;
         this.medicationId = medicationId;
         this.day = day;
         this.dayTime = dayTime;
     }
 
-  
-
     //GETTERS AND SETTERS
-    public Integer getDiagnosisId() {
+    public Long getDiagnosisId() {
         return diagnosisId;
     }
 
-    public void setDiagnosisId(Integer diagnosisId) {
+    public void setDiagnosisId(Long diagnosisId) {
         this.diagnosisId = diagnosisId;
     }
 
-    public Integer getMedicationId() {
+    public Long getMedicationId() {
         return medicationId;
     }
 
-    public void setMedicationId(Integer medicationId) {
+    public void setMedicationId(Long medicationId) {
         this.medicationId = medicationId;
     }
 

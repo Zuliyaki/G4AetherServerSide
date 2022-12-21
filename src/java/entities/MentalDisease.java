@@ -38,7 +38,6 @@ public class MentalDisease implements Serializable {
     @ManyToOne
     private Admin mdadmin;
 
-    @NotNull
     @Enumerated(EnumType.STRING)
     private EnumMentalDisease mdType;
 

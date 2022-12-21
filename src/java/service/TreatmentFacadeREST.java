@@ -24,7 +24,7 @@ import javax.ws.rs.core.PathSegment;
 
 /**
  *
- * @author 2dam
+ * @author unaib
  */
 @Stateless
 @Path("entities.treatment")
@@ -45,11 +45,11 @@ public class TreatmentFacadeREST extends AbstractFacade<Treatment> {
         javax.ws.rs.core.MultivaluedMap<String, String> map = pathSegment.getMatrixParameters();
         java.util.List<String> diagnosisId = map.get("diagnosisId");
         if (diagnosisId != null && !diagnosisId.isEmpty()) {
-            key.setDiagnosisId(new java.lang.Integer(diagnosisId.get(0)));
+            key.setDiagnosisId(new java.lang.Long(diagnosisId.get(0)));
         }
         java.util.List<String> medicationId = map.get("medicationId");
         if (medicationId != null && !medicationId.isEmpty()) {
-            key.setMedicationId(new java.lang.Integer(medicationId.get(0)));
+            key.setMedicationId(new java.lang.Long(medicationId.get(0)));
         }
         java.util.List<String> day = map.get("day");
         if (day != null && !day.isEmpty()) {

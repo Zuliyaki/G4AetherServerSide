@@ -22,7 +22,7 @@ import javax.ws.rs.core.MediaType;
 
 /**
  *
- * @author 2dam
+ * @author unaib
  */
 @Stateless
 @Path("entities.diagnosis")
@@ -45,20 +45,20 @@ public class DiagnosisFacadeREST extends AbstractFacade<Diagnosis> {
     @PUT
     @Path("{id}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void edit(@PathParam("id") Integer id, Diagnosis entity) {
+    public void edit(@PathParam("id") Long id, Diagnosis entity) {
         super.edit(entity);
     }
 
     @DELETE
     @Path("{id}")
-    public void remove(@PathParam("id") Integer id) {
+    public void remove(@PathParam("id") Long id) {
         super.remove(super.find(id));
     }
 
     @GET
     @Path("{id}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Diagnosis find(@PathParam("id") Integer id) {
+    public Diagnosis find(@PathParam("id") Long id) {
         return super.find(id);
     }
 
