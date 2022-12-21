@@ -30,7 +30,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Medication implements Serializable{
     private static final long serialVersionUID = 1L;
     @Id
-    @NotNull
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     @NotNull

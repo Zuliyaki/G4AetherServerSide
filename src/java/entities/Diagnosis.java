@@ -16,8 +16,8 @@ public class Diagnosis implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @NotNull
-    private String id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer id;
     @Temporal(TemporalType.DATE)
     private Date diagnosisDate;
     @Temporal(TemporalType.DATE)
@@ -51,7 +51,7 @@ public class Diagnosis implements Serializable {
      * @param mentalDisease
      * @param onTherapy
      */
-    public Diagnosis(String id, Date diagnosisDate, Date lastDiagnosisChangeDate, Patient patient,
+    public Diagnosis(Integer id, Date diagnosisDate, Date lastDiagnosisChangeDate, Patient patient,
             Psychologist psychologist, MentalDisease mentalDisease, Boolean onTherapy) {
         this.id = id;
         this.diagnosisDate = diagnosisDate;
@@ -63,11 +63,11 @@ public class Diagnosis implements Serializable {
     }
 
     //Getters & Setters
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
