@@ -26,21 +26,26 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Entity
 @Table(name = "dailynote", schema = "aether")
-/*@NamedQueries({
+@NamedQueries({
     @NamedQuery(
-            name = "getAllNotesByPatient", query = "SELECT dn FROM dailynote dn WHERE dn.user.id=:idUser"
-    ),
+        name = "getAllNotesByPatient", query = "SELECT dn FROM DailyNote dn, User us WHERE us.dni=:idUser"
+    )
+})/*
+    ,
     @NamedQuery(
-            name = "createNewDailyNote", query = "INSERT INTO dailynote VALUES (:dnPatient, :dnNoteText, :noteComment, :dnNoteStatus, :dnNoteDate, :dnNoteDateLastEdited, :dnDayScore, :dnNoteReadable)"
-    ),
+            name = "createNewDailyNote", query = "INSERT INTO DailyNote(dnPatient, dnNoteText, noteComment, dnNoteStatus, dnNoteDate, dnNoteDateLastEdited, dnDayScore, dnNoteReadable) SELECT :dnPatient, :dnNoteText, :noteComment, :dnNoteStatus, :dnNoteDate, :dnNoteDateLastEdited, :dnDayScore, :dnNoteReadable"
+    )
+    ,
     @NamedQuery(
-            name = "modifyDailyNote", query = "UPDATE WHERE dn.dnPatient.id=:idPatient and dn.dailynote.id=:idNote"
-    ),
+            name = "modifyDailyNote", query = "UPDATE DailyNote dn SET dn.dnNoteText WHERE dn.dnPatient.id=:idPatient and dn.dailynote.id=:idNote"
+    )
+    ,
     @NamedQuery(
-            name = "deleteDailyNote", query = ""
-    ),
+            name = "deleteDailyNote", query = "DELETE FROM DailyNote dn WHERE dn.id=:idDailyNote"
+    )
+    ,
     @NamedQuery(
-            name = "addCommentOnDailyNote", query = ""
+            name = "addCommentOnDailyNote", query = "UPDATE DailyNote dn SET dn.dnNoteComment=:noteComent WHERE dn.id=:idDailyNote"
     )
 })*/
 @XmlRootElement
@@ -52,17 +57,18 @@ public class DailyNote implements Serializable {
      * Auto generated daily note id
      */
     @Id
-    @NotNull
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     /**
      * Patient that wrote the note
      */
     @ManyToOne
+    @NotNull
     private Patient dnPatient;
     /**
      * Content of the note
      */
+    @NotNull
     private String dnNoteText;
     /**
      * Comment the psychologist can do about the note
@@ -76,6 +82,7 @@ public class DailyNote implements Serializable {
     /**
      * Date of creation of the note
      */
+    @NotNull
     @Temporal(TemporalType.DATE)
     private Date dnNoteDate;
     /**
@@ -86,6 +93,7 @@ public class DailyNote implements Serializable {
     /**
      * Score of the day [1-100] depending how it was
      */
+    @NotNull
     private Double dnDayScore;
     /**
      * Lets the dnPatient choose if the psychologist can read the note

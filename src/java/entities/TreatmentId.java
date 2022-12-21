@@ -27,7 +27,6 @@ public class TreatmentId implements Serializable {
     private EnumDay day;
 
     @Enumerated(EnumType.STRING)
-
     private EnumDayTime dayTime;
 
     public TreatmentId() {

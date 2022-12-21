@@ -16,7 +16,6 @@ public class Diagnosis implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @NotNull
     private String id;
     @Temporal(TemporalType.DATE)
     private Date diagnosisDate;
