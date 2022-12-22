@@ -24,7 +24,7 @@ import javax.ws.rs.core.PathSegment;
 
 /**
  *
- * @author unaib
+ * @author 2dam
  */
 @Stateless
 @Path("entities.treatment")

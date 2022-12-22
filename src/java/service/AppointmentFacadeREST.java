@@ -22,7 +22,7 @@ import javax.ws.rs.core.MediaType;
 
 /**
  *
- * @author unaib
+ * @author 2dam
  */
 @Stateless
 @Path("entities.appointment")

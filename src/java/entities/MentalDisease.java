@@ -34,26 +34,21 @@ public class MentalDisease implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long idMentalDisease;
 
-    @NotNull
     @ManyToOne
     private Admin mdadmin;
 
     @Enumerated(EnumType.STRING)
     private EnumMentalDisease mdType;
 
-    @NotNull
     @Column(name = "name")
     private String mdName;
 
-    @NotNull
     @Column(name = "description")
     private String mdDescription;
 
-    @NotNull
     @Column(name = "symptons")
     private String mdSympton;
 
-    @NotNull
     @Temporal(TemporalType.DATE)
     private Date mdAddDate;
 
@@ -102,7 +97,7 @@ public class MentalDisease implements Serializable {
         return mdadmin;
     }
 
-    public void setAdmin(Admin admin) {
+    public void setAdmin(Admin mdadmin) {
         this.mdadmin = mdadmin;
     }
 
