@@ -17,7 +17,7 @@ public class Diagnosis implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private Long diagnosisId;
     @Temporal(TemporalType.DATE)
     private Date diagnosisDate;
     @Temporal(TemporalType.DATE)
@@ -52,7 +52,7 @@ public class Diagnosis implements Serializable {
      */
     public Diagnosis(Long id, Date diagnosisDate, Date lastDiagnosisChangeDate, Patient patient,
             Psychologist psychologist, MentalDisease mentalDisease, Boolean onTherapy) {
-        this.id = id;
+        this.diagnosisId = id;
         this.diagnosisDate = diagnosisDate;
         this.lastDiagnosisChangeDate = lastDiagnosisChangeDate;
         this.patient = patient;
@@ -63,11 +63,11 @@ public class Diagnosis implements Serializable {
 
     //Getters & Setters
     public void setId(Long id) {
-        this.id = id;
+        this.diagnosisId = id;
     }
 
     public Long getId() {
-        return id;
+        return diagnosisId;
     }
 
     public void setDiagnosisDate(Date diagnosisDate) {
@@ -122,7 +122,7 @@ public class Diagnosis implements Serializable {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 71 * hash + Objects.hashCode(this.id);
+        hash = 71 * hash + Objects.hashCode(this.diagnosisId);
         hash = 71 * hash + Objects.hashCode(this.diagnosisDate);
         hash = 71 * hash + Objects.hashCode(this.lastDiagnosisChangeDate);
         hash = 71 * hash + Objects.hashCode(this.patient);
@@ -146,7 +146,7 @@ public class Diagnosis implements Serializable {
             return false;
         }
         final Diagnosis other = (Diagnosis) obj;
-        if (!Objects.equals(this.id, other.id)) {
+        if (!Objects.equals(this.diagnosisId, other.diagnosisId)) {
             return false;
         }
         if (!Objects.equals(this.mentalDisease, other.mentalDisease)) {
@@ -158,7 +158,7 @@ public class Diagnosis implements Serializable {
     //TO STRING
     @Override
     public String toString() {
-        return "Diagnosis{" + "id=" + id + ", diagnosisDate=" + diagnosisDate + ", lastDiagnosisChangeDate=" + lastDiagnosisChangeDate + ", patient=" + patient + ", psychologist=" + psychologist + ", mentalDisease=" + mentalDisease + ", treatments=" + treatments + ", onTherapy=" + onTherapy + '}';
+        return "Diagnosis{" + "id=" + diagnosisId + ", diagnosisDate=" + diagnosisDate + ", lastDiagnosisChangeDate=" + lastDiagnosisChangeDate + ", patient=" + patient + ", psychologist=" + psychologist + ", mentalDisease=" + mentalDisease + ", treatments=" + treatments + ", onTherapy=" + onTherapy + '}';
     }
 
 }

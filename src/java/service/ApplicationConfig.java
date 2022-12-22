@@ -41,7 +41,6 @@ public class ApplicationConfig extends Application {
         resources.add(service.PatientFacadeREST.class);
         resources.add(service.PsychologistFacadeREST.class);
         resources.add(service.TreatmentFacadeREST.class);
-        resources.add(service.UserFacadeREST.class);
     }
 
 }

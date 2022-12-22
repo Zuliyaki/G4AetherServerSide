@@ -31,7 +31,7 @@ public class Medication implements Serializable{
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private Long medicationId;
     private String medicationName;
     private String description;
     @Enumerated(EnumType.STRING)
@@ -55,7 +55,7 @@ public class Medication implements Serializable{
      * @param typeOfMedication
      */
     public Medication(Long id, String medicationName, String description, EnumMedType typeOfMedication) {
-        this.id = id;
+        this.medicationId = id;
         this.medicationName = medicationName;
         this.description = description;
         this.typeOfMedication = typeOfMedication;
@@ -63,11 +63,11 @@ public class Medication implements Serializable{
 
     //Getters & Setters
     public void setId(Long id) {
-        this.id = id;
+        this.medicationId = id;
     }
 
     public Long getId() {
-        return id;
+        return medicationId;
     }
 
     public void setMedicationName(String medicationName) {
@@ -98,7 +98,7 @@ public class Medication implements Serializable{
     @Override
     public int hashCode() {
         int hash = 3;
-        hash = 29 * hash + Objects.hashCode(this.id);
+        hash = 29 * hash + Objects.hashCode(this.medicationId);
         hash = 29 * hash + Objects.hashCode(this.medicationName);
         hash = 29 * hash + Objects.hashCode(this.description);
         hash = 29 * hash + Objects.hashCode(this.typeOfMedication);
@@ -121,7 +121,7 @@ public class Medication implements Serializable{
         if (!Objects.equals(this.medicationName, other.medicationName)) {
             return false;
         }
-        if (!Objects.equals(this.id, other.id)) {
+        if (!Objects.equals(this.medicationId, other.medicationId)) {
             return false;
         }
         return true;
@@ -129,7 +129,7 @@ public class Medication implements Serializable{
 
     @Override
     public String toString() {
-        return "Medication{" + "id=" + id + ", medicationName=" + medicationName + ", description=" + description + ", typeOfMedication=" + typeOfMedication + ", treatments=" + treatments + '}';
+        return "Medication{" + "id=" + medicationId + ", medicationName=" + medicationName + ", description=" + description + ", typeOfMedication=" + typeOfMedication + ", treatments=" + treatments + '}';
     }
     
         
