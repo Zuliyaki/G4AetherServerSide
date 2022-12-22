@@ -23,6 +23,11 @@ public class Treatment implements Serializable {
     @MapsId("medicationId")
     private Medication medication;
 
+    public Treatment() {
+    }
+
+    
+    
     public Treatment(TreatmentId treatmentId, Diagnosis diagnosis, Medication medication) {
         this.treatmentId = treatmentId;
         this.diagnosis = diagnosis;
