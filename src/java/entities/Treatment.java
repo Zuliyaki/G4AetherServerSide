@@ -16,12 +16,10 @@ public class Treatment implements Serializable {
     private TreatmentId treatmentId;
     
     @ManyToOne
-    @NotNull
     @MapsId("diagnosisId")
     private Diagnosis diagnosis;
 
     @ManyToOne
-    @NotNull
     @MapsId("medicationId")
     private Medication medication;
 

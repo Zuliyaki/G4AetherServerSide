@@ -32,7 +32,6 @@ public class Medication implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @NotNull
     private String medicationName;
     private String description;
     @Enumerated(EnumType.STRING)

@@ -30,7 +30,6 @@ public class Diagnosis implements Serializable {
     private MentalDisease mentalDisease;
     @OneToMany(mappedBy = "diagnosis")
     private Set<Treatment> treatments;
-    @NotNull
     private Boolean onTherapy;
 
     /**
