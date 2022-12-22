@@ -19,6 +19,7 @@ import javax.validation.constraints.NotNull;
  */
 @Embeddable
 public class TreatmentId implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     private Long diagnosisId;
     private Long medicationId;
@@ -73,16 +74,16 @@ public class TreatmentId implements Serializable {
         this.dayTime = dayTime;
     }
 
-    //HASHCODE
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 79 * hash + Objects.hashCode(this.diagnosisId);
-        hash = 79 * hash + Objects.hashCode(this.medicationId);
+        hash = 29 * hash + Objects.hashCode(this.diagnosisId);
+        hash = 29 * hash + Objects.hashCode(this.medicationId);
+        hash = 29 * hash + Objects.hashCode(this.day);
+        hash = 29 * hash + Objects.hashCode(this.dayTime);
         return hash;
     }
 
-    //EQUALS
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -101,7 +102,15 @@ public class TreatmentId implements Serializable {
         if (!Objects.equals(this.medicationId, other.medicationId)) {
             return false;
         }
+        if (this.day != other.day) {
+            return false;
+        }
+        if (this.dayTime != other.dayTime) {
+            return false;
+        }
         return true;
     }
+
+   
 
 }

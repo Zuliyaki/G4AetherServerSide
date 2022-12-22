@@ -6,9 +6,10 @@ import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 @Entity
-@Table(name= "medication", schema= "aether" )
+@Table(name = "medication", schema = "aether")
 /*@NamedQueries({
     @NamedQuery(
             name = "getAllNotesByPatient", query = "SELECT dn FROM dailynote dn WHERE dn.user.id=:idUser"
@@ -25,9 +26,10 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(
             name = "addCommentOnDailyNote", query = ""
     )
-*/
+ */
 @XmlRootElement
-public class Medication implements Serializable{
+public class Medication implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -37,8 +39,8 @@ public class Medication implements Serializable{
     @Enumerated(EnumType.STRING)
     private EnumMedType typeOfMedication;
     @OneToMany(mappedBy = "medication")
-    private Set <Treatment> treatments;
-    
+    private Set<Treatment> treatments;
+
     /**
      * Empty constructor
      */
@@ -46,92 +48,54 @@ public class Medication implements Serializable{
         super();
     }
 
-    /**
-     * Costructor with parameters
-     *
-     * @param id
-     * @param medicationName
-     * @param description
-     * @param typeOfMedication
-     */
-    public Medication(Long id, String medicationName, String description, EnumMedType typeOfMedication) {
-        this.medicationId = id;
+    public Medication(Long medicationId, String medicationName, String description, EnumMedType typeOfMedication, Set<Treatment> treatments) {
+        this.medicationId = medicationId;
         this.medicationName = medicationName;
         this.description = description;
         this.typeOfMedication = typeOfMedication;
+        this.treatments = treatments;
     }
-
     //Getters & Setters
-    public void setId(Long id) {
-        this.medicationId = id;
-    }
 
-    public Long getId() {
+    public Long getMedicationId() {
         return medicationId;
     }
 
-    public void setMedicationName(String medicationName) {
-        this.medicationName = medicationName;
+    public void setMedicationId(Long medicationId) {
+        this.medicationId = medicationId;
     }
 
     public String getMedicationName() {
         return medicationName;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setMedicationName(String medicationName) {
+        this.medicationName = medicationName;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public void setTypeOfMedication(EnumMedType typeOfMedication) {
-        this.typeOfMedication = typeOfMedication;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public EnumMedType getTypeOfMedication() {
         return typeOfMedication;
     }
-    
-    //HASHCODE
-    @Override
-    public int hashCode() {
-        int hash = 3;
-        hash = 29 * hash + Objects.hashCode(this.medicationId);
-        hash = 29 * hash + Objects.hashCode(this.medicationName);
-        hash = 29 * hash + Objects.hashCode(this.description);
-        hash = 29 * hash + Objects.hashCode(this.typeOfMedication);
-        hash = 29 * hash + Objects.hashCode(this.treatments);
-        return hash;
-    }
-    //EQUALS 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Medication other = (Medication) obj;
-        if (!Objects.equals(this.medicationName, other.medicationName)) {
-            return false;
-        }
-        if (!Objects.equals(this.medicationId, other.medicationId)) {
-            return false;
-        }
-        return true;
+
+    public void setTypeOfMedication(EnumMedType typeOfMedication) {
+        this.typeOfMedication = typeOfMedication;
     }
 
-    @Override
-    public String toString() {
-        return "Medication{" + "id=" + medicationId + ", medicationName=" + medicationName + ", description=" + description + ", typeOfMedication=" + typeOfMedication + ", treatments=" + treatments + '}';
+    @XmlTransient
+    public Set<Treatment> getTreatments() {
+        return treatments;
     }
-    
-        
-    
+
+    public void setTreatments(Set<Treatment> treatments) {
+        this.treatments = treatments;
+    }
+
 }
