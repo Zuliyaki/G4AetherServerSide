@@ -28,26 +28,25 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "dailynote", schema = "aether")
 @NamedQueries({
     @NamedQuery(
-        name = "getAllNotesByPatient", query = "SELECT dn FROM DailyNote dn, User us WHERE us.dni=:idUser"
-    )
-})/*
-    ,
-    @NamedQuery(
-            name = "createNewDailyNote", query = "INSERT INTO DailyNote(dnPatient, dnNoteText, noteComment, dnNoteStatus, dnNoteDate, dnNoteDateLastEdited, dnDayScore, dnNoteReadable) SELECT :dnPatient, :dnNoteText, :noteComment, :dnNoteStatus, :dnNoteDate, :dnNoteDateLastEdited, :dnDayScore, :dnNoteReadable"
+            name = "findAllNotesByPatient", query = "SELECT dn FROM DailyNote dn, User us WHERE us.dni=:idUser"
     )
     ,
     @NamedQuery(
-            name = "modifyDailyNote", query = "UPDATE DailyNote dn SET dn.dnNoteText WHERE dn.dnPatient.id=:idPatient and dn.dailynote.id=:idNote"
+            name = "findPatientNoteByDate", query = "SELECT dn FROM DailyNote dn, User us WHERE us.dni=:idUser and dn.dnNoteDate=:noteDate"
     )
     ,
     @NamedQuery(
-            name = "deleteDailyNote", query = "DELETE FROM DailyNote dn WHERE dn.id=:idDailyNote"
+            name = "findPatientEditedNotes", query = "SELECT dn FROM DailyNote dn, User us WHERE us.dni=:idUser and dn.dnNoteDate!=dn.dnNoteDateLastEdited"
     )
     ,
     @NamedQuery(
-            name = "addCommentOnDailyNote", query = "UPDATE DailyNote dn SET dn.dnNoteComment=:noteComent WHERE dn.id=:idDailyNote"
+            name = "findPatientNoteByNotReadable", query = "SELECT dn FROM DailyNote dn, User us WHERE us.dni=:idUser and dn.dnNoteReadable=false"
     )
-})*/
+    ,
+    @NamedQuery(
+            name = "findPatientNoteByDayScore", query = "SELECT dn FROM DailyNote dn, User us WHERE us.dni=:idUser and dn.dnDayScore>:dayScoreLow and dn.dnDayScore<:dayScoreGreat"
+    )
+})
 @XmlRootElement
 public class DailyNote implements Serializable {
 
