@@ -28,11 +28,19 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "dailynote", schema = "aether")
 @NamedQueries({
     @NamedQuery(
+            name = "findAllNotes", query = "SELECT dn FROM DailyNote dn"
+    )
+    ,
+    @NamedQuery(
+            name = "findDailyNoteById", query = "SELECT dn FROM DailyNote dn WHERE dn.id=:idDailyNote"
+    )
+    ,
+    @NamedQuery(
             name = "findAllNotesByPatient", query = "SELECT dn FROM DailyNote dn, User us WHERE us.dni=:idUser"
     )
     ,
     @NamedQuery(
-            name = "findPatientNoteByDate", query = "SELECT dn FROM DailyNote dn, User us WHERE us.dni=:idUser and dn.dnNoteDate=:noteDate"
+            name = "findPatientNotesByDate", query = "SELECT dn FROM DailyNote dn, User us WHERE us.dni=:idUser and dn.dnNoteDate=:noteDate"
     )
     ,
     @NamedQuery(
