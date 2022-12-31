@@ -11,6 +11,7 @@ import exceptions.CreateException;
 import exceptions.DailyNoteNotFoundException;
 import exceptions.DeleteException;
 import exceptions.UpdateException;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -23,18 +24,22 @@ public interface DailyNoteInterface {
 
     public void updateDailyNote(DailyNote dailyNote) throws UpdateException;
 
-    public void deleteDailyNote(DailyNote dailyNote) throws DeleteException;
+    public void deleteDailyNote(Long idDailyNote) throws DeleteException;
+
+    public DailyNote findDailyNoteById(Long idDailyNote) throws DailyNoteNotFoundException;
 
     public List<DailyNote> findAllDailyNotes() throws DailyNoteNotFoundException;
 
-    public List<DailyNote> findDailyNoteById(Long idDailyNote) throws DailyNoteNotFoundException;
+    public List<DailyNote> findAllDailyNotesByPatient(Patient patient) throws DailyNoteNotFoundException;
 
-    public List<DailyNote> findAllNotesByPatient(Patient patient) throws DailyNoteNotFoundException;
+    public DailyNote findPatientDailyNoteByDate(Patient patient, Date date) throws DailyNoteNotFoundException;
 
-    public List<DailyNote> findPatientNoteByDate(DailyNote dailyNote) throws DailyNoteNotFoundException;
+    public List<DailyNote> findPatientDailyNotesBetweenDates(Patient patient, Date dateLow, Date dateGreat) throws DailyNoteNotFoundException;
 
-    public List<DailyNote> findPatientEditedNotes(DailyNote dailyNote) throws DailyNoteNotFoundException;
+    public List<DailyNote> findPatientEditedDailyNotes(Patient patient) throws DailyNoteNotFoundException;
 
-    public List<DailyNote> findPatientNoteByNotReadable(DailyNote dailyNote) throws DailyNoteNotFoundException;
+    public List<DailyNote> findPatientDailyNotesByNotReadable(Patient patient) throws DailyNoteNotFoundException;
+
+    public List<DailyNote> findPatientDailyNotesByDayScores(Patient patient, Long dayScoreLow, Long dayScoreGreat) throws DailyNoteNotFoundException;
 
 }

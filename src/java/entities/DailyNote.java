@@ -44,15 +44,19 @@ import javax.xml.bind.annotation.XmlRootElement;
     )
     ,
     @NamedQuery(
+            name = "findPatientNotesBetweenDates", query = "SELECT dn FROM DailyNote dn, User us WHERE us.dni=:idUser and dn.dnNoteDate=:noteDate"
+    )
+    ,
+    @NamedQuery(
             name = "findPatientEditedNotes", query = "SELECT dn FROM DailyNote dn, User us WHERE us.dni=:idUser and dn.dnNoteDate!=dn.dnNoteDateLastEdited"
     )
     ,
     @NamedQuery(
-            name = "findPatientNoteByNotReadable", query = "SELECT dn FROM DailyNote dn, User us WHERE us.dni=:idUser and dn.dnNoteReadable=false"
+            name = "findPatientNotesByNotReadable", query = "SELECT dn FROM DailyNote dn, User us WHERE us.dni=:idUser and dn.dnNoteReadable=false"
     )
     ,
     @NamedQuery(
-            name = "findPatientNoteByDayScore", query = "SELECT dn FROM DailyNote dn, User us WHERE us.dni=:idUser and dn.dnDayScore>:dayScoreLow and dn.dnDayScore<:dayScoreGreat"
+            name = "findPatientNotesByDayScores", query = "SELECT dn FROM DailyNote dn, User us WHERE us.dni=:idUser and dn.dnDayScore>:dayScoreLow and dn.dnDayScore<:dayScoreGreat"
     )
 })
 @XmlRootElement
