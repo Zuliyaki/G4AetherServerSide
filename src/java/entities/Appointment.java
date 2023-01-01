@@ -2,7 +2,6 @@ package entities;
 
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -10,7 +9,6 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -19,13 +17,16 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity
 @Table(name = "appointment", schema = "aether")
-/*@DiscriminatorValue("appointment")
 @NamedQueries({
-    @NamedQuery(name = "Appointment.findAll", query = "SELECT a FROM Appointment a"),
-    @Namedquery(name = "Appointment.findByIdAppointment", query = "SELECT a FROM Appointment a WHERE a.idAppointment = :idAppointment"),
-    @NamedQuery(name = "Appointment.findByAppointmentDate", query = "SELECT a FROM Appointment a WHERE a.appointmentDate = :appointmentDate"),
+    @NamedQuery(name = "Appointment.findAll", query = "SELECT a FROM Appointment a")
+    ,
+    @NamedQuery(name = "Appointment.findByIdAppointment", query = "SELECT a FROM Appointment a WHERE a.idAppointment = :idAppointment")
+    ,
+    @NamedQuery(name = "Appointment.findByAppointmentDate", query = "SELECT a FROM Appointment a WHERE a.appointmentDate = :appointmentDate")
+    ,
     @NamedQuery(name = "Appointment.findByAppointmentChange", query = "SELECT a FROM Appointment a WHERE a.appointmentChange = :appointmentChange")
-})*/
+
+})
 @XmlRootElement
 public class Appointment implements Serializable {
 
@@ -150,8 +151,12 @@ public class Appointment implements Serializable {
     public Psychologist getPsychologist() {
         return psychologist;
     }
-    
-    //HasCode
+
+    /**
+     * HasCode
+     *
+     * @return
+     */
     @Override
     public int hashCode() {
         int hash = 0;
@@ -159,6 +164,11 @@ public class Appointment implements Serializable {
         return hash;
     }
 
+    /**
+     *
+     * @param object
+     * @return
+     */
     @Override
     public boolean equals(Object object) {
 
@@ -172,6 +182,10 @@ public class Appointment implements Serializable {
         return true;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public String toString() {
         return "Appointment{" + "idAppointment=" + idAppointment + ", appointmentChange=" + appointmentChange + ", appointmentDate=" + appointmentDate + ", patient=" + patient + ", psychologist=" + psychologist + '}';
