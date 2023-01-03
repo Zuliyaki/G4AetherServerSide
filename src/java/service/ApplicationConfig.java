@@ -38,8 +38,6 @@ public class ApplicationConfig extends Application {
         resources.add(service.DiagnosisFacadeREST.class);
         resources.add(service.MedicationFacadeREST.class);
         resources.add(service.MentalDiseaseFacadeREST.class);
-        resources.add(service.PatientFacadeREST.class);
-        resources.add(service.PsychologistFacadeREST.class);
         resources.add(service.TreatmentFacadeREST.class);
         resources.add(service.UserFacadeREST.class);
     }

@@ -23,7 +23,7 @@ import javax.persistence.EntityManager;
 @Stateless
 public class EJBDailyNoteManager implements DailyNoteInterface {
 
-    private EntityManager entityManager;
+    private EntityManager em;
 
     /**
      * Create a new daily note

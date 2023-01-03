@@ -5,14 +5,25 @@
  */
 package service;
 
+import dailyNotesService.DailyNoteInterface;
 import entities.DailyNote;
+import entities.Patient;
+import exceptions.CreateException;
+import exceptions.DailyNoteNotFoundException;
+import exceptions.DeleteException;
+import exceptions.UpdateException;
+import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -22,70 +33,158 @@ import javax.ws.rs.core.MediaType;
 
 /**
  *
- * @author 2dam
+ * @author unaib
  */
-@Stateless
 @Path("entities.dailynote")
-public class DailyNoteFacadeREST extends AbstractFacade<DailyNote> {
+public class DailyNoteFacadeREST {
 
-    @PersistenceContext(unitName = "G4AetherPU")
-    private EntityManager em;
+    @EJB
+    private DailyNoteInterface dailyNoteEJB;
 
-    public DailyNoteFacadeREST() {
-        super(DailyNote.class);
-    }
+    private Logger LOGGER = Logger.getLogger(DailyNoteFacadeREST.class.getName());
 
     @POST
-    @Override
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void create(DailyNote entity) {
-        super.create(entity);
+        try {
+            dailyNoteEJB.createDailyNote(entity);
+        } catch (CreateException ex) {
+            LOGGER.severe(ex.getMessage());
+            throw new InternalServerErrorException(ex.getMessage());
+        }
     }
 
     @PUT
     @Path("{id}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void edit(@PathParam("id") Long id, DailyNote entity) {
-        super.edit(entity);
+        try {
+            dailyNoteEJB.updateDailyNote(entity);
+        } catch (UpdateException ex) {
+            LOGGER.severe(ex.getMessage());
+            throw new InternalServerErrorException(ex.getMessage());
+        }
     }
 
     @DELETE
     @Path("{id}")
     public void remove(@PathParam("id") Long id) {
-        super.remove(super.find(id));
+        try {
+            dailyNoteEJB.deleteDailyNote(id);
+        } catch (DeleteException ex) {
+            LOGGER.severe(ex.getMessage());
+            throw new InternalServerErrorException(ex.getMessage());
+        }
     }
 
     @GET
     @Path("{id}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public DailyNote find(@PathParam("id") Long id) {
-        return super.find(id);
+    public DailyNote findDailyNoteById(@PathParam("id") Long id) {
+        DailyNote dailyNote = null;
+        try {
+            dailyNote = dailyNoteEJB.findDailyNoteById(id);
+        } catch (DailyNoteNotFoundException ex) {
+            LOGGER.severe(ex.getMessage());
+            throw new InternalServerErrorException(ex.getMessage());
+        }
+        return dailyNote;
     }
 
     @GET
-    @Override
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<DailyNote> findAll() {
-        return super.findAll();
+    public List<DailyNote> findAllDailyNotes() {
+        List<DailyNote> dailyNotes = null;
+        try {
+            dailyNotes = dailyNoteEJB.findAllDailyNotes();
+        } catch (DailyNoteNotFoundException ex) {
+            LOGGER.severe(ex.getMessage());
+            throw new InternalServerErrorException(ex.getMessage());
+        }
+        return dailyNotes;
     }
 
     @GET
     @Path("{from}/{to}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<DailyNote> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
-        return super.findRange(new int[]{from, to});
+    public List<DailyNote> findAllDailyNotesByPatient(@PathParam("patient") Patient patient) {
+        List<DailyNote> dailyNotes = null;
+        try {
+            dailyNotes = dailyNoteEJB.findAllDailyNotesByPatient(patient);
+        } catch (DailyNoteNotFoundException ex) {
+            LOGGER.severe(ex.getMessage());
+            throw new InternalServerErrorException(ex.getMessage());
+        }
+        return dailyNotes;
+    }
+
+    @GET
+    @Path("{from}/{to}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public DailyNote findPatientDailyNoteByDate(@PathParam("patient") Patient patient, @PathParam("date") Date date) {
+        DailyNote dailyNote = null;
+        try {
+            dailyNote = dailyNoteEJB.findPatientDailyNoteByDate(patient, date);
+        } catch (DailyNoteNotFoundException ex) {
+            LOGGER.severe(ex.getMessage());
+            throw new InternalServerErrorException(ex.getMessage());
+        }
+        return dailyNote;
+    }
+
+    @GET
+    @Path("{from}/{to}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<DailyNote> findPatientDailyNotesBetweenDates(@PathParam("patient") Patient patient, @PathParam("dateLow") Date dateLow, @PathParam("dateGreat") Date dateGreat) {
+        List<DailyNote> dailyNotes = null;
+        try {
+            dailyNotes = dailyNoteEJB.findPatientDailyNotesBetweenDates(patient, dateLow, dateGreat);
+        } catch (DailyNoteNotFoundException ex) {
+            LOGGER.severe(ex.getMessage());
+            throw new InternalServerErrorException(ex.getMessage());
+        }
+        return dailyNotes;
+    }
+
+    @GET
+    @Path("{from}/{to}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<DailyNote> findPatientEditedDailyNotes(@PathParam("patient") Patient patient) {
+        List<DailyNote> dailyNotes = null;
+        try {
+            dailyNotes = dailyNoteEJB.findPatientEditedDailyNotes(patient);
+        } catch (DailyNoteNotFoundException ex) {
+            LOGGER.severe(ex.getMessage());
+            throw new InternalServerErrorException(ex.getMessage());
+        }
+        return dailyNotes;
+    }
+
+    @GET
+    @Path("{from}/{to}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<DailyNote> findPatientDailyNotesByNotReadable(@PathParam("patient") Patient patient) {
+        List<DailyNote> dailyNotes = null;
+        try {
+            dailyNotes = dailyNoteEJB.findPatientDailyNotesByNotReadable(patient);
+        } catch (DailyNoteNotFoundException ex) {
+            LOGGER.severe(ex.getMessage());
+            throw new InternalServerErrorException(ex.getMessage());
+        }
+        return dailyNotes;
     }
 
     @GET
     @Path("count")
-    @Produces(MediaType.TEXT_PLAIN)
-    public String countREST() {
-        return String.valueOf(super.count());
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<DailyNote> findPatientDailyNotesByDayScores(@PathParam("patient") Patient patient, @PathParam("dayScoreLow") Long dayScoreLow, @PathParam("dayScoreGreat") Long dayScoreGreat) {
+        List<DailyNote> dailyNotes = null;
+        try {
+            dailyNotes = dailyNoteEJB.findPatientDailyNotesByDayScores(patient, dayScoreLow, dayScoreGreat);
+        } catch (DailyNoteNotFoundException ex) {
+            LOGGER.severe(ex.getMessage());
+            throw new InternalServerErrorException(ex.getMessage());
+        }
+        return dailyNotes;
     }
-
-    @Override
-    protected EntityManager getEntityManager() {
-        return em;
-    }
-    
 }
