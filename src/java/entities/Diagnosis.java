@@ -12,6 +12,27 @@ import javax.xml.bind.annotation.XmlTransient;
 
 @Entity
 @Table(name = "diagnosis", schema = "aether")
+@NamedQueries({
+    @NamedQuery(
+            name = "findAllDiagnosis", query = "SELECT dia FROM Diagnosis dia"
+    )
+    ,
+    @NamedQuery(
+            name = "findDiagnosisById", query = "SELECT dia FROM Diagnosis dia WHERE dia.diagnosisId=:diagnosisId"
+    )
+    ,
+    @NamedQuery(
+            name = "findAllDiagnosisByPatient", query = "SELECT dia FROM Diagnosis dia, User us WHERE us.dni=:idUser"
+    )
+    ,
+    @NamedQuery(
+            name = "findPatientDiagnosisByDate", query = "SELECT dia FROM Diagnosis dia, User us WHERE us.dni=:idUser and dia.diagnosisDate=:diagnosisDate"
+    )
+    ,
+    @NamedQuery(
+            name = "findAllIfPatientOnTeraphy", query = "SELECT dia FROM Diagnosis dia, User us WHERE us.dni=:idUser and dia.onTherapy=true"
+    )
+})
 @XmlRootElement
 public class Diagnosis implements Serializable {
 

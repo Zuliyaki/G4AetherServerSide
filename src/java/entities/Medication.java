@@ -10,23 +10,19 @@ import javax.xml.bind.annotation.XmlTransient;
 
 @Entity
 @Table(name = "medication", schema = "aether")
-/*@NamedQueries({
+@NamedQueries({
     @NamedQuery(
-            name = "getAllNotesByPatient", query = "SELECT dn FROM dailynote dn WHERE dn.user.id=:idUser"
-    ),
-    @NamedQuery(
-            name = "createNewDailyNote", query = "INSERT INTO dailynote VALUES (:dnPatient, :dnNoteText, :noteComment, :dnNoteStatus, :dnNoteDate, :dnNoteDateLastEdited, :dnDayScore, :dnNoteReadable)"
-    ),
-    @NamedQuery(
-            name = "modifyDailyNote", query = "UPDATE WHERE dn.dnPatient.id=:idPatient and dn.dailynote.id=:idNote"
-    ),
-    @NamedQuery(
-            name = "deleteDailyNote", query = ""
-    ),
-    @NamedQuery(
-            name = "addCommentOnDailyNote", query = ""
+            name = "findAllMedication", query = "SELECT med FROM Medication med"
     )
- */
+    ,
+    @NamedQuery(
+            name = "findMedicationById", query = "SELECT med FROM Medication med WHERE med.medicationId=:medicationId"
+    )
+    ,
+    @NamedQuery(
+            name = "findMedicationByName", query = "SELECT med FROM Medication med WHERE med.medicationName=:medicationName"
+    )
+})
 @XmlRootElement
 public class Medication implements Serializable {
 

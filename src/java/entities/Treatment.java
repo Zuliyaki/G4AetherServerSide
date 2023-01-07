@@ -9,6 +9,15 @@ import javax.xml.bind.annotation.XmlTransient;
 
 @Entity
 @Table(name = "treatment", schema = "aether")
+@NamedQueries({
+    @NamedQuery(
+            name = "findAllTreatments", query = "SELECT tr FROM Treatment tr"
+    )
+    ,
+    @NamedQuery(
+            name = "findTreatmentByDiagnosisId", query = "SELECTtr FROM Treatment tr WHERE tr.diagnosis=:diagnosis"
+    )
+})
 @XmlRootElement
 public class Treatment implements Serializable {
 

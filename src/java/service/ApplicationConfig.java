@@ -33,14 +33,11 @@ public class ApplicationConfig extends Application {
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
         resources.add(service.AdminFacadeREST.class);
-        resources.add(service.AppointmentFacadeREST.class);
-        resources.add(service.DailyNoteFacadeREST.class);
         resources.add(service.DiagnosisFacadeREST.class);
         resources.add(service.MedicationFacadeREST.class);
         resources.add(service.MentalDiseaseFacadeREST.class);
         resources.add(service.PatientFacadeREST.class);
         resources.add(service.PsychologistFacadeREST.class);
-        resources.add(service.TreatmentFacadeREST.class);
         resources.add(service.UserFacadeREST.class);
     }
 
