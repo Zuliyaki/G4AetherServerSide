@@ -28,18 +28,18 @@ public interface DailyNoteInterface {
 
     public DailyNote findDailyNoteById(Long idDailyNote) throws DailyNoteNotFoundException;
 
-    public List<DailyNote> findAllDailyNotes() throws DailyNoteNotFoundException;
+    public List<DailyNote> findAllNotes() throws DailyNoteNotFoundException;
 
-    public List<DailyNote> findAllDailyNotesByPatient(Patient patient) throws DailyNoteNotFoundException;
+    public List<DailyNote> findAllNotesByPatient(Patient patient) throws DailyNoteNotFoundException;
 
-    public DailyNote findPatientDailyNoteByDate(Patient patient, Date date) throws DailyNoteNotFoundException;
+    public DailyNote findPatientNoteByDate(Patient patient, Date date) throws DailyNoteNotFoundException;
 
-    public List<DailyNote> findPatientDailyNotesBetweenDates(Patient patient, Date dateLow, Date dateGreat) throws DailyNoteNotFoundException;
+    public List<DailyNote> findPatientNotesBetweenDates(Patient patient, Date dateLow, Date dateGreat) throws DailyNoteNotFoundException;
 
-    public List<DailyNote> findPatientEditedDailyNotes(Patient patient) throws DailyNoteNotFoundException;
+    public List<DailyNote> findPatientEditedNotes(Patient patient) throws DailyNoteNotFoundException;
 
-    public List<DailyNote> findPatientDailyNotesByNotReadable(Patient patient) throws DailyNoteNotFoundException;
+    public List<DailyNote> findPatientNotesByNotReadable(Patient patient) throws DailyNoteNotFoundException;
 
-    public List<DailyNote> findPatientDailyNotesByDayScores(Patient patient, Long dayScoreLow, Long dayScoreGreat) throws DailyNoteNotFoundException;
+    public List<DailyNote> findPatientNotesByDayScores(Patient patient, Long dayScoreLow, Long dayScoreGreat) throws DailyNoteNotFoundException;
 
 }

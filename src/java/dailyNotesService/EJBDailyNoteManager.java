@@ -5,16 +5,17 @@
  */
 package dailyNotesService;
 
-import entities.DailyNote;
-import entities.Patient;
-import exceptions.CreateException;
-import exceptions.DailyNoteNotFoundException;
-import exceptions.DeleteException;
-import exceptions.UpdateException;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import entities.DailyNote;
+import entities.Patient;
+import exceptions.CreateException;
+import exceptions.DeleteException;
+import exceptions.UpdateException;
+import exceptions.DailyNoteNotFoundException;
 
 /**
  *
@@ -23,7 +24,8 @@ import javax.persistence.EntityManager;
 @Stateless
 public class EJBDailyNoteManager implements DailyNoteInterface {
 
-    private EntityManager em;
+    @PersistenceContext(unitName = "AetherPU")
+    private EntityManager entityManager;
 
     /**
      * Create a new daily note
@@ -33,7 +35,11 @@ public class EJBDailyNoteManager implements DailyNoteInterface {
      */
     @Override
     public void createDailyNote(DailyNote dailyNote) throws CreateException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            entityManager.persist(dailyNote);
+        } catch (Exception e) {
+            throw new CreateException(e.getMessage());
+        }
     }
 
     /**
@@ -44,7 +50,14 @@ public class EJBDailyNoteManager implements DailyNoteInterface {
      */
     @Override
     public void updateDailyNote(DailyNote dailyNote) throws UpdateException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            if (!entityManager.contains(dailyNote)) {
+                entityManager.merge(dailyNote);
+            }
+            entityManager.flush();
+        } catch (Exception e) {
+            throw new UpdateException(e.getMessage());
+        }
     }
 
     /**
@@ -55,7 +68,11 @@ public class EJBDailyNoteManager implements DailyNoteInterface {
      */
     @Override
     public void deleteDailyNote(Long idDailyNote) throws DeleteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            entityManager.remove(entityManager.merge(findDailyNoteById(idDailyNote)));
+        } catch (DailyNoteNotFoundException e) {
+            throw new DeleteException(e.getMessage());
+        }
     }
 
     /**
@@ -67,7 +84,13 @@ public class EJBDailyNoteManager implements DailyNoteInterface {
      */
     @Override
     public DailyNote findDailyNoteById(Long idDailyNote) throws DailyNoteNotFoundException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        DailyNote dailyNote;
+        try {
+            dailyNote = (DailyNote) entityManager.createNamedQuery("findDailyNoteById").setParameter("idDailyNote", idDailyNote).getResultList();
+        } catch (Exception e) {
+            throw new DailyNoteNotFoundException(e.getMessage());
+        }
+        return dailyNote;
     }
 
     /**
@@ -77,8 +100,14 @@ public class EJBDailyNoteManager implements DailyNoteInterface {
      * @throws DailyNoteNotFoundException
      */
     @Override
-    public List<DailyNote> findAllDailyNotes() throws DailyNoteNotFoundException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List<DailyNote> findAllNotes() throws DailyNoteNotFoundException {
+        List<DailyNote> dailyNotes;
+        try {
+            dailyNotes = entityManager.createNamedQuery("findAllNotes").getResultList();
+        } catch (Exception e) {
+            throw new DailyNoteNotFoundException(e.getMessage());
+        }
+        return dailyNotes;
     }
 
     /**
@@ -89,8 +118,14 @@ public class EJBDailyNoteManager implements DailyNoteInterface {
      * @throws DailyNoteNotFoundException
      */
     @Override
-    public List<DailyNote> findAllDailyNotesByPatient(Patient patient) throws DailyNoteNotFoundException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List<DailyNote> findAllNotesByPatient(Patient patient) throws DailyNoteNotFoundException {
+        List<DailyNote> dailyNotes;
+        try {
+            dailyNotes = entityManager.createNamedQuery("findAllNotesByPatient").setParameter("idUser", patient.getDni()).getResultList();
+        } catch (Exception e) {
+            throw new DailyNoteNotFoundException(e.getMessage());
+        }
+        return dailyNotes;
     }
 
     /**
@@ -102,8 +137,14 @@ public class EJBDailyNoteManager implements DailyNoteInterface {
      * @throws DailyNoteNotFoundException
      */
     @Override
-    public DailyNote findPatientDailyNoteByDate(Patient patient, Date date) throws DailyNoteNotFoundException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public DailyNote findPatientNoteByDate(Patient patient, Date date) throws DailyNoteNotFoundException {
+        DailyNote dailyNote;
+        try {
+            dailyNote = (DailyNote) entityManager.createNamedQuery("findPatientNoteByDate").setParameter("idUser", patient.getDni()).setParameter("noteDate", date).getResultList();
+        } catch (Exception e) {
+            throw new DailyNoteNotFoundException(e.getMessage());
+        }
+        return dailyNote;
     }
 
     /**
@@ -116,8 +157,14 @@ public class EJBDailyNoteManager implements DailyNoteInterface {
      * @throws DailyNoteNotFoundException
      */
     @Override
-    public List<DailyNote> findPatientDailyNotesBetweenDates(Patient patient, Date dateLow, Date dateGreat) throws DailyNoteNotFoundException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List<DailyNote> findPatientNotesBetweenDates(Patient patient, Date dateLow, Date dateGreat) throws DailyNoteNotFoundException {
+        List<DailyNote> dailyNotes;
+        try {
+            dailyNotes = entityManager.createNamedQuery("findPatientNotesBetweenDates").setParameter("idUser", patient.getDni()).setParameter("noteDateLow", dateLow).setParameter("noteDateGreat", dateGreat).getResultList();
+        } catch (Exception e) {
+            throw new DailyNoteNotFoundException(e.getMessage());
+        }
+        return dailyNotes;
     }
 
     /**
@@ -128,8 +175,14 @@ public class EJBDailyNoteManager implements DailyNoteInterface {
      * @throws DailyNoteNotFoundException
      */
     @Override
-    public List<DailyNote> findPatientEditedDailyNotes(Patient patient) throws DailyNoteNotFoundException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List<DailyNote> findPatientEditedNotes(Patient patient) throws DailyNoteNotFoundException {
+        List<DailyNote> dailyNotes;
+        try {
+            dailyNotes = entityManager.createNamedQuery("findPatientEditedNotes").setParameter("idUser", patient.getDni()).getResultList();
+        } catch (Exception e) {
+            throw new DailyNoteNotFoundException(e.getMessage());
+        }
+        return dailyNotes;
     }
 
     /**
@@ -140,8 +193,14 @@ public class EJBDailyNoteManager implements DailyNoteInterface {
      * @throws DailyNoteNotFoundException
      */
     @Override
-    public List<DailyNote> findPatientDailyNotesByNotReadable(Patient patient) throws DailyNoteNotFoundException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List<DailyNote> findPatientNotesByNotReadable(Patient patient) throws DailyNoteNotFoundException {
+        List<DailyNote> dailyNotes;
+        try {
+            dailyNotes = entityManager.createNamedQuery("findPatientEditedNotes").setParameter("idUser", patient.getDni()).getResultList();
+        } catch (Exception e) {
+            throw new DailyNoteNotFoundException(e.getMessage());
+        }
+        return dailyNotes;
     }
 
     /**
@@ -154,8 +213,14 @@ public class EJBDailyNoteManager implements DailyNoteInterface {
      * @throws DailyNoteNotFoundException
      */
     @Override
-    public List<DailyNote> findPatientDailyNotesByDayScores(Patient patient, Long dayScoreLow, Long dayScoreGreat) throws DailyNoteNotFoundException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List<DailyNote> findPatientNotesByDayScores(Patient patient, Long dayScoreLow, Long dayScoreGreat) throws DailyNoteNotFoundException {
+        List<DailyNote> dailyNotes;
+        try {
+            dailyNotes = entityManager.createNamedQuery("findPatientNotesBetweenDates").setParameter("idUser", patient.getDni()).setParameter("dayScoreLow", dayScoreLow).setParameter("dayScoreGreat", dayScoreGreat).getResultList();
+        } catch (Exception e) {
+            throw new DailyNoteNotFoundException(e.getMessage());
+        }
+        return dailyNotes;
     }
 
 }
