@@ -43,7 +43,7 @@ public class DiagnosisFacadeREST {
 
     @POST
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void create(Diagnosis entity) {
+    public void createDiagnosis(Diagnosis entity) {
         try {
             LOGGER.log(Level.INFO, "Creating a Diagnosis");
             ejb.createDiagnosis(entity);
@@ -56,7 +56,7 @@ public class DiagnosisFacadeREST {
     @PUT
     @Path("{id}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void edit(Diagnosis entity) {
+    public void updateDiagnosis(Diagnosis entity) {
         try {
             LOGGER.log(Level.INFO, "updating diagnosis");
             ejb.updateDiagnosis(entity);
@@ -68,7 +68,7 @@ public class DiagnosisFacadeREST {
 
     @DELETE
     @Path("{id}")
-    public void remove(@PathParam("id") Long id) {
+    public void deleteDiagnosis(@PathParam("id") Long id) {
         try {
             LOGGER.log(Level.INFO, "Deleting Diagnosis {0}", id);
             ejb.deleteDiagnosis(ejb.findDiagnosisById(id));
@@ -81,7 +81,7 @@ public class DiagnosisFacadeREST {
     @GET
     @Path("{id}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Diagnosis find(@PathParam("id") Long id) {
+    public Diagnosis findDiagnosisById(@PathParam("id") Long id) {
         Diagnosis diagnosis = null;
         try {
             LOGGER.log(Level.INFO, "getting diagnosis by id");
@@ -95,7 +95,7 @@ public class DiagnosisFacadeREST {
 
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Diagnosis> findAll() {
+    public List<Diagnosis> findAllDiagnosis() {
          List<Diagnosis> diagnosises = null;
         try {
             LOGGER.log(Level.INFO, "getting diagnosis by id");
@@ -115,12 +115,6 @@ public class DiagnosisFacadeREST {
         return null;
     }
 
-    @GET
-    @Path("count")
-    @Produces(MediaType.TEXT_PLAIN)
-    public String countREST() {
-       // return String.valueOf(super.count());
-       return null;
-    }
+    
 
 }

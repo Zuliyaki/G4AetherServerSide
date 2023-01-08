@@ -77,7 +77,7 @@ public class TreatmentFacadeREST {
 
     @POST
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void create(Treatment entity) {
+    public void createTreatment(Treatment entity) {
         try {
             LOGGER.log(Level.INFO, "creating treatment");
             ejb.createTreatment(entity);
@@ -89,7 +89,7 @@ public class TreatmentFacadeREST {
 
     @PUT
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void edit(Treatment entity) {
+    public void updateTreatment(Treatment entity) {
         try {
             LOGGER.log(Level.INFO, "upadting treatment");
             ejb.updateTreatment(entity);
@@ -104,7 +104,7 @@ public class TreatmentFacadeREST {
  */
     @DELETE
     @Path("{treatmentId}")
-    public void remove(@PathParam("treatmentId") TreatmentId treatmentId) {
+    public void deleteTreatment(@PathParam("treatmentId") TreatmentId treatmentId) {
         Treatment treatment;
         try {
             LOGGER.log(Level.INFO, "deleting treatment");
@@ -118,8 +118,8 @@ public class TreatmentFacadeREST {
      @GET
     @Path("{id}")
     @Produces({MediaType.APPLICATION_XML,MediaType.APPLICATION_JSON})
-    public Treatment find(@PathParam("id") TreatmentId treatmentId) {
-         Treatment treatment;
+    public Treatment findTreatmentByID(@PathParam("id") TreatmentId treatmentId) {
+         Treatment treatment = new Treatment();
         try {
             LOGGER.log(Level.INFO,"get Treatment by ID");
             treatment = ejb.findTreatmentByID(treatmentId.getDiagnosisId(), treatmentId.getMedicationId(), treatmentId.getDay(), treatmentId.getDayTime());
@@ -127,12 +127,8 @@ public class TreatmentFacadeREST {
             LOGGER.severe(ex.getMessage());
            // throw new InternalServerErrorException(ex.getMessage());        
         }
-        return null;
+        return treatment;
     }
-    /**
-     * 
-     * @param id
-     * @return      */
 
     @GET
     @Path("diagnosis/{id}")
@@ -147,6 +143,5 @@ public class TreatmentFacadeREST {
             LOGGER.severe(ex.getMessage());
         }
         return treatmentents;
-
     }
 }
