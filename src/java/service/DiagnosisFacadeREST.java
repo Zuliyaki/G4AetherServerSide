@@ -5,11 +5,16 @@
  */
 package service;
 
+import exceptions.InternalServerErrorException;
+import DiagnosisService.DiagnosisInterface;
 import entities.Diagnosis;
+import exceptions.*;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -26,66 +31,96 @@ import javax.ws.rs.core.MediaType;
  */
 @Stateless
 @Path("entities.diagnosis")
-public class DiagnosisFacadeREST extends AbstractFacade<Diagnosis> {
+public class DiagnosisFacadeREST {
 
-    @PersistenceContext(unitName = "G4AetherPU")
-    private EntityManager em;
+    /**
+     * The EJB interface
+     */
+    @EJB
+    private DiagnosisInterface ejb;
 
-    public DiagnosisFacadeREST() {
-        super(Diagnosis.class);
-    }
+    private Logger LOGGER = Logger.getLogger(DiagnosisFacadeREST.class.getName());
 
     @POST
-    @Override
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void create(Diagnosis entity) {
-        super.create(entity);
+        try {
+            LOGGER.log(Level.INFO, "Creating a Diagnosis");
+            ejb.createDiagnosis(entity);
+        } catch (CreateException ex) {
+            LOGGER.severe(ex.getMessage());
+            // throw new InternalServerErrorException(ex.getMessage());        
+        }
     }
 
     @PUT
     @Path("{id}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void edit(@PathParam("id") Long id, Diagnosis entity) {
-        super.edit(entity);
+    public void edit(Diagnosis entity) {
+        try {
+            LOGGER.log(Level.INFO, "updating diagnosis");
+            ejb.updateDiagnosis(entity);
+        } catch (UpdateException ex) {
+            LOGGER.severe(ex.getMessage());
+            // throw new InternalServerErrorException(ex.getMessage());        
+        }
     }
 
     @DELETE
     @Path("{id}")
     public void remove(@PathParam("id") Long id) {
-        super.remove(super.find(id));
+        try {
+            LOGGER.log(Level.INFO, "Deleting Diagnosis {0}", id);
+            ejb.deleteDiagnosis(ejb.findDiagnosisById(id));
+        } catch (DiagnosisNotFoundException | DeleteException ex) {
+            LOGGER.severe(ex.getMessage());
+            // throw new InternalServerErrorException(ex.getMessage());        
+        }
     }
 
     @GET
     @Path("{id}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Diagnosis find(@PathParam("id") Long id) {
-        return super.find(id);
+        Diagnosis diagnosis = null;
+        try {
+            LOGGER.log(Level.INFO, "getting diagnosis by id");
+            diagnosis = ejb.findDiagnosisById(id);
+        } catch (DiagnosisNotFoundException ex) {
+            LOGGER.severe(ex.getMessage());
+            // throw new InternalServerErrorException(ex.getMessage());        
+        }
+        return diagnosis;
     }
 
     @GET
-    @Override
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public List<Diagnosis> findAll() {
-        return super.findAll();
+         List<Diagnosis> diagnosises = null;
+        try {
+            LOGGER.log(Level.INFO, "getting diagnosis by id");
+            diagnosises = ejb.findAllDiagnosis();
+        } catch (DiagnosisNotFoundException ex) {
+            LOGGER.severe(ex.getMessage());
+            // throw new InternalServerErrorException(ex.getMessage());        
+        }
+        return diagnosises;
     }
 
     @GET
     @Path("{from}/{to}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public List<Diagnosis> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
-        return super.findRange(new int[]{from, to});
+        //return super.findRange(new int[]{from, to});
+        return null;
     }
 
     @GET
     @Path("count")
     @Produces(MediaType.TEXT_PLAIN)
     public String countREST() {
-        return String.valueOf(super.count());
+       // return String.valueOf(super.count());
+       return null;
     }
 
-    @Override
-    protected EntityManager getEntityManager() {
-        return em;
-    }
-    
 }
