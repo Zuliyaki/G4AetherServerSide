@@ -5,10 +5,29 @@
  */
 package TreatmentService;
 
+import entities.Diagnosis;
+import entities.EnumDay;
+import entities.EnumDayTime;
+import exceptions.TreatmentNotFoundException;
+import entities.Treatment;
+import exceptions.CreateException;
+import exceptions.DeleteException;
+import exceptions.UpdateException;
+import java.util.List;
+
 /**
  *
  * @author unaiz
  */
 public interface TreatmentInterface {
-    
+
+    public void createTreatment(Treatment treament) throws CreateException;
+
+    public void updateTreatment(Treatment treament) throws UpdateException;
+
+    public void deleteTreatment(Treatment treament) throws DeleteException;
+
+    public Treatment findTreatmentByID(Long DiagnosisId, Long MedicationId, EnumDay day, EnumDayTime dayTime) throws TreatmentNotFoundException;
+
+    public List <Treatment> findTreatmentsByDiagnosisId(Long DiagnosisId) throws TreatmentNotFoundException;
 }

@@ -5,12 +5,20 @@
  */
 package service;
 
+
+import TreatmentService.TreatmentInterface;
+
 import entities.Treatment;
 import entities.TreatmentId;
+import exceptions.CreateException;
+import exceptions.DeleteException;
+import exceptions.TreatmentNotFoundException;
+import exceptions.UpdateException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -28,10 +36,15 @@ import javax.ws.rs.core.PathSegment;
  */
 @Stateless
 @Path("entities.treatment")
-public class TreatmentFacadeREST extends AbstractFacade<Treatment> {
+public class TreatmentFacadeREST {
 
-    @PersistenceContext(unitName = "G4AetherPU")
-    private EntityManager em;
+    /**
+     * The EJB interface
+     */
+    @EJB
+    private TreatmentInterface ejb;
+
+    private Logger LOGGER = Logger.getLogger(DiagnosisFacadeREST.class.getName());
 
     private TreatmentId getPrimaryKey(PathSegment pathSegment) {
         /*
@@ -62,63 +75,78 @@ public class TreatmentFacadeREST extends AbstractFacade<Treatment> {
         return key;
     }
 
-    public TreatmentFacadeREST() {
-        super(Treatment.class);
-    }
-
     @POST
-    @Override
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void create(Treatment entity) {
-        super.create(entity);
+        try {
+            LOGGER.log(Level.INFO, "creating treatment");
+            ejb.createTreatment(entity);
+        } catch (CreateException ex) {
+            LOGGER.severe(ex.getMessage());
+            //throw new InternalServerErrorException(ex.getMessage());        
+        }
     }
 
     @PUT
-    @Path("{id}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void edit(@PathParam("id") PathSegment id, Treatment entity) {
-        super.edit(entity);
+    public void edit(Treatment entity) {
+        try {
+            LOGGER.log(Level.INFO, "upadting treatment");
+            ejb.updateTreatment(entity);
+        } catch (UpdateException ex) {
+            LOGGER.severe(ex.getMessage());
+            //throw new InternalServerErrorException(ex.getMessage());        
+        }
     }
-
+/**
+ * 
+ * @param treatmentId 
+ */
     @DELETE
+    @Path("{treatmentId}")
+    public void remove(@PathParam("treatmentId") TreatmentId treatmentId) {
+        Treatment treatment;
+        try {
+            LOGGER.log(Level.INFO, "deleting treatment");
+            treatment = ejb.findTreatmentByID(treatmentId.getDiagnosisId(), treatmentId.getMedicationId(), treatmentId.getDay(), treatmentId.getDayTime());
+             ejb.deleteTreatment(treatment);
+        } catch (TreatmentNotFoundException | DeleteException ex) {
+            LOGGER.severe(ex.getMessage());
+            //throw new InternalServerErrorException(ex.getMessage());        
+        }
+    }
+     @GET
     @Path("{id}")
-    public void remove(@PathParam("id") PathSegment id) {
-        entities.TreatmentId key = getPrimaryKey(id);
-        super.remove(super.find(key));
+    @Produces({MediaType.APPLICATION_XML,MediaType.APPLICATION_JSON})
+    public Treatment find(@PathParam("id") TreatmentId treatmentId) {
+         Treatment treatment;
+        try {
+            LOGGER.log(Level.INFO,"get Treatment by ID");
+            treatment = ejb.findTreatmentByID(treatmentId.getDiagnosisId(), treatmentId.getMedicationId(), treatmentId.getDay(), treatmentId.getDayTime());
+        } catch (TreatmentNotFoundException ex) {
+            LOGGER.severe(ex.getMessage());
+           // throw new InternalServerErrorException(ex.getMessage());        
+        }
+        return null;
     }
+    /**
+     * 
+     * @param id
+     * @return      */
 
     @GET
-    @Path("{id}")
+    @Path("diagnosis/{id}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Treatment find(@PathParam("id") PathSegment id) {
-        entities.TreatmentId key = getPrimaryKey(id);
-        return super.find(key);
-    }
+    public List<Treatment> findTreatmentsByDiagnosisId(@PathParam("id") Long id) {
+        List<Treatment> treatmentents = null;
 
-    @GET
-    @Override
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Treatment> findAll() {
-        return super.findAll();
-    }
+        try {
+            LOGGER.log(Level.INFO, "getting all treatments for Diagnosis");
+            treatmentents = ejb.findTreatmentsByDiagnosisId(id);
+        } catch (TreatmentNotFoundException ex) {
+            LOGGER.severe(ex.getMessage());
+        }
+        return treatmentents;
 
-    @GET
-    @Path("{from}/{to}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Treatment> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
-        return super.findRange(new int[]{from, to});
     }
-
-    @GET
-    @Path("count")
-    @Produces(MediaType.TEXT_PLAIN)
-    public String countREST() {
-        return String.valueOf(super.count());
-    }
-
-    @Override
-    protected EntityManager getEntityManager() {
-        return em;
-    }
-    
 }
