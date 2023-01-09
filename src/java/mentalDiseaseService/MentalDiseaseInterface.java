@@ -14,7 +14,7 @@ import java.util.List;
 
 /**
  *
- * @author Usuario
+ * @author Leire
  */
 public interface MentalDiseaseInterface {
 

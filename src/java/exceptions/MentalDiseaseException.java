@@ -7,7 +7,7 @@ package exceptions;
 
 /**
  *
- * @author Usuario
+ * @author Leire
  */
 public class MentalDiseaseException extends Exception {
 

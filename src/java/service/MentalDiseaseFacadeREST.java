@@ -27,7 +27,7 @@ import mentalDiseaseService.MentalDiseaseInterface;
 
 /**
  *
- * @author 2dam
+ * @author Leire
  */
 @Path("entities.mentaldisease")
 public class MentalDiseaseFacadeREST {

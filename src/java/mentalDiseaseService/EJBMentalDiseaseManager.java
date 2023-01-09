@@ -16,7 +16,7 @@ import javax.persistence.PersistenceContext;
 
 /**
  *
- * @author Usuario
+ * @author Leire
  */
 public class EJBMentalDiseaseManager implements MentalDiseaseInterface {
 
