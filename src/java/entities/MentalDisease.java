@@ -26,6 +26,24 @@ import javax.xml.bind.annotation.XmlTransient;
 
 @Entity
 @Table(name = "mentaldisease", schema = "aether")
+@NamedQueries({
+    @NamedQuery(
+            name = "getAllMentalDiseases", query = "SELECT * FROM mentaldisease md"
+    )
+    ,
+    @NamedQuery(
+            name = "getAllMentalDiseasesOrderByName", query = "SELECT * FROM mentaldisease md ORDER BY md.mdname=:name ASC"
+    )
+    , 
+    @NamedQuery(
+            name = "getMentalDiseasesByName", query = "SELECT md FROM mentaldisease md WHERE md.mdname=:name"
+    )
+    , 
+    @NamedQuery(
+            name = "getMentalDiseasesById", query = "SELECT md FROM mentaldisease md WHERE md.idMentalDisease=:idMentalDisease"
+    )
+
+})
 @XmlRootElement
 public class MentalDisease implements Serializable {
 
