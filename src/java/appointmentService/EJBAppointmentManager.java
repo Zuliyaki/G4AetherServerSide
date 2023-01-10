@@ -5,7 +5,6 @@ import exceptions.AppointmentNotFoundException;
 import exceptions.CreateException;
 import exceptions.DeleteException;
 import exceptions.UpdateException;
-import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -21,81 +20,90 @@ public class EJBAppointmentManager implements AppointmentInterface {
     @PersistenceContext(unitName = "G4AetherPU")
     private EntityManager entityManager;
 
+    /**
+     * create new an appointment
+     *
+     * @param appointment to save
+     * @throws CreateException
+     */
     @Override
-    public Appointment createAppointment(Appointment appointment) throws CreateException {
+    public void createAppointment(Appointment appointment) throws CreateException {
         try {
             entityManager.persist(appointment);
-            entityManager.flush();
-            return appointment;
         } catch (Exception e) {
             throw new CreateException("Error creating appointment: " + e.getMessage());
         }
     }
 
+    /**
+     * update an appointment
+     *
+     * @param appointment to update
+     * @throws UpdateException
+     */
     @Override
-    public Appointment findAppointmentById(Long idAppointment) throws AppointmentNotFoundException {
+    public void updateAppointment(Appointment appointment) throws UpdateException {
+
         try {
-            Appointment appointment = entityManager.find(Appointment.class, idAppointment);
-            if (appointment == null) {
-                throw new AppointmentNotFoundException("Appointment with id " + idAppointment + " not found");
+            if (!entityManager.contains(appointment)) {
+                entityManager.merge(appointment);
             }
-            return appointment;
-        } catch (AppointmentNotFoundException e) {
-            throw new AppointmentNotFoundException("Error retrieving appointment: " + e.getMessage());
-        }
-
-    }
-
-    @Override
-    public Appointment findByAppointmentDate(Date appointmentDate) throws AppointmentNotFoundException {
-        try {
-            Appointment appointment = entityManager.find(Appointment.class, appointmentDate);
-            if (appointment == null) {
-                throw new AppointmentNotFoundException("Appointment with appointmentDate " + appointmentDate + " not found");
-            }
-            return appointment;
-        } catch (AppointmentNotFoundException e) {
-            throw new AppointmentNotFoundException("Error retrieving appointment: " + e.getMessage());
-        }
-    }
-
-    @Override
-    public List<Appointment> findAllAppointments() throws AppointmentNotFoundException {
-        try {
-            List<Appointment> appointments = entityManager.createQuery("SELECT a FROM Appointment a").getResultList();
-            if (appointments == null) {
-                throw new AppointmentNotFoundException("No appointments found");
-            }
-            return appointments;
-        } catch (AppointmentNotFoundException e) {
-            throw new AppointmentNotFoundException("Error retrieving appointments: " + e.getMessage());
-        }
-
-    }
-
-    @Override
-    public Appointment updateAppointment(Appointment appointment) throws UpdateException {
-        try {
-            entityManager.merge(appointment);
             entityManager.flush();
-            return appointment;
         } catch (Exception e) {
             throw new UpdateException("Error updating appointment: " + e.getMessage());
         }
-
     }
 
+    /**
+     * Delete an appointment by idAppointment
+     *
+     * @param idAppointment to delete
+     * @throws DeleteException
+     */
     @Override
     public void deleteAppointment(Long idAppointment) throws DeleteException {
+
         try {
-            Appointment appointment = entityManager.find(Appointment.class, idAppointment);
-            if (appointment == null) {
-                throw new DeleteException("Appointment with id " + idAppointment + " not found");
-            }
-            entityManager.remove(appointment);
-            entityManager.flush();
-        } catch (DeleteException e) {
+            entityManager.remove(entityManager.merge(findAppointmentById(idAppointment)));
+        } catch (AppointmentNotFoundException e) {
             throw new DeleteException("Error deleting appointment: " + e.getMessage());
         }
+    }
+
+    /**
+     * Find a appointment by idAppointment
+     *
+     * @param idAppointment Id of the appointment to search for
+     * @return Selected appointment
+     * @throws AppointmentNotFoundException
+     */
+    @Override
+    public Appointment findAppointmentById(Long idAppointment) throws AppointmentNotFoundException {
+
+        Appointment appointment;
+        try {
+            appointment = (Appointment) entityManager.createNamedQuery("findDailyNoteById").setParameter("idAppointment", idAppointment).getResultList();
+        } catch (Exception e) {
+            throw new AppointmentNotFoundException("Error retrieving appointment: " + e.getMessage());
+        }
+        return appointment;
+    }
+
+    /**
+     * find all appointments
+     *
+     * @return list of all appointments
+     * @throws AppointmentNotFoundException
+     */
+    @Override
+    public List<Appointment> findAllAppointments() throws AppointmentNotFoundException {
+
+        List<Appointment> appointments;
+        try {
+            appointments = entityManager.createNamedQuery("findAllAppointments").getResultList();
+        } catch (Exception e) {
+            throw new AppointmentNotFoundException("Error retrieving appointments: " + e.getMessage());
+        }
+        return appointments;
     }
 }

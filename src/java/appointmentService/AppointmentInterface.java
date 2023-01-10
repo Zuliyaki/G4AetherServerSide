@@ -6,7 +6,6 @@ import exceptions.AppointmentNotFoundException;
 import exceptions.CreateException;
 import exceptions.DeleteException;
 import exceptions.UpdateException;
-import java.util.Date;
 
 /**
  *
@@ -14,15 +13,13 @@ import java.util.Date;
  */
 public interface AppointmentInterface {
 
-    public Appointment createAppointment(Appointment appointment) throws CreateException;
+    public void createAppointment(Appointment appointment) throws CreateException;
+
+    public void updateAppointment(Appointment appointment) throws UpdateException;
+
+    public void deleteAppointment(Long idAppointment) throws DeleteException;
 
     public Appointment findAppointmentById(Long idAppointment) throws AppointmentNotFoundException;
 
-    public Appointment findByAppointmentDate(Date appointmentDate) throws AppointmentNotFoundException;
-
     public List<Appointment> findAllAppointments() throws AppointmentNotFoundException;
-
-    public Appointment updateAppointment(Appointment appointment) throws UpdateException;
-
-    public void deleteAppointment(Long idAppointment) throws DeleteException;
 }

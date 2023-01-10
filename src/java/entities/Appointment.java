@@ -16,14 +16,16 @@ import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity
+
 @Table(name = "appointment", schema = "aether")
+
 @NamedQueries({
+    
     @NamedQuery(name = "findAllAppointments", query = "SELECT a FROM Appointment a")
     ,
     @NamedQuery(name = "findAppointmentById", query = "SELECT a FROM Appointment a WHERE a.idAppointment = :idAppointment")
-    ,        
-    @NamedQuery(name = "findByAppointmentDate", query = "SELECT a FROM Appointment a WHERE a.appointmentDate = :appointmentDate")
 })
+
 @XmlRootElement
 public class Appointment implements Serializable {
 
