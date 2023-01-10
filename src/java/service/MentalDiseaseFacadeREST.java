@@ -84,12 +84,12 @@ public class MentalDiseaseFacadeREST {
     }
 
     @GET
-    @Path("getAllByName/{name}")
+    @Path("getAllByName")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<MentalDisease> getAllMentalDiseasesOrderByName(@PathParam("name") String mdname) {
+    public List<MentalDisease> getAllMentalDiseasesOrderByName() {
         List<MentalDisease> mentalDiseases = null;
         try {
-            mentalDiseases = mentalDiseaseEJB.getAllMentalDiseasesOrderByName(mdname);
+            mentalDiseases = mentalDiseaseEJB.getAllMentalDiseasesOrderByName();
         } catch (MentalDiseaseException ex) {
             LOGGER.severe(ex.getMessage());
             throw new InternalServerErrorException(ex.getMessage());
@@ -98,12 +98,12 @@ public class MentalDiseaseFacadeREST {
     }
 
     @GET
-    @Path("{name}")
+    @Path("getByName/{name}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public MentalDisease getMentalDiseasesByName(@PathParam("name") String mdname) {
+    public MentalDisease getMentalDiseasesByName(@PathParam("name") String mdName) {
         MentalDisease mentalDisease = null;
         try {
-            mentalDisease = mentalDiseaseEJB.getMentalDiseasesByName(mdname);
+            mentalDisease = mentalDiseaseEJB.getMentalDiseasesByName(mdName);
         } catch (MentalDiseaseException ex) {
             LOGGER.severe(ex.getMessage());
             throw new InternalServerErrorException(ex.getMessage());

@@ -11,6 +11,7 @@ import exceptions.DeleteException;
 import exceptions.UpdateException;
 import exceptions.MentalDiseaseException;
 import java.util.List;
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -18,9 +19,10 @@ import javax.persistence.PersistenceContext;
  *
  * @author Leire
  */
+@Stateless
 public class EJBMentalDiseaseManager implements MentalDiseaseInterface {
 
-    @PersistenceContext(unitName = "AetherPU")
+    @PersistenceContext(unitName = "G4AetherPU")
     private EntityManager entityManager;
 
     /**
@@ -95,10 +97,10 @@ public class EJBMentalDiseaseManager implements MentalDiseaseInterface {
      * @throws MentalDiseaseException
      */
     @Override
-    public List<MentalDisease> getAllMentalDiseasesOrderByName(String mdname) throws MentalDiseaseException {
+    public List<MentalDisease> getAllMentalDiseasesOrderByName() throws MentalDiseaseException {
         List<MentalDisease> mentalDiseases;
         try {
-            mentalDiseases = entityManager.createNamedQuery("getAllMentalDiseasesOrderByName").setParameter("name", mdname).getResultList();
+            mentalDiseases = entityManager.createNamedQuery("getAllMentalDiseasesOrderByName").getResultList();
         } catch (Exception e) {
             throw new MentalDiseaseException(e.getMessage());
         }
@@ -116,7 +118,7 @@ public class EJBMentalDiseaseManager implements MentalDiseaseInterface {
     public MentalDisease getMentalDiseasesByName(String mdName) throws MentalDiseaseException {
         MentalDisease mentalDisease;
         try {
-            mentalDisease = (MentalDisease) entityManager.createNamedQuery("getMentalDiseasesByName").setParameter("mdName", mdName).getResultList();
+            mentalDisease = (MentalDisease) entityManager.createNamedQuery("getMentalDiseasesByName").setParameter("mdName", mdName).getSingleResult();
         } catch (Exception e) {
             throw new MentalDiseaseException(e.getMessage());
         }
@@ -134,7 +136,7 @@ public class EJBMentalDiseaseManager implements MentalDiseaseInterface {
     public MentalDisease getMentalDiseasesById(Long idMentalDisease) throws MentalDiseaseException {
         MentalDisease mentalDisease;
         try {
-            mentalDisease = (MentalDisease) entityManager.createNamedQuery("getMentalDiseasesById").setParameter("idMentalDisease", idMentalDisease).getResultList();
+            mentalDisease = (MentalDisease) entityManager.find(MentalDisease.class, idMentalDisease);
         } catch (Exception e) {
             throw new MentalDiseaseException(e.getMessage());
         }
