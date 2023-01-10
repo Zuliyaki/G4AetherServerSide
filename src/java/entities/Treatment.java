@@ -14,7 +14,7 @@ public class Treatment implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     private TreatmentId treatmentId;
-    
+
     @ManyToOne
     @NotNull
     @MapsId("diagnosisId")
@@ -60,6 +60,9 @@ public class Treatment implements Serializable {
     /**
      * Empty constructor
      */
-  
+    public Treatment() {
+        super();
+    }
+
 
 }

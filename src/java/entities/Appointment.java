@@ -21,6 +21,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "findAll", query = "SELECT a FROM Appointment a")
     ,
     @NamedQuery(name = "findAppointmentById", query = "SELECT a FROM Appointment a WHERE a.idAppointment = :idAppointment")
+    ,        
+    @NamedQuery(name = "findByAppointmentDate", query = "SELECT a FROM Appointment a WHERE a.appointmentDate = :appointmentDate")
 })
 @XmlRootElement
 public class Appointment implements Serializable {
@@ -75,10 +77,10 @@ public class Appointment implements Serializable {
         return idAppointment;
     }
 
-   /**
-    * 
-    * @param idAppointment 
-    */
+    /**
+     *
+     * @param idAppointment
+     */
     public void setidAppointment(Long idAppointment) {
         this.idAppointment = idAppointment;
     }

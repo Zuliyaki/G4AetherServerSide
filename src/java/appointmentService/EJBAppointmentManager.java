@@ -5,6 +5,7 @@ import exceptions.AppointmentNotFoundException;
 import exceptions.CreateException;
 import exceptions.DeleteException;
 import exceptions.UpdateException;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -43,6 +44,19 @@ public class EJBAppointmentManager implements AppointmentInterface {
             throw new AppointmentNotFoundException("Error retrieving appointment: " + e.getMessage());
         }
 
+    }
+
+    @Override
+    public Appointment findByAppointmentDate(Date appointmentDate) throws AppointmentNotFoundException {
+        try {
+            Appointment appointment = entityManager.find(Appointment.class, appointmentDate);
+            if (appointment == null) {
+                throw new AppointmentNotFoundException("Appointment with appointmentDate " + appointmentDate + " not found");
+            }
+            return appointment;
+        } catch (AppointmentNotFoundException e) {
+            throw new AppointmentNotFoundException("Error retrieving appointment: " + e.getMessage());
+        }
     }
 
     @Override
