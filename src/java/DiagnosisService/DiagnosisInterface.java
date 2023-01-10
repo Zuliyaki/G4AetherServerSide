@@ -29,11 +29,11 @@ public interface DiagnosisInterface {
 
     public Diagnosis findDiagnosisById(Long idDiagnosis) throws DiagnosisNotFoundException;
 
-    public List<Diagnosis> findAllDiagnosisByPatient(Patient patient) throws DiagnosisNotFoundException;
+    public List<Diagnosis> findAllDiagnosisByPatient(Long patientID) throws DiagnosisNotFoundException;
     
-    public List<Diagnosis> findPatientDiagnosisByDate(Patient patient, Date date) throws DiagnosisNotFoundException;
+    public List<Diagnosis> findPatientDiagnosisByDate(Long patientID, Date date) throws DiagnosisNotFoundException;
     
-    public List<Diagnosis> findAllIfPatientOnTeraphy(Patient patient) throws DiagnosisNotFoundException;
+    public List<Diagnosis> findAllIfPatientOnTeraphy(Long patientID) throws DiagnosisNotFoundException;
     
     
 }
