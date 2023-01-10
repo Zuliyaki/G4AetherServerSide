@@ -18,7 +18,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "appointment", schema = "aether")
 @NamedQueries({
-    @NamedQuery(name = "findAll", query = "SELECT a FROM Appointment a")
+    @NamedQuery(name = "findAllAppointments", query = "SELECT a FROM Appointment a")
     ,
     @NamedQuery(name = "findAppointmentById", query = "SELECT a FROM Appointment a WHERE a.idAppointment = :idAppointment")
     ,        
