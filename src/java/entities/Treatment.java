@@ -15,7 +15,7 @@ import javax.xml.bind.annotation.XmlTransient;
     )
     ,
     @NamedQuery(
-            name = "findTreatmentByDiagnosisId", query = "SELECTtr FROM Treatment tr WHERE tr.diagnosis=:diagnosis"
+            name = "findTreatmentByDiagnosisId", query = "SELECT tr FROM Treatment tr WHERE tr.diagnosis=:diagnosis"
     )
 })
 @XmlRootElement

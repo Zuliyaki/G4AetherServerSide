@@ -69,14 +69,10 @@ public class EJBTreatmentManager implements TreatmentInterface {
     }
 
     @Override
-    public Treatment findTreatmentByID(Long DiagnosisId, Long MedicationId, EnumDay day, EnumDayTime dayTime) throws TreatmentNotFoundException {
+    public Treatment findTreatmentByID(TreatmentId treatmentid ) throws TreatmentNotFoundException {
         Treatment treatment = new Treatment();
-        TreatmentId treatmentid = new TreatmentId();
         try {
-            treatmentid.setDay(day);
-            treatmentid.setDayTime(dayTime);
-            treatmentid.setDiagnosisId(DiagnosisId);
-            treatmentid.setMedicationId(MedicationId);
+            
             em.find(Treatment.class, treatmentid);
         } catch (Exception e) {
             throw new TreatmentNotFoundException(e.getMessage());

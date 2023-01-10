@@ -22,7 +22,7 @@ import javax.ws.rs.core.MediaType;
 
 /**
  *
- * @author unaiz
+ * @author 2dam
  */
 @Stateless
 @Path("entities.dailynote")

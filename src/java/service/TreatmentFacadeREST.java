@@ -7,6 +7,8 @@ package service;
 
 
 import TreatmentService.TreatmentInterface;
+import entities.EnumDay;
+import entities.EnumDayTime;
 
 import entities.Treatment;
 import entities.TreatmentId;
@@ -101,14 +103,25 @@ public class TreatmentFacadeREST {
 /**
  * 
  * @param treatmentId 
+     * @param MedicationId 
+     * @param Day 
+     * @param Daytime 
  */
     @DELETE
-    @Path("{treatmentId}")
-    public void deleteTreatment(@PathParam("treatmentId") TreatmentId treatmentId) {
+    @Path("{treatmentId}/{MedicationId}/{Day}/{Daytime}")
+    public void deleteTreatment(@PathParam("id") Long treatmentId,@PathParam("id")Long MedicationId,@PathParam("id") String Day,@PathParam("id") String Daytime) {
         Treatment treatment;
+        TreatmentId treatmentid = null;
+        EnumDay.valueOf(Day);
+        EnumDayTime enumdaytime;
+        
+        treatmentid.setDay(EnumDay.valueOf(Day));
+        treatmentid.setDayTime(EnumDayTime.valueOf(Daytime));
+        treatmentid.setDiagnosisId(treatmentId);
+        treatmentid.setMedicationId(MedicationId);
         try {
             LOGGER.log(Level.INFO, "deleting treatment");
-            treatment = ejb.findTreatmentByID(treatmentId.getDiagnosisId(), treatmentId.getMedicationId(), treatmentId.getDay(), treatmentId.getDayTime());
+            treatment = ejb.findTreatmentByID(treatmentid);
              ejb.deleteTreatment(treatment);
         } catch (TreatmentNotFoundException | DeleteException ex) {
             LOGGER.severe(ex.getMessage());
@@ -116,13 +129,18 @@ public class TreatmentFacadeREST {
         }
     }
      @GET
-    @Path("{id}")
+    @Path("{treatmentId}/{MedicationId}/{Day}/{Daytime}")
     @Produces({MediaType.APPLICATION_XML,MediaType.APPLICATION_JSON})
-    public Treatment findTreatmentByID(@PathParam("id") TreatmentId treatmentId) {
+    public Treatment findTreatmentByID(@PathParam("id") Long treatmentId,@PathParam("id")Long MedicationId,@PathParam("id") String Day,@PathParam("id") String Daytime) {
          Treatment treatment = new Treatment();
+          TreatmentId treatmentid = null;
+           treatmentid.setDay(EnumDay.valueOf(Day));
+        treatmentid.setDayTime(EnumDayTime.valueOf(Daytime));
+        treatmentid.setDiagnosisId(treatmentId);
+        treatmentid.setMedicationId(MedicationId);
         try {
             LOGGER.log(Level.INFO,"get Treatment by ID");
-            treatment = ejb.findTreatmentByID(treatmentId.getDiagnosisId(), treatmentId.getMedicationId(), treatmentId.getDay(), treatmentId.getDayTime());
+            treatment = ejb.findTreatmentByID(treatmentid);
         } catch (TreatmentNotFoundException ex) {
             LOGGER.severe(ex.getMessage());
            // throw new InternalServerErrorException(ex.getMessage());        

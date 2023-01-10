@@ -22,7 +22,7 @@ import javax.xml.bind.annotation.XmlTransient;
     )
     ,
     @NamedQuery(
-            name = "findAllDiagnosisByPatient", query = "SELECT dia FROM Diagnosis dia, WHERE dia.patient=:patient"
+            name = "findAllDiagnosisByPatient", query = "SELECT dia FROM Diagnosis dia WHERE dia.patient=:patient"
     )
     ,
     @NamedQuery(

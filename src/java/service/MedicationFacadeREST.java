@@ -75,9 +75,9 @@ public class MedicationFacadeREST{
     }
     
      @GET
-    @Path("{id}")
+    @Path("searchbyname/{id}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Medication find(@PathParam("name") String name) {
+    public Medication find(@PathParam("id") String name) {
           Medication medication = null;
         try {
             LOGGER.log(Level.INFO, "getting medication by id");

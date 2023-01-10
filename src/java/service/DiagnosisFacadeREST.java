@@ -5,7 +5,6 @@
  */
 package service;
 
-import exceptions.InternalServerErrorException;
 import DiagnosisService.DiagnosisInterface;
 import entities.Diagnosis;
 import exceptions.*;
@@ -14,7 +13,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -54,7 +52,6 @@ public class DiagnosisFacadeREST {
     }
 
     @PUT
-    @Path("{id}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void updateDiagnosis(Diagnosis entity) {
         try {
@@ -98,7 +95,7 @@ public class DiagnosisFacadeREST {
     public List<Diagnosis> findAllDiagnosis() {
          List<Diagnosis> diagnosises = null;
         try {
-            LOGGER.log(Level.INFO, "getting diagnosis by id");
+            LOGGER.log(Level.INFO, "getting all diagnosis");
             diagnosises = ejb.findAllDiagnosis();
         } catch (DiagnosisNotFoundException ex) {
             LOGGER.severe(ex.getMessage());
