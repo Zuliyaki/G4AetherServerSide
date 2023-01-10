@@ -6,7 +6,6 @@ import exceptions.AppointmentNotFoundException;
 import exceptions.CreateException;
 import exceptions.DeleteException;
 import exceptions.UpdateException;
-import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
@@ -36,8 +35,8 @@ public class AppointmentFacadeREST {
     private static final Logger LOGGER = Logger.getLogger(AppointmentFacadeREST.class.getName());
 
     /**
-     * 
-     * @param entity 
+     *
+     * @param entity
      */
     @POST
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -51,9 +50,9 @@ public class AppointmentFacadeREST {
     }
 
     /**
-     * 
+     *
      * @param idAppointment
-     * @param entity 
+     * @param entity
      */
     @PUT
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -67,8 +66,8 @@ public class AppointmentFacadeREST {
     }
 
     /**
-     * 
-     * @param idAppointment 
+     *
+     * @param idAppointment
      */
     @DELETE
     @Path("{id}")
@@ -82,9 +81,9 @@ public class AppointmentFacadeREST {
     }
 
     /**
-     * 
+     *
      * @param idAppointment
-     * @return 
+     * @return
      */
     @GET
     @Path("{id}")
@@ -102,8 +101,8 @@ public class AppointmentFacadeREST {
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -117,24 +116,4 @@ public class AppointmentFacadeREST {
         }
         return appointments;
     }
-    
-    /**
-     * 
-     * @param date
-     * @return 
-    
-    @GET
-    @Path("{findByDate}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Appointment findAppointmentByDate(@PathParam("date") Date date) {
-        Appointment appointment = null;
-        try {
-            appointment = appointmentEJB.findAppointmentByDate(date);
-        } catch (AppointmentNotFoundException ex) {
-            LOGGER.severe(ex.getMessage());
-            throw new InternalServerErrorException(ex.getMessage());
-        }
-        return appointment;    
-    }
-    *  */
 }
