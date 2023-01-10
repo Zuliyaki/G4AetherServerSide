@@ -18,14 +18,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "appointment", schema = "aether")
 @NamedQueries({
-    @NamedQuery(name = "Appointment.findAll", query = "SELECT a FROM Appointment a")
+    @NamedQuery(name = "findAll", query = "SELECT a FROM Appointment a")
     ,
-    @NamedQuery(name = "Appointment.findByIdAppointment", query = "SELECT a FROM Appointment a WHERE a.idAppointment = :idAppointment")
-    ,
-    @NamedQuery(name = "Appointment.findByAppointmentDate", query = "SELECT a FROM Appointment a WHERE a.appointmentDate = :appointmentDate")
-    ,
-    @NamedQuery(name = "Appointment.findByAppointmentChange", query = "SELECT a FROM Appointment a WHERE a.appointmentChange = :appointmentChange")
-
+    @NamedQuery(name = "findAppointmentById", query = "SELECT a FROM Appointment a WHERE a.idAppointment = :idAppointment")
 })
 @XmlRootElement
 public class Appointment implements Serializable {
@@ -80,10 +75,10 @@ public class Appointment implements Serializable {
         return idAppointment;
     }
 
-    /**
-     *
-     * @param idMentalDisease
-     */
+   /**
+    * 
+    * @param idAppointment 
+    */
     public void setidAppointment(Long idAppointment) {
         this.idAppointment = idAppointment;
     }
