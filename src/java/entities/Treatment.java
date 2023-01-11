@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.*;
 import static javax.persistence.FetchType.EAGER;
+import static javax.persistence.FetchType.LAZY;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -26,11 +27,11 @@ public class Treatment implements Serializable {
     @EmbeddedId
     private TreatmentId treatmentId;
     
-    @ManyToOne(cascade = CascadeType.MERGE, fetch=EAGER)
+    @ManyToOne(targetEntity=Diagnosis.class)
     @MapsId("diagnosisId")
     private Diagnosis diagnosis;
 
-    @ManyToOne(cascade = CascadeType.MERGE, fetch=EAGER)
+    @ManyToOne(targetEntity= Medication.class)
     @MapsId("medicationId")
     private Medication medication;
 
@@ -89,12 +90,6 @@ public class Treatment implements Serializable {
         }
         final Treatment other = (Treatment) obj;
         if (!Objects.equals(this.treatmentId, other.treatmentId)) {
-            return false;
-        }
-        if (!Objects.equals(this.diagnosis, other.diagnosis)) {
-            return false;
-        }
-        if (!Objects.equals(this.medication, other.medication)) {
             return false;
         }
         return true;

@@ -37,12 +37,6 @@ public class EJBTreatmentManager implements TreatmentInterface {
         try {
             //if persistence context does not contain account for movement
             //merge it to update account's balance after movement
-            if (!em.contains(treament.getDiagnosis())) {
-                em.merge(treament.getDiagnosis());
-            }
-            if (!em.contains(treament.getMedication())) {
-                em.merge(treament.getMedication());
-            }
             em.persist(treament);
         } catch (Exception e) {
             throw new CreateException(e.getMessage());

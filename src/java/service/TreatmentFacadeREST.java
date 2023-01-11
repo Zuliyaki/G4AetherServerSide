@@ -23,6 +23,7 @@ import javax.ejb.EJB;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -46,7 +47,13 @@ public class TreatmentFacadeREST {
     private TreatmentInterface ejb;
 
     private Logger LOGGER = Logger.getLogger(DiagnosisFacadeREST.class.getName());
-
+/**
+ * 
+     * @param entity
+ * 
+ * @return 
+ */
+    /*
     private TreatmentId getPrimaryKey(PathSegment pathSegment) {
         /*
          * pathSemgent represents a URI path segment and any associated matrix parameters.
@@ -55,6 +62,9 @@ public class TreatmentFacadeREST {
          * it is ignored in the following code.
          * Matrix parameters are used as field names to build a primary key instance.
          */
+        /*
+        
+        
         entities.TreatmentId key = new entities.TreatmentId();
         javax.ws.rs.core.MultivaluedMap<String, String> map = pathSegment.getMatrixParameters();
         java.util.List<String> diagnosisId = map.get("diagnosisId");
@@ -74,8 +84,9 @@ public class TreatmentFacadeREST {
             key.setDayTime(entities.EnumDayTime.valueOf(dayTime.get(0)));
         }
         return key;
+          
     }
-
+*/
     @POST
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void createTreatment(Treatment entity) {
@@ -84,7 +95,7 @@ public class TreatmentFacadeREST {
             ejb.createTreatment(entity);
         } catch (CreateException ex) {
             LOGGER.severe(ex.getMessage());
-            //throw new InternalServerErrorException(ex.getMessage());        
+            throw new InternalServerErrorException(ex.getMessage());        
         }
     }
 
@@ -96,7 +107,7 @@ public class TreatmentFacadeREST {
             ejb.updateTreatment(entity);
         } catch (UpdateException ex) {
             LOGGER.severe(ex.getMessage());
-            //throw new InternalServerErrorException(ex.getMessage());        
+           throw new InternalServerErrorException(ex.getMessage());        
         }
     }
 /**
@@ -107,7 +118,7 @@ public class TreatmentFacadeREST {
      * @param Daytime 
  */
     @DELETE
-    @Path("{treatmentId}/{MedicationId}/{Day}/{Daytime}")
+    @Path("Delete/{treatmentId}/{MedicationId}/{Day}/{Daytime}")
     public void deleteTreatment(@PathParam("id") Long treatmentId,@PathParam("MedicationId")Long MedicationId,@PathParam("Day") String Day,@PathParam("Daytime") String Daytime) {
         Treatment treatment;
         TreatmentId treatmentid = null;
@@ -124,17 +135,17 @@ public class TreatmentFacadeREST {
              ejb.deleteTreatment(treatment);
         } catch (TreatmentNotFoundException | DeleteException ex) {
             LOGGER.severe(ex.getMessage());
-            //throw new InternalServerErrorException(ex.getMessage());        
+            throw new InternalServerErrorException(ex.getMessage());        
         }
     }
      @GET
-    @Path("{treatmentId}/{MedicationId}/{Day}/{Daytime}")
+    @Path("get/{treatmentId}/{MedicationId}/{Day}/{Daytime}")
     @Produces({MediaType.APPLICATION_XML,MediaType.APPLICATION_JSON})
-    public Treatment findTreatmentByID(@PathParam("id") Long treatmentId,@PathParam("id")Long MedicationId,@PathParam("id") String Day,@PathParam("id") String Daytime) {
+    public Treatment findTreatmentByID(@PathParam("id") Long treatmentId,@PathParam("MedicationId")Long MedicationId,@PathParam("Day") EnumDay Day,@PathParam("Daytime") EnumDayTime Daytime) {
          Treatment treatment = new Treatment();
           TreatmentId treatmentid = null;
-           treatmentid.setDay(EnumDay.valueOf(Day));
-        treatmentid.setDayTime(EnumDayTime.valueOf(Daytime));
+           treatmentid.setDay(Day);
+        treatmentid.setDayTime(Daytime);
         treatmentid.setDiagnosisId(treatmentId);
         treatmentid.setMedicationId(MedicationId);
         try {
@@ -142,7 +153,7 @@ public class TreatmentFacadeREST {
             treatment = ejb.findTreatmentByID(treatmentid);
         } catch (TreatmentNotFoundException ex) {
             LOGGER.severe(ex.getMessage());
-           // throw new InternalServerErrorException(ex.getMessage());        
+            throw new InternalServerErrorException(ex.getMessage());        
         }
         return treatment;
     }
@@ -154,10 +165,11 @@ public class TreatmentFacadeREST {
         List<Treatment> treatmentents = null;
 
         try {
-            LOGGER.log(Level.INFO, "getting all treatments for Diagnosis");
+            LOGGER.log(Level.INFO, "getting treatments by ID");
             treatmentents = ejb.findTreatmentsByDiagnosisId(id);
         } catch (TreatmentNotFoundException ex) {
             LOGGER.severe(ex.getMessage());
+            throw new InternalServerErrorException(ex.getMessage());  
         }
         return treatmentents;
     }

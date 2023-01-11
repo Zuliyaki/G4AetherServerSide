@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.Objects;
 import java.util.Set;
 import javax.persistence.*;
+import static javax.persistence.FetchType.EAGER;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -50,7 +51,7 @@ public class Diagnosis implements Serializable {
     private Psychologist psychologist;
     @ManyToOne
     private MentalDisease mentalDisease;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "diagnosis")
+    @OneToMany(targetEntity = Treatment.class, mappedBy = "diagnosis", cascade = CascadeType.MERGE, orphanRemoval=true)
     private Set<Treatment> treatments;
     private Boolean onTherapy;
 
@@ -62,7 +63,7 @@ public class Diagnosis implements Serializable {
     }
 
     public Diagnosis(Long diagnosisId, Date diagnosisDate, Date lastDiagnosisChangeDate, Patient patient, Psychologist psychologist, MentalDisease mentalDisease, Set<Treatment> treatments, Boolean onTherapy) {
-        this.diagnosisId = diagnosisId;
+      this.diagnosisId = diagnosisId;
         this.diagnosisDate = diagnosisDate;
         this.lastDiagnosisChangeDate = lastDiagnosisChangeDate;
         this.patient = patient;
@@ -166,27 +167,7 @@ public class Diagnosis implements Serializable {
         if (!Objects.equals(this.diagnosisId, other.diagnosisId)) {
             return false;
         }
-        if (!Objects.equals(this.diagnosisDate, other.diagnosisDate)) {
-            return false;
-        }
-        if (!Objects.equals(this.lastDiagnosisChangeDate, other.lastDiagnosisChangeDate)) {
-            return false;
-        }
-        if (!Objects.equals(this.patient, other.patient)) {
-            return false;
-        }
-        if (!Objects.equals(this.psychologist, other.psychologist)) {
-            return false;
-        }
-        if (!Objects.equals(this.mentalDisease, other.mentalDisease)) {
-            return false;
-        }
-        if (!Objects.equals(this.treatments, other.treatments)) {
-            return false;
-        }
-        if (!Objects.equals(this.onTherapy, other.onTherapy)) {
-            return false;
-        }
+      
         return true;
     }
 

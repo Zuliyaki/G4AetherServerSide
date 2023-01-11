@@ -35,7 +35,8 @@ public class Medication implements Serializable {
     private String description;
     @Enumerated(EnumType.STRING)
     private EnumMedType typeOfMedication;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "medication", fetch=EAGER)
+    
+    @OneToMany(targetEntity = Treatment.class, mappedBy = "medication", cascade = CascadeType.MERGE, orphanRemoval=true)
     private Set<Treatment> treatments;
 
     /**
