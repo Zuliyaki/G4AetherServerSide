@@ -11,6 +11,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Table(name = "user", schema = "aether")
+@NamedQueries({
+    @NamedQuery(
+            name = "getAllUsers", query = "SELECT u FROM User u"
+    ), 
+    @NamedQuery(
+            name = "getUserByDni", query = "SELECT u FROM User u WHERE u.dni=:dni"
+    )
+})
 @DiscriminatorColumn(name = "user_type",
         discriminatorType = DiscriminatorType.STRING)
 @XmlRootElement

@@ -6,81 +6,101 @@
 package service;
 
 import entities.User;
+import exceptions.CreateException;
+import exceptions.DeleteException;
+import exceptions.UpdateException;
+import exceptions.UserException;
 import java.util.List;
-import javax.ejb.Stateless;
+import java.util.logging.Logger;
+import javax.ejb.EJB;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import userService.UserInterface;
 
 /**
  *
- * @author 2dam
+ * @author Leire
  */
-@Stateless
 @Path("entities.user")
 public class UserFacadeREST extends AbstractFacade<User> {
 
-    @PersistenceContext(unitName = "G4AetherPU")
+    @EJB
+    private UserInterface userEJB;
     private EntityManager em;
 
-    public UserFacadeREST() {
-        super(User.class);
+    private static final Logger LOGGER = Logger.getLogger(MentalDiseaseFacadeREST.class.getName());
+
+    public UserFacadeREST(Class<User> entityClass) {
+        super(entityClass);
     }
 
     @POST
-    @Override
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void create(User entity) {
-        super.create(entity);
+    public void createUser(User entity) {
+        try {
+            userEJB.createUser(entity);
+        } catch (CreateException ex) {
+            LOGGER.severe(ex.getMessage());
+            throw new InternalServerErrorException(ex.getMessage());
+        }
     }
 
     @PUT
-    @Path("{id}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void edit(@PathParam("id") String id, User entity) {
-        super.edit(entity);
+    public void editUser(@PathParam("dni") String dni, User entity) {
+        try {
+            userEJB.updateUser(entity);
+        } catch (UpdateException ex) {
+            LOGGER.severe(ex.getMessage());
+            throw new InternalServerErrorException(ex.getMessage());
+        }
     }
 
     @DELETE
-    @Path("{id}")
-    public void remove(@PathParam("id") String id) {
-        super.remove(super.find(id));
+    @Path("{dni}")
+    public void removeUser(@PathParam("dni") String dni) {
+        try {
+            userEJB.deleteUser(dni);
+        } catch (DeleteException ex) {
+            LOGGER.severe(ex.getMessage());
+            throw new InternalServerErrorException(ex.getMessage());
+        }
     }
 
     @GET
-    @Path("{id}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public User find(@PathParam("id") String id) {
-        return super.find(id);
+    public List<User> getAllUsers() {
+        List<User> users = null;
+        try {
+            users = userEJB.getAllUsers();
+        } catch (UserException ex) {
+            LOGGER.severe(ex.getMessage());
+            throw new InternalServerErrorException(ex.getMessage());
+        }
+        return users;
     }
-
+    
     @GET
-    @Override
+    @Path("{dni}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<User> findAll() {
-        return super.findAll();
-    }
-
-    @GET
-    @Path("{from}/{to}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<User> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
-        return super.findRange(new int[]{from, to});
-    }
-
-    @GET
-    @Path("count")
-    @Produces(MediaType.TEXT_PLAIN)
-    public String countREST() {
-        return String.valueOf(super.count());
+    public User getUsersByDni(@PathParam("dni") String dni) {
+        User user = null;
+        try {
+            user = userEJB.getUsersByDni(dni);
+        } catch (UserException ex) {
+            LOGGER.severe(ex.getMessage());
+            throw new InternalServerErrorException(ex.getMessage());
+        }
+        return user;
     }
 
     @Override
