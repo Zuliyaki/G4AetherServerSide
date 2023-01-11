@@ -6,7 +6,6 @@
 package dailyNotesService;
 
 import entities.DailyNote;
-import entities.Patient;
 import exceptions.CreateException;
 import exceptions.DailyNoteNotFoundException;
 import exceptions.DeleteException;

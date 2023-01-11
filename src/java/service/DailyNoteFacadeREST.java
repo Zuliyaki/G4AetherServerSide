@@ -9,7 +9,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 import entities.DailyNote;
-import entities.Patient;
 import dailyNotesService.DailyNoteInterface;
 import exceptions.CreateException;
 import exceptions.DailyNoteNotFoundException;

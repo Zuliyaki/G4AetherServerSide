@@ -1,7 +1,5 @@
 package entities;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import java.io.Serializable;
 
 import java.util.Date;
@@ -97,13 +95,11 @@ public class DailyNote implements Serializable {
      */
     @NotNull
     @Temporal(TemporalType.DATE)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")
     private Date dnNoteDate;
     /**
      * Date of the last time the note was edited
      */
     @Temporal(TemporalType.DATE)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")
     private Date dnNoteDateLastEdited;
     /**
      * Score of the day [1-100] depending how it was
