@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Objects;
 import java.util.Set;
 import javax.persistence.*;
+import static javax.persistence.FetchType.EAGER;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -34,7 +35,7 @@ public class Medication implements Serializable {
     private String description;
     @Enumerated(EnumType.STRING)
     private EnumMedType typeOfMedication;
-    @OneToMany(mappedBy = "medication")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "medication", fetch=EAGER)
     private Set<Treatment> treatments;
 
     /**

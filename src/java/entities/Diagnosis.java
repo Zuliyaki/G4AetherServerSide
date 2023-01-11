@@ -50,7 +50,7 @@ public class Diagnosis implements Serializable {
     private Psychologist psychologist;
     @ManyToOne
     private MentalDisease mentalDisease;
-    @OneToMany(mappedBy = "diagnosis")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "diagnosis")
     private Set<Treatment> treatments;
     private Boolean onTherapy;
 

@@ -15,6 +15,7 @@ import exceptions.DeleteException;
 import exceptions.TreatmentNotFoundException;
 import exceptions.UpdateException;
 import java.util.List;
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -22,6 +23,7 @@ import javax.persistence.PersistenceContext;
  *
  * @author unaiz
  */
+@Stateless
 public class EJBTreatmentManager implements TreatmentInterface {
 
     /**
@@ -85,7 +87,7 @@ public class EJBTreatmentManager implements TreatmentInterface {
         List<Treatment> treatments;
         try {
             treatments = em.createNamedQuery("findTreatmentsByDiagnosisId")
-                        .setParameter("account", em.find(Diagnosis.class, DiagnosisId))
+                        .setParameter("diagnosis", em.find(Diagnosis.class, DiagnosisId))
                         .getResultList();
 
         } catch (Exception e) {

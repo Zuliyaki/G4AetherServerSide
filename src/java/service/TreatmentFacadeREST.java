@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
-import javax.ejb.Stateless;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -36,7 +35,7 @@ import javax.ws.rs.core.PathSegment;
  *
  * @author unaiz
  */
-@Stateless
+
 @Path("entities.treatment")
 public class TreatmentFacadeREST {
 
@@ -109,14 +108,14 @@ public class TreatmentFacadeREST {
  */
     @DELETE
     @Path("{treatmentId}/{MedicationId}/{Day}/{Daytime}")
-    public void deleteTreatment(@PathParam("id") Long treatmentId,@PathParam("id")Long MedicationId,@PathParam("id") String Day,@PathParam("id") String Daytime) {
+    public void deleteTreatment(@PathParam("id") Long treatmentId,@PathParam("MedicationId")Long MedicationId,@PathParam("Day") String Day,@PathParam("Daytime") String Daytime) {
         Treatment treatment;
         TreatmentId treatmentid = null;
-        EnumDay.valueOf(Day);
-        EnumDayTime enumdaytime;
+   
+       
         
-        treatmentid.setDay(EnumDay.valueOf(Day));
-        treatmentid.setDayTime(EnumDayTime.valueOf(Daytime));
+        treatmentid.setDay(EnumDay.valueOf(Day.toUpperCase().trim()));
+        treatmentid.setDayTime(EnumDayTime.valueOf(Daytime.toUpperCase().trim()));
         treatmentid.setDiagnosisId(treatmentId);
         treatmentid.setMedicationId(MedicationId);
         try {

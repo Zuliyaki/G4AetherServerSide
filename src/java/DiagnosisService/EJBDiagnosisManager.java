@@ -14,6 +14,7 @@ import exceptions.DiagnosisNotFoundException;
 import exceptions.UpdateException;
 import java.util.Date;
 import java.util.List;
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -21,6 +22,8 @@ import javax.persistence.PersistenceContext;
  *
  * @author unaiz
  */
+
+@Stateless
 public class EJBDiagnosisManager implements DiagnosisInterface {
    /**
      * EntityManager for persistence unit.
@@ -33,6 +36,7 @@ public class EJBDiagnosisManager implements DiagnosisInterface {
     @Override
     public void createDiagnosis(Diagnosis diagnosis) throws CreateException {
         try{
+            
             em.persist(diagnosis);
         }catch(Exception e){
             throw new CreateException(e.getMessage());

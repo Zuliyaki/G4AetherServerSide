@@ -3,6 +3,7 @@ package entities;
 import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.*;
+import static javax.persistence.FetchType.EAGER;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -15,7 +16,7 @@ import javax.xml.bind.annotation.XmlTransient;
     )
     ,
     @NamedQuery(
-            name = "findTreatmentByDiagnosisId", query = "SELECT tr FROM Treatment tr WHERE tr.diagnosis=:diagnosis"
+            name = "findTreatmentsByDiagnosisId", query = "SELECT tr FROM Treatment tr WHERE tr.diagnosis=:diagnosis"
     )
 })
 @XmlRootElement
@@ -25,11 +26,11 @@ public class Treatment implements Serializable {
     @EmbeddedId
     private TreatmentId treatmentId;
     
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE, fetch=EAGER)
     @MapsId("diagnosisId")
     private Diagnosis diagnosis;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE, fetch=EAGER)
     @MapsId("medicationId")
     private Medication medication;
 

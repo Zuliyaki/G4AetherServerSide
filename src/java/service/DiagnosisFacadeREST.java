@@ -7,12 +7,15 @@ package service;
 
 import DiagnosisService.DiagnosisInterface;
 import entities.Diagnosis;
+import entities.Patient;
 import exceptions.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
-import javax.ejb.Stateless;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -27,7 +30,7 @@ import javax.ws.rs.core.MediaType;
  *
  * @author unaiz
  */
-@Stateless
+
 @Path("entities.diagnosis")
 public class DiagnosisFacadeREST {
 
@@ -103,7 +106,56 @@ public class DiagnosisFacadeREST {
         }
         return diagnosises;
     }
-
+@GET
+    @Path("patient/{id}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<Diagnosis> findAllDiagnosisByPatient(@PathParam("id") Long id) {
+        List <Diagnosis> diagnosises = null;
+        Patient patient = null;
+        try {
+            LOGGER.log(Level.INFO, "getting diagnosis by patient id");
+            diagnosises = ejb.findAllDiagnosisByPatient(id);
+        } catch (DiagnosisNotFoundException ex) {
+            LOGGER.severe(ex.getMessage());
+            // throw new InternalServerErrorException(ex.getMessage());        
+        }
+        return diagnosises;
+    }
+    
+    @GET
+    @Path("patientOnTeraphy/{id}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<Diagnosis> findAllIfPatientOnTeraphy(@PathParam("id") Long id) {
+        List <Diagnosis> diagnosises = null;
+        Patient patient = null;
+        try {
+            LOGGER.log(Level.INFO, "getting diagnosis by patient id");
+            diagnosises = ejb.findAllIfPatientOnTeraphy(id);
+        } catch (DiagnosisNotFoundException ex) {
+            LOGGER.severe(ex.getMessage());
+            // throw new InternalServerErrorException(ex.getMessage());        
+        }
+        return diagnosises;
+    }
+        
+    @GET
+    @Path("byDates/{id}/{Date}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<Diagnosis> findPatientDiagnosisByDate(@PathParam("id") Long id ,@PathParam("date")String dateIntro) {
+        List <Diagnosis> diagnosises = null;
+        Patient patient = null;
+        try {
+            LOGGER.log(Level.INFO, "getting diagnosis by patient id");
+            SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+            Date date = format.parse(dateIntro);
+            diagnosises = ejb.findPatientDiagnosisByDate(id, date);
+        } catch (ParseException | DiagnosisNotFoundException ex) {
+            LOGGER.severe(ex.getMessage());
+            // throw new InternalServerErrorException(ex.getMessage());        
+       
+        }
+        return diagnosises;
+    }
     @GET
     @Path("{from}/{to}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})

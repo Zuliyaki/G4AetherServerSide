@@ -32,7 +32,7 @@ import javax.ws.rs.core.MediaType;
  *
  * @author unaiz
  */
-@Stateless
+
 @Path("entities.medication")
 public class MedicationFacadeREST{
   /**
