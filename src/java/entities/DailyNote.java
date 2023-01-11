@@ -1,5 +1,7 @@
 package entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import java.io.Serializable;
 
 import java.util.Date;
@@ -36,27 +38,27 @@ import javax.xml.bind.annotation.XmlRootElement;
     )
     ,
     @NamedQuery(
-            name = "findAllNotesByPatient", query = "SELECT dn FROM DailyNote dn, User us WHERE us.dni=:idUser"
+            name = "findAllNotesByPatient", query = "SELECT dn FROM DailyNote dn WHERE dn.dnPatient.dni=:idUser"
     )
     ,
     @NamedQuery(
-            name = "findPatientNoteByDate", query = "SELECT dn FROM DailyNote dn, User us WHERE us.dni=:idUser and dn.dnNoteDate=:noteDate"
+            name = "findPatientNoteByDate", query = "SELECT dn FROM DailyNote dn WHERE dn.dnPatient.dni=:idUser and dn.dnNoteDate=:noteDate"
     )
     ,
     @NamedQuery(
-            name = "findPatientNotesBetweenDates", query = "SELECT dn FROM DailyNote dn, User us WHERE us.dni=:idUser and dn.dnNoteDate>:noteDateLow and dn.dnNoteDate<:noteDateGreat"
+            name = "findPatientNotesBetweenDates", query = "SELECT dn FROM DailyNote dn WHERE dn.dnPatient.dni=:idUser and dn.dnNoteDate BETWEEN :noteDateLow AND :noteDateGreat"
     )
     ,
     @NamedQuery(
-            name = "findPatientEditedNotes", query = "SELECT dn FROM DailyNote dn, User us WHERE us.dni=:idUser and dn.dnNoteDate!=dn.dnNoteDateLastEdited"
+            name = "findPatientEditedNotes", query = "SELECT dn FROM DailyNote dn WHERE dn.dnPatient.dni=:idUser and dn.dnNoteDate!=dn.dnNoteDateLastEdited"
     )
     ,
     @NamedQuery(
-            name = "findPatientNotesByNotReadable", query = "SELECT dn FROM DailyNote dn, User us WHERE us.dni=:idUser and dn.dnNoteReadable=false"
+            name = "findPatientNotesByNotReadable", query = "SELECT dn FROM DailyNote dn WHERE dn.dnPatient.dni=:idUser and dn.dnNoteReadable = FALSE"
     )
     ,
     @NamedQuery(
-            name = "findPatientNotesByDayScores", query = "SELECT dn FROM DailyNote dn, User us WHERE us.dni=:idUser and dn.dnDayScore>:dayScoreLow and dn.dnDayScore<:dayScoreGreat"
+            name = "findPatientNotesBetweenDayScores", query = "SELECT dn FROM DailyNote dn WHERE dn.dnPatient.dni=:idUser and dn.dnDayScore BETWEEN :dayScoreLow AND :dayScoreGreat"
     )
 })
 @XmlRootElement
@@ -95,11 +97,13 @@ public class DailyNote implements Serializable {
      */
     @NotNull
     @Temporal(TemporalType.DATE)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")
     private Date dnNoteDate;
     /**
      * Date of the last time the note was edited
      */
     @Temporal(TemporalType.DATE)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")
     private Date dnNoteDateLastEdited;
     /**
      * Score of the day [1-100] depending how it was

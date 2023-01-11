@@ -15,6 +15,9 @@ import exceptions.CreateException;
 import exceptions.DailyNoteNotFoundException;
 import exceptions.DeleteException;
 import exceptions.UpdateException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.logging.Level;
 import javax.ejb.EJB;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -100,12 +103,12 @@ public class DailyNoteFacadeREST {
     }
 
     @GET
-    @Path("findByPatient/{patient}")
+    @Path("findByPatient/{patientId}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<DailyNote> findAllDailyNotesByPatient(@PathParam("patient") Patient patient) {
+    public List<DailyNote> findAllDailyNotesByPatientId(@PathParam("patientId") String idPatient) {
         List<DailyNote> dailyNotes = null;
         try {
-            dailyNotes = dailyNoteEJB.findAllNotesByPatient(patient);
+            dailyNotes = dailyNoteEJB.findAllNotesByPatientId(idPatient);
         } catch (DailyNoteNotFoundException ex) {
             LOGGER.severe(ex.getMessage());
             throw new InternalServerErrorException(ex.getMessage());
@@ -114,12 +117,16 @@ public class DailyNoteFacadeREST {
     }
 
     @GET
-    @Path("findByDate/{date}")
+    @Path("findByDate/{patientId}/{date}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public DailyNote findPatientDailyNoteByDate(@PathParam("patient") Patient patient, @PathParam("date") Date date) {
+    public DailyNote findPatientDailyNoteByDate(@PathParam("patientId") String idPatient, @PathParam("date") String dateIntro) {
         DailyNote dailyNote = null;
+        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
         try {
-            dailyNote = dailyNoteEJB.findPatientNoteByDate(patient, date);
+            Date date = format.parse(dateIntro);
+            dailyNote = dailyNoteEJB.findPatientNoteByDate(idPatient, date);
+        } catch (ParseException ex) {
+            Logger.getLogger(DailyNoteFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
         } catch (DailyNoteNotFoundException ex) {
             LOGGER.severe(ex.getMessage());
             throw new InternalServerErrorException(ex.getMessage());
@@ -128,12 +135,17 @@ public class DailyNoteFacadeREST {
     }
 
     @GET
-    @Path("findBetweenDates/{dateLow}/{dateGreat}")
+    @Path("findBetweenDates/{patientId}/{dateLow}/{dateGreat}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<DailyNote> findPatientDailyNotesBetweenDates(@PathParam("patient") Patient patient, @PathParam("dateLow") Date dateLow, @PathParam("dateGreat") Date dateGreat) {
+    public List<DailyNote> findPatientDailyNotesBetweenDates(@PathParam("patientId") String idPatient, @PathParam("dateLow") String dateIntroLow, @PathParam("dateGreat") String dateIntroGreat) {
         List<DailyNote> dailyNotes = null;
+        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
         try {
-            dailyNotes = dailyNoteEJB.findPatientNotesBetweenDates(patient, dateLow, dateGreat);
+            Date dateLow = format.parse(dateIntroLow);
+            Date dateGreat = format.parse(dateIntroGreat);
+            dailyNotes = dailyNoteEJB.findPatientNotesBetweenDates(idPatient, dateLow, dateGreat);
+        } catch (ParseException ex) {
+            Logger.getLogger(DailyNoteFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
         } catch (DailyNoteNotFoundException ex) {
             LOGGER.severe(ex.getMessage());
             throw new InternalServerErrorException(ex.getMessage());
@@ -142,12 +154,12 @@ public class DailyNoteFacadeREST {
     }
 
     @GET
-    @Path("findEditedNotes/{patient}")
+    @Path("findEditedNotes/{patientId}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<DailyNote> findPatientEditedDailyNotes(@PathParam("patient") Patient patient) {
+    public List<DailyNote> findPatientEditedDailyNotes(@PathParam("patientId") String idPatient) {
         List<DailyNote> dailyNotes = null;
         try {
-            dailyNotes = dailyNoteEJB.findPatientEditedNotes(patient);
+            dailyNotes = dailyNoteEJB.findPatientEditedNotes(idPatient);
         } catch (DailyNoteNotFoundException ex) {
             LOGGER.severe(ex.getMessage());
             throw new InternalServerErrorException(ex.getMessage());
@@ -156,12 +168,12 @@ public class DailyNoteFacadeREST {
     }
 
     @GET
-    @Path("findNotReadedNotes/{patient}")
+    @Path("findNotReadableNotes/{patientId}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<DailyNote> findPatientDailyNotesByNotReadable(@PathParam("patient") Patient patient) {
+    public List<DailyNote> findPatientDailyNotesByNotReadable(@PathParam("patientId") String idPatient) {
         List<DailyNote> dailyNotes = null;
         try {
-            dailyNotes = dailyNoteEJB.findPatientNotesByNotReadable(patient);
+            dailyNotes = dailyNoteEJB.findPatientNotesByNotReadable(idPatient);
         } catch (DailyNoteNotFoundException ex) {
             LOGGER.severe(ex.getMessage());
             throw new InternalServerErrorException(ex.getMessage());
@@ -170,12 +182,14 @@ public class DailyNoteFacadeREST {
     }
 
     @GET
-    @Path("findBetweenScores/{dayScoreLow}/{dayScoreGreat}")
+    @Path("findBetweenScores/{patientId}/{dayScoreLow}/{dayScoreGreat}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<DailyNote> findPatientDailyNotesByDayScores(@PathParam("patient") Patient patient, @PathParam("dayScoreLow") Long dayScoreLow, @PathParam("dayScoreGreat") Long dayScoreGreat) {
+    public List<DailyNote> findPatientNotesBetweenDayScores(@PathParam("patientId") String idPatient, @PathParam("dayScoreLow") Double dayScoreLow, @PathParam("dayScoreGreat") Double dayScoreGreat) {
         List<DailyNote> dailyNotes = null;
         try {
-            dailyNotes = dailyNoteEJB.findPatientNotesByDayScores(patient, dayScoreLow, dayScoreGreat);
+            //Double dayScoreLow = Double.parseDouble(dayScoreLowIntro);
+            //Double dayScoreGreat = Double.parseDouble(dayScoreGreatIntro);
+            dailyNotes = dailyNoteEJB.findPatientNotesBetweenDayScores(idPatient, dayScoreLow, dayScoreGreat);
         } catch (DailyNoteNotFoundException ex) {
             LOGGER.severe(ex.getMessage());
             throw new InternalServerErrorException(ex.getMessage());
