@@ -5,7 +5,6 @@
  */
 package service;
 
-
 import TreatmentService.TreatmentInterface;
 import entities.EnumDay;
 import entities.EnumDayTime;
@@ -36,7 +35,6 @@ import javax.ws.rs.core.PathSegment;
  *
  * @author unaiz
  */
-
 @Path("entities.treatment")
 public class TreatmentFacadeREST {
 
@@ -47,12 +45,13 @@ public class TreatmentFacadeREST {
     private TreatmentInterface ejb;
 
     private Logger LOGGER = Logger.getLogger(DiagnosisFacadeREST.class.getName());
-/**
- * 
+
+    /**
+     *
      * @param entity
- * 
- * @return 
- */
+     *
+     * @return
+     */
     /*
     private TreatmentId getPrimaryKey(PathSegment pathSegment) {
         /*
@@ -61,8 +60,8 @@ public class TreatmentFacadeREST {
          * Here 'somePath' is a result of getPath() method invocation and
          * it is ignored in the following code.
          * Matrix parameters are used as field names to build a primary key instance.
-         */
-        /*
+     */
+ /*
         
         
         entities.TreatmentId key = new entities.TreatmentId();
@@ -86,7 +85,7 @@ public class TreatmentFacadeREST {
         return key;
           
     }
-*/
+     */
     @POST
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void createTreatment(Treatment entity) {
@@ -95,7 +94,7 @@ public class TreatmentFacadeREST {
             ejb.createTreatment(entity);
         } catch (CreateException ex) {
             LOGGER.severe(ex.getMessage());
-            throw new InternalServerErrorException(ex.getMessage());        
+            throw new InternalServerErrorException(ex.getMessage());
         }
     }
 
@@ -107,41 +106,33 @@ public class TreatmentFacadeREST {
             ejb.updateTreatment(entity);
         } catch (UpdateException ex) {
             LOGGER.severe(ex.getMessage());
-           throw new InternalServerErrorException(ex.getMessage());        
+            throw new InternalServerErrorException(ex.getMessage());
         }
     }
-/**
- * 
- * @param treatmentId 
-     * @param MedicationId 
-     * @param Day 
-     * @param Daytime 
- */
+
+    /**
+     *
+     * @param treatmentId
+     * @param MedicationId
+     * @param Day
+     * @param Daytime
+     */
     @DELETE
-    @Path("Delete/{treatmentId}/{MedicationId}/{Day}/{Daytime}")
-    public void deleteTreatment(@PathParam("id") Long treatmentId,@PathParam("MedicationId")Long MedicationId,@PathParam("Day") String Day,@PathParam("Daytime") String Daytime) {
-        Treatment treatment;
-        TreatmentId treatmentid = null;
-   
-       
-        
-        treatmentid.setDay(EnumDay.valueOf(Day.toUpperCase().trim()));
-        treatmentid.setDayTime(EnumDayTime.valueOf(Daytime.toUpperCase().trim()));
-        treatmentid.setDiagnosisId(treatmentId);
-        treatmentid.setMedicationId(MedicationId);
+
+    public void deleteTreatment(Treatment treatment) {
+
         try {
-            LOGGER.log(Level.INFO, "deleting treatment");
-            treatment = ejb.findTreatmentByID(treatmentid);
-             ejb.deleteTreatment(treatment);
-        } catch (TreatmentNotFoundException | DeleteException ex) {
+            ejb.deleteTreatment(treatment);
+        } catch (DeleteException ex) {
             LOGGER.severe(ex.getMessage());
-            throw new InternalServerErrorException(ex.getMessage());        
+            throw new InternalServerErrorException(ex.getMessage());
         }
     }
-     @GET
-    @Path("get/{treatmentId}/{MedicationId}/{Day}/{Daytime}")
-    @Produces({MediaType.APPLICATION_XML,MediaType.APPLICATION_JSON})
-    public Treatment findTreatmentByID(@PathParam("id") Long treatmentId,@PathParam("MedicationId")Long MedicationId,@PathParam("Day") EnumDay Day,@PathParam("Daytime") EnumDayTime Daytime) {
+    
+    @GET
+        @Path("get/{treatmentId}/{MedicationId}/{Day}/{Daytime}")
+        @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+        public Treatment findTreatmentByID(@PathParam("id") Long treatmentId,@PathParam("MedicationId")Long MedicationId,@PathParam("Day") EnumDay Day,@PathParam("Daytime") EnumDayTime Daytime) {
          Treatment treatment = new Treatment();
           TreatmentId treatmentid = null;
            treatmentid.setDay(Day);
@@ -159,9 +150,9 @@ public class TreatmentFacadeREST {
     }
 
     @GET
-    @Path("diagnosis/{id}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Treatment> findTreatmentsByDiagnosisId(@PathParam("id") Long id) {
+        @Path("diagnosis/{id}")
+        @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+        public List<Treatment> findTreatmentsByDiagnosisId(@PathParam("id") Long id) {
         List<Treatment> treatmentents = null;
 
         try {
