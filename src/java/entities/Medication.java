@@ -36,7 +36,7 @@ public class Medication implements Serializable {
     @Enumerated(EnumType.STRING)
     private EnumMedType typeOfMedication;
     
-    @OneToMany(targetEntity = Treatment.class, mappedBy = "medication", cascade = CascadeType.MERGE, orphanRemoval=true)
+    @OneToMany(targetEntity = Treatment.class, mappedBy = "medication", orphanRemoval=true)
     private Set<Treatment> treatments;
 
     /**
@@ -47,7 +47,7 @@ public class Medication implements Serializable {
     }
 
     public Medication(Long medicationId, String medicationName, String description, EnumMedType typeOfMedication, Set<Treatment> treatments) {
-        this.medicationId = medicationId;
+       // this.medicationId = medicationId;
         this.medicationName = medicationName;
         this.description = description;
         this.typeOfMedication = typeOfMedication;

@@ -8,6 +8,7 @@ package TreatmentService;
 import entities.Diagnosis;
 import entities.EnumDay;
 import entities.EnumDayTime;
+import entities.Medication;
 import entities.Treatment;
 import entities.TreatmentId;
 import exceptions.CreateException;
@@ -35,8 +36,14 @@ public class EJBTreatmentManager implements TreatmentInterface {
     @Override
     public void createTreatment(Treatment treament) throws CreateException {
         try {
-            //if persistence context does not contain account for movement
-            //merge it to update account's balance after movement
+             Diagnosis diagnosis;
+             Medication medication;
+           if (!em.contains(treament.getDiagnosis())) {
+                 diagnosis = em.merge(treament.getDiagnosis());
+            }
+           if (!em.contains(treament.getMedication())) {
+                medication = em.merge(treament.getMedication());
+            }
             em.persist(treament);
         } catch (Exception e) {
             throw new CreateException(e.getMessage());
