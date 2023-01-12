@@ -7,9 +7,8 @@ package service;
 
 import entities.Admin;
 import java.util.List;
-import javax.ejb.Stateless;
+import javax.ejb.EJB;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -19,16 +18,17 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import userService.UserInterface;
 
 /**
  *
  * @author 2dam
  */
-@Stateless
 @Path("entities.admin")
 public class AdminFacadeREST extends AbstractFacade<Admin> {
 
-    @PersistenceContext(unitName = "G4AetherPU")
+    @EJB
+    private UserInterface userEJB;
     private EntityManager em;
 
     public AdminFacadeREST() {

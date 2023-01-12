@@ -71,7 +71,7 @@ public class EJBUserManager implements UserInterface {
     public List<User> getAllUsers() throws UserException {
         List<User> users;
         try {
-            users = entityManager.createNamedQuery("getAllUsers").getResultList();
+            users = entityManager.createNamedQuery("findAllUsers").getResultList();
         } catch (Exception e) {
             throw new UserException(e.getMessage());
         }

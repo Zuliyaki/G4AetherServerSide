@@ -8,15 +8,25 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
+/**
+ * 
+ * @author unaibAndLeire
+ */
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Table(name = "user", schema = "aether")
 @NamedQueries({
     @NamedQuery(
-            name = "getAllUsers", query = "SELECT u FROM User u"
-    ), 
+            name = "findAllUsers", query = "SELECT u FROM User u"
+    ),
     @NamedQuery(
-            name = "getUserByDni", query = "SELECT u FROM User u WHERE u.dni=:dni"
+            name = "findAllPatients", query = "SELECT u FROM User u, Patient p WHERE u.dni=p.dni"
+    ),
+    @NamedQuery(
+            name = "findAllPsychologists", query = "SELECT u FROM User u, Psychologist p WHERE u.dni=p.dni"
+    ),
+    @NamedQuery(
+            name = "findUserByDni", query = "SELECT u FROM User u WHERE u.dni=:dni"
     )
 })
 @DiscriminatorColumn(name = "user_type",
