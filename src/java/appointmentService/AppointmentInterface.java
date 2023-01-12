@@ -2,8 +2,6 @@ package appointmentService;
 
 import java.util.List;
 import entities.Appointment;
-import entities.Patient;
-import entities.Psychologist;
 import exceptions.AppointmentNotFoundException;
 import exceptions.CreateException;
 import exceptions.DeleteException;
@@ -26,12 +24,7 @@ public interface AppointmentInterface {
 
     public List<Appointment> getAllAppointments() throws AppointmentNotFoundException;
 
-    public List<Appointment> getAppointmentByPatient(String idPatient) throws AppointmentNotFoundException;
-
-    public List<Appointment> getAppointmentByPsychologist(String idPsychologist) throws AppointmentNotFoundException;
-
     public Appointment getAppointmentByDate(Date appointmentDate) throws AppointmentNotFoundException;
 
     public List<Appointment> getAppointmentByChange(Boolean appointmentChange) throws AppointmentNotFoundException;
-
 }

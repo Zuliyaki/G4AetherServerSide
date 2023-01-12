@@ -31,11 +31,6 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "getAppointmentByDate", query = "SELECT a FROM Appointment a WHERE a.appointmentDate = :appointmentDate")
     ,
     @NamedQuery(name = "getAppointmentByChange", query = "SELECT a FROM Appointment a WHERE a.appointmentChange = :appointmentChange")
-    ,
-    @NamedQuery(name = "getAppointmentByPatient", query = "SELECT a FROM Appointment a WHERE a.patient.dni=:patient_dni")
-    ,
-    @NamedQuery(name = "getAppointmentByPsychologist", query = "SELECT a FROM Appointment a WHERE a.psychologist.dni=:psychologist_dni")
-
 })
 
 @XmlRootElement

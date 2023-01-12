@@ -38,6 +38,10 @@ public class AppointmentFacadeREST {
 
     private static final Logger LOGGER = Logger.getLogger(AppointmentFacadeREST.class.getName());
 
+    /**
+     * 
+     * @param entity 
+     */
     @POST
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void create(Appointment entity) {
@@ -49,6 +53,11 @@ public class AppointmentFacadeREST {
         }
     }
 
+    /**
+     * 
+     * @param idAppointment
+     * @param entity 
+     */
     @PUT
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void edit(@PathParam("id") Long idAppointment, Appointment entity) {
@@ -60,6 +69,10 @@ public class AppointmentFacadeREST {
         }
     }
 
+    /**
+     * 
+     * @param idAppointment 
+     */
     @DELETE
     @Path("{id}")
     public void remove(@PathParam("id") Long idAppointment) {
@@ -71,6 +84,11 @@ public class AppointmentFacadeREST {
         }
     }
 
+    /**
+     * 
+     * @param idAppointment
+     * @return 
+     */
     @GET
     @Path("{id}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -85,6 +103,10 @@ public class AppointmentFacadeREST {
         return appointment;
     }
 
+    /**
+     * 
+     * @return 
+     */
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public List<Appointment> getAllAppointments() {
@@ -98,34 +120,11 @@ public class AppointmentFacadeREST {
         return appointments;
     }
 
-    @GET
-    @Path("getByPatient/{patient_dni}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Appointment> getAppointmentByPatient(@PathParam("patient_dni") String patient) {
-        List<Appointment> appointments = null;
-        try {
-            appointments = appointmentEJB.getAppointmentByPatient(patient);
-        } catch (AppointmentNotFoundException ex) {
-            LOGGER.severe(ex.getMessage());
-            throw new InternalServerErrorException(ex.getMessage());
-        }
-        return appointments;
-    }
-
-    @GET
-    @Path("getByPsychologist/{psychologist_dni}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Appointment> getAppointmentByPsychologist(@PathParam("patient_dni") String psychologist) {
-        List<Appointment> appointments = null;
-        try {
-            appointments = appointmentEJB.getAppointmentByPsychologist(psychologist);
-        } catch (AppointmentNotFoundException ex) {
-            LOGGER.severe(ex.getMessage());
-            throw new InternalServerErrorException(ex.getMessage());
-        }
-        return appointments;
-    }
-
+    /**
+     * 
+     * @param appointmentdate
+     * @return 
+     */
     @GET
     @Path("getAppointmentByDate/{appointmentDate}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -144,6 +143,11 @@ public class AppointmentFacadeREST {
         return appointments;
     }
 
+    /**
+     * 
+     * @param appointmentchange
+     * @return 
+     */
     @GET
     @Path("getAppointmentByChange/{appointmentchange}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})

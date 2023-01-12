@@ -21,6 +21,11 @@ public class EJBAppointmentManager implements AppointmentInterface {
     @PersistenceContext(unitName = "G4AetherPU")
     private EntityManager entityManager;
 
+    /**
+     * Create appointment
+     * @param appointment
+     * @throws CreateException 
+     */
     @Override
     public void createAppointment(Appointment appointment) throws CreateException {
         try {
@@ -30,6 +35,11 @@ public class EJBAppointmentManager implements AppointmentInterface {
         }
     }
 
+    /**
+     * Update Appointment
+     * @param appointment
+     * @throws UpdateException 
+     */
     @Override
     public void updateAppointment(Appointment appointment) throws UpdateException {
         try {
@@ -42,6 +52,11 @@ public class EJBAppointmentManager implements AppointmentInterface {
         }
     }
 
+    /**
+     * delete Appointment
+     * @param idAppointment
+     * @throws DeleteException 
+     */
     @Override
     public void deleteAppointment(Long idAppointment) throws DeleteException {
         try {
@@ -51,6 +66,12 @@ public class EJBAppointmentManager implements AppointmentInterface {
         }
     }
 
+    /**
+     * Get appointment by ID
+     * @param idAppointment
+     * @return
+     * @throws AppointmentNotFoundException 
+     */
     @Override
     public Appointment getAppointmentById(Long idAppointment) throws AppointmentNotFoundException {
         Appointment appointment;
@@ -62,6 +83,11 @@ public class EJBAppointmentManager implements AppointmentInterface {
         return appointment;
     }
 
+    /**
+     * Get appointmentByAll
+     * @return
+     * @throws AppointmentNotFoundException 
+     */
     @Override
     public List<Appointment> getAllAppointments() throws AppointmentNotFoundException {
         List<Appointment> appointment;
@@ -73,29 +99,12 @@ public class EJBAppointmentManager implements AppointmentInterface {
         return appointment;
     }
 
-    @Override
-    public List<Appointment> getAppointmentByPatient(String Patient) throws AppointmentNotFoundException {
-        List<Appointment> appointment;
-        try {
-            appointment = entityManager.createNamedQuery("getAppointmentByPatient").setParameter("idUser", Patient).getResultList();
-        } catch (Exception e) {
-            throw new AppointmentNotFoundException("Error finding appointments by patient" + e.getMessage());
-        }
-        return appointment;
-    }
-
-    @Override
-    public List<Appointment> getAppointmentByPsychologist(String psychologist) throws AppointmentNotFoundException {
-        List<Appointment> appointment;
-        try {
-            appointment = entityManager.createNamedQuery("getAppointmentByPsychologist").setParameter("idUser", psychologist).getResultList();
-        } catch (Exception e) {
-            throw new AppointmentNotFoundException("Error finding appointments by psychologist" + e.getMessage());
-        }
-        return appointment;
-
-    }
-
+    /**
+     * Get AppointmentByDate
+     * @param appointmentDate
+     * @return
+     * @throws AppointmentNotFoundException 
+     */
     @Override
     public Appointment getAppointmentByDate(Date appointmentDate) throws AppointmentNotFoundException {
         Appointment appointment;
@@ -107,6 +116,12 @@ public class EJBAppointmentManager implements AppointmentInterface {
         return appointment;
     }
 
+    /**
+     * Get AppointmentByChange
+     * @param appointmentChange
+     * @return
+     * @throws AppointmentNotFoundException 
+     */
     @Override
     public List<Appointment> getAppointmentByChange(Boolean appointmentChange) throws AppointmentNotFoundException {
         try {
