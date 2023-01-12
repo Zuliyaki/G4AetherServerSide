@@ -97,12 +97,14 @@ public class EJBAppointmentManager implements AppointmentInterface {
     }
 
     @Override
-    public List<Appointment> getAppointmentByDate(Date appointmentDate) throws AppointmentNotFoundException {
+    public Appointment getAppointmentByDate(Date appointmentDate) throws AppointmentNotFoundException {
+        Appointment appointment;
         try {
-            return entityManager.createNamedQuery("getAppointmentByDate").setParameter("appointmentDate", appointmentDate).getResultList();
+            appointment = (Appointment) entityManager.createNamedQuery("getAppointmentByDate").setParameter("appointmentDate", appointmentDate).getSingleResult();
         } catch (Exception e) {
             throw new AppointmentNotFoundException("Error finding appointments by date" + e.getMessage());
         }
+        return appointment;
     }
 
     @Override

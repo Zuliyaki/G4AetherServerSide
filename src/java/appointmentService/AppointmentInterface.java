@@ -30,7 +30,7 @@ public interface AppointmentInterface {
 
     public List<Appointment> getAppointmentByPsychologist(String idPsychologist) throws AppointmentNotFoundException;
 
-    public List<Appointment> getAppointmentByDate(Date appointmentDate) throws AppointmentNotFoundException;
+    public Appointment getAppointmentByDate(Date appointmentDate) throws AppointmentNotFoundException;
 
     public List<Appointment> getAppointmentByChange(Boolean appointmentChange) throws AppointmentNotFoundException;
 
