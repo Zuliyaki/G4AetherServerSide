@@ -17,7 +17,7 @@ import javax.persistence.PersistenceContext;
 
 /**
  *
- * @author Leire
+ * @author unaibAndLeire
  */
 @Stateless
 public class EJBUserManager implements UserInterface {
@@ -48,7 +48,7 @@ public class EJBUserManager implements UserInterface {
      */
     @Override
     public void updateUser(User user) throws UpdateException {
-         try {
+        try {
             if (!entityManager.contains(user)) {
                 entityManager.merge(user);
             }
@@ -60,16 +60,22 @@ public class EJBUserManager implements UserInterface {
 
     @Override
     public void deleteUser(String dni) throws DeleteException {
-          try {
-            entityManager.remove(entityManager.merge(getUsersByDni(dni)));
+        try {
+            entityManager.remove(entityManager.merge(findUserByDni(dni)));
         } catch (UserException e) {
             throw new DeleteException(e.getMessage());
         }
     }
 
+    /**
+     * Get all users
+     *
+     * @return List of all users
+     * @throws UserException
+     */
     @Override
-    public List<User> getAllUsers() throws UserException {
-        List<User> users;
+    public List<User> findAllUsers() throws UserException {
+        List<User> users = null;
         try {
             users = entityManager.createNamedQuery("findAllUsers").getResultList();
         } catch (Exception e) {
@@ -77,8 +83,8 @@ public class EJBUserManager implements UserInterface {
         }
         return users;
     }
-    
-     /**
+
+    /**
      * Get an user by dni
      *
      * @param dni Dni of the user to search for
@@ -86,7 +92,7 @@ public class EJBUserManager implements UserInterface {
      * @throws UserException
      */
     @Override
-    public User getUsersByDni(String dni) throws UserException {
+    public User findUserByDni(String dni) throws UserException {
         User user;
         try {
             user = entityManager.find(User.class, dni);
@@ -94,6 +100,51 @@ public class EJBUserManager implements UserInterface {
             throw new UserException(e.getMessage());
         }
         return user;
+    }
+
+    /**
+     * Get all patients
+     *
+     * @return List of all patients
+     * @throws UserException
+     */
+    @Override
+    public List<User> findAllPatients() throws UserException {
+        List<User> users;
+        try {
+            users = entityManager.createNamedQuery("findAllPatients").getResultList();
+        } catch (Exception e) {
+            throw new UserException(e.getMessage());
+        }
+        return users;
+    }
+
+    /**
+     * Get all psychologists
+     *
+     * @return List of all psychologists
+     * @throws UserException
+     */
+    @Override
+    public List<User> findAllPsychologists() throws UserException {
+        List<User> users;
+        try {
+            users = entityManager.createNamedQuery("findAllPsychologists").getResultList();
+        } catch (Exception e) {
+            throw new UserException(e.getMessage());
+        }
+        return users;
+    }
+
+    @Override
+    public List<User> findAllPatientsByPsychologist(String dniPsychologist) throws UserException {
+        List<User> users;
+        try {
+            users = entityManager.createNamedQuery("findAllPatientsByPsychologist").setParameter("dniPsychologist", dniPsychologist).getResultList();
+        } catch (Exception e) {
+            throw new UserException(e.getMessage());
+        }
+        return users;
     }
 
 }

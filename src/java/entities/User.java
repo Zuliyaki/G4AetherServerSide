@@ -9,28 +9,27 @@ import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * 
+ *
  * @author unaibAndLeire
  */
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Table(name = "user", schema = "aether")
+@DiscriminatorColumn(name = "user_type",
+        discriminatorType = DiscriminatorType.STRING)
 @NamedQueries({
     @NamedQuery(
-            name = "findAllUsers", query = "SELECT u FROM User u"
-    ),
+            name = "findAllUsers", query = "SELECT u FROM User u, Patient p WHERE u.user_type=patient"
+    )
+    ,
     @NamedQuery(
-            name = "findAllPatients", query = "SELECT u FROM User u, Patient p WHERE u.dni=p.dni"
-    ),
-    @NamedQuery(
-            name = "findAllPsychologists", query = "SELECT u FROM User u, Psychologist p WHERE u.dni=p.dni"
-    ),
+            name = "singIn", query = "SELECT u FROM User u WHERE u.dni=:dniUser AND u.password=:passwordUser"
+    )
+    ,
     @NamedQuery(
             name = "findUserByDni", query = "SELECT u FROM User u WHERE u.dni=:dni"
     )
 })
-@DiscriminatorColumn(name = "user_type",
-        discriminatorType = DiscriminatorType.STRING)
 @XmlRootElement
 public class User implements Serializable {
 

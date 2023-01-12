@@ -13,6 +13,14 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 @Entity
 @DiscriminatorValue("patient")
+@NamedQueries({
+    @NamedQuery(
+            name = "findAllPatients", query = "SELECT u FROM User u, Patient p WHERE u.dni=p.dni"
+    ),
+    @NamedQuery(
+            name = "findAllPatientsByPsychologist", query = "SELECT u FROM User u, Patient pa WHERE u.dni=pa.dni AND pa.psychologist.dni=:dniPsychologist"
+    )
+})
 @XmlRootElement
 public class Patient extends User {
 

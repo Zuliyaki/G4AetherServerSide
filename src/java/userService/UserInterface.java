@@ -24,8 +24,14 @@ public interface UserInterface {
 
     public void deleteUser(String dni) throws DeleteException;
 
-    public List<User> getAllUsers() throws UserException;
+    public List<User> findAllUsers() throws UserException;
     
-    public User getUsersByDni(String dni) throws UserException;
+    public List<User> findAllPatients() throws UserException;
+    
+    public List<User> findAllPsychologists() throws UserException;
+    
+    public List<User> findAllPatientsByPsychologist(String dniPsychologist) throws UserException;
+    
+    public User findUserByDni(String dni) throws UserException;
 
 }

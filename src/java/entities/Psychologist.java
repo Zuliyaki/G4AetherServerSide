@@ -8,11 +8,16 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
- * 
+ *
  * @author unaibAndLeire
  */
 @Entity
 @DiscriminatorValue("psychologist")
+@NamedQueries({
+    @NamedQuery(
+            name = "findAllPsychologists", query = "SELECT u FROM User u, Psychologist p WHERE u.dni=p.dni"
+    )
+})
 @XmlRootElement
 public class Psychologist extends User {
 

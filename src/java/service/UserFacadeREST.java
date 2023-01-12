@@ -11,9 +11,12 @@ import exceptions.DeleteException;
 import exceptions.UpdateException;
 import exceptions.UserException;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -28,7 +31,7 @@ import userService.UserInterface;
 
 /**
  *
- * @author Leire
+ * @author unaibAndLeire
  */
 @Path("entities.user")
 public class UserFacadeREST extends AbstractFacade<User> {
@@ -37,7 +40,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
     private UserInterface userEJB;
     private EntityManager em;
 
-    private static final Logger LOGGER = Logger.getLogger(MentalDiseaseFacadeREST.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(UserFacadeREST.class.getName());
 
     public UserFacadeREST(Class<User> entityClass) {
         super(entityClass);
@@ -78,24 +81,24 @@ public class UserFacadeREST extends AbstractFacade<User> {
 
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<User> getAllUsers() {
+    public List<User> findAllUsers() {
         List<User> users = null;
         try {
-            users = userEJB.getAllUsers();
+            users = userEJB.findAllUsers();
         } catch (UserException ex) {
             LOGGER.severe(ex.getMessage());
             throw new InternalServerErrorException(ex.getMessage());
         }
         return users;
     }
-    
+
     @GET
     @Path("{dni}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public User getUsersByDni(@PathParam("dni") String dni) {
         User user = null;
         try {
-            user = userEJB.getUsersByDni(dni);
+            user = userEJB.findUserByDni(dni);
         } catch (UserException ex) {
             LOGGER.severe(ex.getMessage());
             throw new InternalServerErrorException(ex.getMessage());
@@ -103,9 +106,22 @@ public class UserFacadeREST extends AbstractFacade<User> {
         return user;
     }
 
+    @GET
+    @Path("findPatientsByPsychologist/{dniPsychologist}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<User> findAllPatientsByPsychologist(@PathParam("dniPsychologist") String dniPsychologist) {
+        List<User> users = null;
+        try {
+            users = userEJB.findAllPatientsByPsychologist(dniPsychologist);
+        } catch (UserException ex) {
+            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return users;
+    }
+
     @Override
     protected EntityManager getEntityManager() {
         return em;
     }
-    
+
 }
