@@ -15,15 +15,27 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
+/**
+ *
+ * @author Janam
+ */
 @Entity
 
 @Table(name = "appointment", schema = "aether")
 
 @NamedQueries({
-    
-    @NamedQuery(name = "findAllAppointments", query = "SELECT a FROM Appointment a")
+    @NamedQuery(name = "getAllAppointments", query = "SELECT a FROM Appointment a")
     ,
-    @NamedQuery(name = "findAppointmentById", query = "SELECT a FROM Appointment a WHERE a.idAppointment = :idAppointment")
+    @NamedQuery(name = "getAppointmentById", query = "SELECT a FROM Appointment a WHERE a.idAppointment = :idAppointment")
+    ,
+    @NamedQuery(name = "getAppointmentByDate", query = "SELECT a FROM Appointment a WHERE a.appointmentDate = :appointmentDate")
+    ,
+    @NamedQuery(name = "getAppointmentByChange", query = "SELECT a FROM Appointment a WHERE a.appointmentChange = :appointmentChange")
+    ,
+    @NamedQuery(name = "getAppointmentByPatient", query = "SELECT a FROM Appointment a WHERE a.patient.dni=:patient_dni")
+    ,
+    @NamedQuery(name = "getAppointmentByPsychologist", query = "SELECT a FROM Appointment a WHERE a.psychologist.dni=:psychologist_dni")
+
 })
 
 @XmlRootElement

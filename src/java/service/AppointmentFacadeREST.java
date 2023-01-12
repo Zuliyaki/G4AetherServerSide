@@ -6,6 +6,7 @@ import exceptions.AppointmentNotFoundException;
 import exceptions.CreateException;
 import exceptions.DeleteException;
 import exceptions.UpdateException;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
@@ -23,7 +24,7 @@ import javax.ws.rs.core.MediaType;
 
 /**
  *
- * @author unaib
+ * @author Janam
  */
 @Stateless
 @Path("entities.appointment")
@@ -34,10 +35,6 @@ public class AppointmentFacadeREST {
 
     private static final Logger LOGGER = Logger.getLogger(AppointmentFacadeREST.class.getName());
 
-    /**
-     *
-     * @param entity
-     */
     @POST
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void create(Appointment entity) {
@@ -49,11 +46,6 @@ public class AppointmentFacadeREST {
         }
     }
 
-    /**
-     *
-     * @param idAppointment
-     * @param entity
-     */
     @PUT
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void edit(@PathParam("id") Long idAppointment, Appointment entity) {
@@ -65,10 +57,6 @@ public class AppointmentFacadeREST {
         }
     }
 
-    /**
-     *
-     * @param idAppointment
-     */
     @DELETE
     @Path("{id}")
     public void remove(@PathParam("id") Long idAppointment) {
@@ -80,36 +68,83 @@ public class AppointmentFacadeREST {
         }
     }
 
-    /**
-     *
-     * @param idAppointment
-     * @return
-     */
     @GET
     @Path("{id}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Appointment findAppointmentById(@PathParam("id") Long idAppointment) {
+    public Appointment getAppointmentById(@PathParam("id") Long idAppointment) {
         Appointment appointment = null;
         try {
-            appointment = appointmentEJB.findAppointmentById(idAppointment);
+            appointment = appointmentEJB.getAppointmentById(idAppointment);
         } catch (AppointmentNotFoundException ex) {
             LOGGER.severe(ex.getMessage());
             throw new InternalServerErrorException(ex.getMessage());
         }
         return appointment;
-
     }
 
-    /**
-     *
-     * @return
-     */
+   
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Appointment> findAllAppointments() {
+    public List<Appointment> getAllAppointments() {
         List<Appointment> appointments = null;
         try {
-            appointments = appointmentEJB.findAllAppointments();
+            appointments = appointmentEJB.getAllAppointments();
+        } catch (AppointmentNotFoundException ex) {
+            LOGGER.severe(ex.getMessage());
+            throw new InternalServerErrorException(ex.getMessage());
+        }
+        return appointments;
+    }
+
+    @GET
+    @Path("getByPatient/{patient_dni}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<Appointment> getAppointmentByPatient(@PathParam("patient_dni") String idPatient) {
+        List<Appointment> appointments = null;
+        try {
+            appointments = appointmentEJB.getAppointmentByPatient(idPatient);
+        } catch (AppointmentNotFoundException ex) {
+            LOGGER.severe(ex.getMessage());
+            throw new InternalServerErrorException(ex.getMessage());
+        }
+        return appointments;
+    }
+
+    @GET
+    @Path("getByPsychologist/{psychologist_dni}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<Appointment> getAppointmentByPsychologist(@PathParam("patient_dni") String idPsychologist) {
+        List<Appointment> appointments = null;
+        try {
+            appointments = appointmentEJB.getAppointmentByPsychologist(idPsychologist);
+        } catch (AppointmentNotFoundException ex) {
+            LOGGER.severe(ex.getMessage());
+            throw new InternalServerErrorException(ex.getMessage());
+        }
+        return appointments;
+    }
+
+    @GET
+    @Path("getAppointmentByDate/{appointmentdate}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<Appointment> getAppointmentByDate(@PathParam("appointmentdate") Date appointmentdate) {
+        List<Appointment> appointments = null;
+        try {
+            appointments = appointmentEJB.getAppointmentByDate(appointmentdate);
+        } catch (AppointmentNotFoundException ex) {
+            LOGGER.severe(ex.getMessage());
+            throw new InternalServerErrorException(ex.getMessage());
+        }
+        return appointments;
+    }
+
+    @GET
+    @Path("getAppointmentByChange/{appointmentchange}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<Appointment> getAppointmentByChange(@PathParam("appointmentchange") Boolean appointmentchange) {
+        List<Appointment> appointments = null;
+        try {
+            appointments = appointmentEJB.getAppointmentByChange(appointmentchange);
         } catch (AppointmentNotFoundException ex) {
             LOGGER.severe(ex.getMessage());
             throw new InternalServerErrorException(ex.getMessage());
