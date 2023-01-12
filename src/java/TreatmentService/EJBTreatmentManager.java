@@ -36,14 +36,12 @@ public class EJBTreatmentManager implements TreatmentInterface {
     @Override
     public void createTreatment(Treatment treament) throws CreateException {
         try {
-             Diagnosis diagnosis;
-             Medication medication;
-           if (!em.contains(treament.getDiagnosis())) {
-                 diagnosis = em.merge(treament.getDiagnosis());
-            }
-           if (!em.contains(treament.getMedication())) {
-                medication = em.merge(treament.getMedication());
-            }
+          if (!em.contains(treament.getDiagnosis())) 
+                 treament.setDiagnosis(em.merge(treament.getDiagnosis()));
+            
+           if (!em.contains(treament.getMedication())) 
+                treament.setMedication(em.merge(treament.getMedication()));
+            
             em.persist(treament);
         } catch (Exception e) {
             throw new CreateException(e.getMessage());
