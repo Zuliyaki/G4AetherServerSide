@@ -6,11 +6,8 @@
 package userService;
 
 import entities.User;
-import exceptions.CreateException;
-import exceptions.DeleteException;
-import exceptions.UpdateException;
-import exceptions.UserException;
 import java.util.List;
+import exceptions.UserNotFoundException;
 
 /**
  *
@@ -18,20 +15,10 @@ import java.util.List;
  */
 public interface UserInterface {
 
-    public void createUser(User user) throws CreateException;
+    public User logInUser(String dniUser, String passwordUser) throws UserNotFoundException;
 
-    public void updateUser(User user) throws UpdateException;
+    public List<User> findAllUsers() throws UserNotFoundException;
 
-    public void deleteUser(String dni) throws DeleteException;
-
-    public List<User> findAllUsers() throws UserException;
+    public User findUserByDni(String dniUser) throws UserNotFoundException;
     
-    public List<User> findAllPatients() throws UserException;
-    
-    public List<User> findAllPsychologists() throws UserException;
-    
-    public List<User> findAllPatientsByPsychologist(String dniPsychologist) throws UserException;
-    
-    public User findUserByDni(String dni) throws UserException;
-
 }

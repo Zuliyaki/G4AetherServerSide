@@ -29,21 +29,18 @@ import userService.UserInterface;
 
 /**
  *
- * @author Leire
+ * @author LeireAndUnaib
  */
 @Path("entities.admin")
-public class AdminFacadeREST extends AbstractFacade<Admin> {
+public class AdminFacadeREST {
 
     @EJB
     private UserInterface userEJB;
-    private EntityManager em;
 
     private static final Logger LOGGER = Logger.getLogger(AdminFacadeREST.class.getName());
 
-    public AdminFacadeREST() {
-        super(Admin.class);
-    }
 
+    /*
     @POST
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void createUser(User entity) {
@@ -89,10 +86,5 @@ public class AdminFacadeREST extends AbstractFacade<Admin> {
         }
         return users;
     }
-    
-    @Override
-    protected EntityManager getEntityManager() {
-        return em;
-    }
-
+     */
 }

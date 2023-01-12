@@ -19,11 +19,10 @@ import javax.xml.bind.annotation.XmlRootElement;
         discriminatorType = DiscriminatorType.STRING)
 @NamedQueries({
     @NamedQuery(
-            name = "findAllUsers", query = "SELECT u FROM User u, Patient p WHERE u.user_type=patient"
-    )
-    ,
-    @NamedQuery(
             name = "singIn", query = "SELECT u FROM User u WHERE u.dni=:dniUser AND u.password=:passwordUser"
+    )
+    ,@NamedQuery(
+            name = "findAllUsers", query = "SELECT u FROM User u"
     )
     ,
     @NamedQuery(

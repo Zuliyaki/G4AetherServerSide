@@ -25,25 +25,21 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import userService.UserInterface;
+import patientService.PatientInterface;
 
 /**
  *
- * @author Leire
+ * @author LeireAndUnaib
  */
 @Path("entities.patient")
-public class PatientFacadeREST extends AbstractFacade<Patient> {
+public class PatientFacadeREST {
 
     @EJB
-    private UserInterface userEJB;
-    private EntityManager em;
-    
+    private PatientInterface patientEJB;
+
     private static final Logger LOGGER = Logger.getLogger(PatientFacadeREST.class.getName());
 
-    public PatientFacadeREST() {
-        super(Patient.class);
-    }
-
+    /*
     @POST
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void createUser(User entity) {
@@ -89,10 +85,5 @@ public class PatientFacadeREST extends AbstractFacade<Patient> {
         }
         return users;
     }
-
-    @Override
-    protected EntityManager getEntityManager() {
-        return em;
-    }
-    
+     */
 }
