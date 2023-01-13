@@ -23,15 +23,15 @@ import javax.xml.bind.annotation.XmlTransient;
     )
     ,
     @NamedQuery(
-            name = "findAllDiagnosisByPatient", query = "SELECT dia FROM Diagnosis dia WHERE dia.patient=:patient"
+            name = "findAllDiagnosisByPatient", query = "SELECT dia FROM Diagnosis dia WHERE dia.patient.dni=:patient"
     )
     ,
     @NamedQuery(
-            name = "findPatientDiagnosisByDate", query = "SELECT dia FROM Diagnosis dia WHERE dia.patient=:patient and dia.diagnosisDate=:diagnosisDate"
+            name = "findPatientDiagnosisByDate", query = "SELECT dia FROM Diagnosis dia WHERE dia.patient.dni=:patient and dia.diagnosisDate BETWEEN :diaDateLow AND :diaDateGreat"
     )
     ,
     @NamedQuery(
-            name = "findAllIfPatientOnTeraphy", query = "SELECT dia FROM Diagnosis dia WHERE dia.patient=:patient and dia.onTherapy=true"
+            name = "findAllIfPatientOnTeraphy", query = "SELECT dia FROM Diagnosis dia WHERE dia.patient.dni=:patient and dia.onTherapy=true"
     )
 })
 @XmlRootElement

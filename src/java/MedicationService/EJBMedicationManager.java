@@ -54,7 +54,8 @@ public class EJBMedicationManager implements MedicationInterface {
     public Medication findMedicationByName(String medicationName) throws MedicationNotFoundException {
         Medication medication;
         try{
-            medication=em.find(Medication.class, medicationName);
+            medication =(Medication) em.createNamedQuery("findMedicationByName").setParameter("medicationName", medicationName).getSingleResult();
+            
                 
         }catch(Exception e){
             throw new MedicationNotFoundException(e.getMessage());

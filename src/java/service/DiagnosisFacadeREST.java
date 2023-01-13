@@ -25,12 +25,12 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.InternalServerErrorException;
 
 /**
  *
  * @author unaiz
  */
-
 @Path("entities.diagnosis")
 public class DiagnosisFacadeREST {
 
@@ -50,7 +50,7 @@ public class DiagnosisFacadeREST {
             ejb.createDiagnosis(entity);
         } catch (CreateException ex) {
             LOGGER.severe(ex.getMessage());
-            // throw new InternalServerErrorException(ex.getMessage());        
+            throw new InternalServerErrorException(ex.getMessage());
         }
     }
 
@@ -62,7 +62,7 @@ public class DiagnosisFacadeREST {
             ejb.updateDiagnosis(entity);
         } catch (UpdateException ex) {
             LOGGER.severe(ex.getMessage());
-            // throw new InternalServerErrorException(ex.getMessage());        
+            throw new InternalServerErrorException(ex.getMessage());
         }
     }
 
@@ -74,7 +74,7 @@ public class DiagnosisFacadeREST {
             ejb.deleteDiagnosis(ejb.findDiagnosisById(id));
         } catch (DiagnosisNotFoundException | DeleteException ex) {
             LOGGER.severe(ex.getMessage());
-            // throw new InternalServerErrorException(ex.getMessage());        
+            throw new InternalServerErrorException(ex.getMessage());
         }
     }
 
@@ -88,82 +88,76 @@ public class DiagnosisFacadeREST {
             diagnosis = ejb.findDiagnosisById(id);
         } catch (DiagnosisNotFoundException ex) {
             LOGGER.severe(ex.getMessage());
-            // throw new InternalServerErrorException(ex.getMessage());        
+            throw new InternalServerErrorException(ex.getMessage());
         }
         return diagnosis;
     }
 
     @GET
+    @Path("all")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public List<Diagnosis> findAllDiagnosis() {
-         List<Diagnosis> diagnosises = null;
+        List<Diagnosis> diagnosises = null;
         try {
             LOGGER.log(Level.INFO, "getting all diagnosis");
             diagnosises = ejb.findAllDiagnosis();
         } catch (DiagnosisNotFoundException ex) {
             LOGGER.severe(ex.getMessage());
-            // throw new InternalServerErrorException(ex.getMessage());        
+            throw new InternalServerErrorException(ex.getMessage());
         }
         return diagnosises;
     }
-@GET
-    @Path("patient/{id}")
+
+    @GET
+    @Path("patients/{id}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Diagnosis> findAllDiagnosisByPatient(@PathParam("id") Long id) {
-        List <Diagnosis> diagnosises = null;
-        Patient patient = null;
+    public List<Diagnosis> findAllDiagnosisByPatient(@PathParam("id") String id) {
+        List<Diagnosis> diagnosises = null;
+
         try {
             LOGGER.log(Level.INFO, "getting diagnosis by patient id");
             diagnosises = ejb.findAllDiagnosisByPatient(id);
         } catch (DiagnosisNotFoundException ex) {
             LOGGER.severe(ex.getMessage());
-            // throw new InternalServerErrorException(ex.getMessage());        
+            throw new InternalServerErrorException(ex.getMessage());
         }
         return diagnosises;
     }
-    
+
     @GET
-    @Path("patientOnTeraphy/{id}")
+    @Path("onteraphy/{id}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Diagnosis> findAllIfPatientOnTeraphy(@PathParam("id") Long id) {
-        List <Diagnosis> diagnosises = null;
-        Patient patient = null;
+    public List<Diagnosis> findAllIfPatientOnTeraphy(@PathParam("id") String id) {
+        List<Diagnosis> diagnosises = null;
         try {
             LOGGER.log(Level.INFO, "getting diagnosis by patient id");
             diagnosises = ejb.findAllIfPatientOnTeraphy(id);
         } catch (DiagnosisNotFoundException ex) {
             LOGGER.severe(ex.getMessage());
-            // throw new InternalServerErrorException(ex.getMessage());        
+            throw new InternalServerErrorException(ex.getMessage());
         }
         return diagnosises;
-    }
-        
-    @GET
-    @Path("byDates/{id}/{Date}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Diagnosis> findPatientDiagnosisByDate(@PathParam("id") Long id ,@PathParam("date")String dateIntro) {
-        List <Diagnosis> diagnosises = null;
-        Patient patient = null;
-        try {
-            LOGGER.log(Level.INFO, "getting diagnosis by patient id");
-            SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
-            Date date = format.parse(dateIntro);
-            diagnosises = ejb.findPatientDiagnosisByDate(id, date);
-        } catch (ParseException | DiagnosisNotFoundException ex) {
-            LOGGER.severe(ex.getMessage());
-            // throw new InternalServerErrorException(ex.getMessage());        
-       
-        }
-        return diagnosises;
-    }
-    @GET
-    @Path("{from}/{to}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Diagnosis> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
-        //return super.findRange(new int[]{from, to});
-        return null;
     }
 
-    
+    @GET
+    @Path("findDiagnosisByPatientIdbeetweenDates/{id}/{dateLow}/{dateGreat}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<Diagnosis> findPatientDiagnosisByDate(@PathParam("id") String idPatient, @PathParam("dateLow") String dateIntroLow, @PathParam("dateGreat") String dateIntroGreat) {
+        List<Diagnosis> diagnosises = null;
+        Patient patient = null;
+        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+        try {
+            LOGGER.log(Level.INFO, "getting diagnosis by patient id");
+            Date dateLow = format.parse(dateIntroLow);
+            Date dateGreat = format.parse(dateIntroGreat);
+
+            diagnosises = ejb.findPatientDiagnosisByDate(idPatient, dateLow, dateGreat);
+        } catch (ParseException | DiagnosisNotFoundException ex) {
+            LOGGER.severe(ex.getMessage());
+            throw new InternalServerErrorException(ex.getMessage());
+
+        }
+        return diagnosises;
+    }
 
 }

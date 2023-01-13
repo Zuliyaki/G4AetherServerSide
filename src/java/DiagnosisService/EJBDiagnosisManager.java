@@ -6,8 +6,6 @@
 package DiagnosisService;
 
 import entities.Diagnosis;
-import entities.Patient;
-import entities.User;
 import exceptions.CreateException;
 import exceptions.DeleteException;
 import exceptions.DiagnosisNotFoundException;
@@ -87,10 +85,10 @@ public class EJBDiagnosisManager implements DiagnosisInterface {
     }
 
     @Override
-    public List<Diagnosis> findAllDiagnosisByPatient(Long patientID) throws DiagnosisNotFoundException {
+    public List<Diagnosis> findAllDiagnosisByPatient(String patientID) throws DiagnosisNotFoundException {
          List<Diagnosis> diagnosises;
         try{
-           diagnosises=em.createNamedQuery("findAllDiagnosisByPatient").setParameter("patient", em.find(Patient.class, patientID)).getResultList();
+           diagnosises=em.createNamedQuery("findAllDiagnosisByPatient").setParameter("patient", patientID).getResultList();
         }catch(Exception e){
             throw new DiagnosisNotFoundException(e.getMessage());
         }
@@ -98,10 +96,10 @@ public class EJBDiagnosisManager implements DiagnosisInterface {
     }
 
     @Override
-    public List<Diagnosis> findPatientDiagnosisByDate(Long patientID, Date date) throws DiagnosisNotFoundException {
+    public List<Diagnosis> findPatientDiagnosisByDate(String patientID, Date dateLow, Date dateGreat) throws DiagnosisNotFoundException {
         List<Diagnosis> diagnosises;
         try{
-            diagnosises = em.createNamedQuery("findPatientDiagnosisByDate").setParameter("diagnosisDate", date).setParameter("patient", em.find(Patient.class, patientID)).getResultList();
+            diagnosises = em.createNamedQuery("findPatientDiagnosisByDate").setParameter("diaDateGreat", dateGreat).setParameter("diaDateLow", dateLow).setParameter("patient",patientID).getResultList();
         }catch(Exception e){
             throw new DiagnosisNotFoundException(e.getMessage());
         }
@@ -109,10 +107,10 @@ public class EJBDiagnosisManager implements DiagnosisInterface {
     }
 
     @Override
-    public List<Diagnosis> findAllIfPatientOnTeraphy(Long patientID) throws DiagnosisNotFoundException {
+    public List<Diagnosis> findAllIfPatientOnTeraphy(String patientID) throws DiagnosisNotFoundException {
         List<Diagnosis> diagnosises;
         try{
-            diagnosises=em.createNamedQuery("findAllIfPatientOnTeraphy").setParameter("patient", em.find(Patient.class, patientID)).getResultList();
+            diagnosises=em.createNamedQuery("findAllIfPatientOnTeraphy").setParameter("patient", patientID).getResultList();
         }catch(Exception e){
             throw new DiagnosisNotFoundException(e.getMessage());
         }
