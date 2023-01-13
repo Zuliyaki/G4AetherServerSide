@@ -6,86 +6,95 @@
 package service;
 
 import entities.Patient;
+import exceptions.CreateException;
+import exceptions.DeleteException;
+import exceptions.UpdateException;
+import exceptions.PatientException;
 import java.util.List;
-import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import java.util.logging.Logger;
+import javax.ejb.EJB;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import patientService.PatientInterface;
 
 /**
  *
- * @author unaib
+ * @author unaibAndLeire
  */
-@Stateless
 @Path("entities.patient")
-public class PatientFacadeREST extends AbstractFacade<Patient> {
-
-    @PersistenceContext(unitName = "G4AetherPU")
-    private EntityManager em;
-
-    public PatientFacadeREST() {
-        super(Patient.class);
-    }
-
+public class PatientFacadeREST {
+    
+    @EJB
+    private PatientInterface patientEJB;
+    
+    private static final Logger LOGGER = Logger.getLogger(PatientFacadeREST.class.getName());
+    
     @POST
-    @Override
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void create(Patient entity) {
-        super.create(entity);
+    public void createPatient(Patient entity) {
+        try {
+            patientEJB.createPatient(entity);
+        } catch (CreateException ex) {
+            LOGGER.severe(ex.getMessage());
+            throw new InternalServerErrorException(ex.getMessage());
+        }
     }
-
+    
     @PUT
-    @Path("{id}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void edit(@PathParam("id") String id, Patient entity) {
-        super.edit(entity);
+    public void editPatient(@PathParam("dni") String dni, Patient entity) {
+        try {
+            patientEJB.updatePatient(entity, dni);
+        } catch (UpdateException ex) {
+            LOGGER.severe(ex.getMessage());
+            throw new InternalServerErrorException(ex.getMessage());
+        }
     }
-
+    
     @DELETE
-    @Path("{id}")
-    public void remove(@PathParam("id") String id) {
-        super.remove(super.find(id));
+    @Path("{dni}")
+    public void removePatient(@PathParam("dni") String dni) {
+        try {
+            patientEJB.deletePatient(dni);
+        } catch (DeleteException ex) {
+            LOGGER.severe(ex.getMessage());
+            throw new InternalServerErrorException(ex.getMessage());
+        }
     }
-
+    
     @GET
-    @Path("{id}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Patient find(@PathParam("id") String id) {
-        return super.find(id);
+    public List<Patient> findAllPatients() {
+        List<Patient> patients = null;
+        try {
+            patients = patientEJB.findAllPatients();
+        } catch (PatientException ex) {
+            LOGGER.severe(ex.getMessage());
+            throw new InternalServerErrorException(ex.getMessage());
+        }
+        return patients;
     }
-
+    
     @GET
-    @Override
+    @Path("findPatientsByPsychologist/{dniPsychologist}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Patient> findAll() {
-        return super.findAll();
-    }
-
-    @GET
-    @Path("{from}/{to}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Patient> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
-        return super.findRange(new int[]{from, to});
-    }
-
-    @GET
-    @Path("count")
-    @Produces(MediaType.TEXT_PLAIN)
-    public String countREST() {
-        return String.valueOf(super.count());
-    }
-
-    @Override
-    protected EntityManager getEntityManager() {
-        return em;
+    public List<Patient> findAllPatientsByPsychologist(@PathParam("dniPsychologist") String dniPsychologist) {
+        List<Patient> patients = null;
+        try {
+            patients = patientEJB.findAllPatientsByPsychologist(dniPsychologist);
+        } catch (PatientException ex) {
+            LOGGER.severe(ex.getMessage());
+            throw new InternalServerErrorException(ex.getMessage());
+        }
+        return patients;
     }
     
 }

@@ -20,12 +20,28 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 @Entity
 @Table(name = "mentaldisease", schema = "aether")
+@NamedQueries({
+    @NamedQuery(
+            name = "getAllMentalDiseases", query = "SELECT md FROM MentalDisease md"
+    )
+    ,
+    @NamedQuery(
+            name = "getAllMentalDiseasesOrderByName", query = "SELECT md FROM MentalDisease md ORDER BY md.mdName ASC"
+    )
+    , 
+    @NamedQuery(
+            name = "getMentalDiseasesByName", query = "SELECT md FROM MentalDisease md WHERE md.mdName=:mdName"
+    )
+    , 
+    @NamedQuery(
+            name = "getMentalDiseasesById", query = "SELECT md FROM MentalDisease md WHERE md.idMentalDisease=:idMentalDisease"
+    )
+})
 @XmlRootElement
 public class MentalDisease implements Serializable {
 

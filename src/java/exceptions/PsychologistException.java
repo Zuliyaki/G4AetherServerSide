@@ -9,23 +9,22 @@ package exceptions;
  *
  * @author unaib
  */
-public class CreateException extends Exception {
+public class PsychologistException extends Exception {
 
     /**
-     * Creates a new instance of <code>CreationException</code> without detail
-     * message.
+     * Creates a new instance of <code>PsychologistException</code> without
+     * detail message.
      */
-    public CreateException() {
+    public PsychologistException() {
     }
 
     /**
-     * Constructs an instance of <code>CreationException</code> with the
+     * Constructs an instance of <code>PsychologistException</code> with the
      * specified detail message.
      *
      * @param msg the detail message.
      */
-    public CreateException(String msg) {
+    public PsychologistException(String msg) {
         super(msg);
     }
-
 }
