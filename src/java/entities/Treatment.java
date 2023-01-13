@@ -95,7 +95,4 @@ public class Treatment implements Serializable {
         return true;
     }
 
-   
-  
-
 }

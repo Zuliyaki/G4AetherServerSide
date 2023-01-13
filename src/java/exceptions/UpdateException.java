@@ -7,7 +7,7 @@ package exceptions;
 
 /**
  *
- * @author unaiz
+ * @author unaib
  */
 public class UpdateException extends Exception {
 
@@ -27,4 +27,5 @@ public class UpdateException extends Exception {
     public UpdateException(String msg) {
         super(msg);
     }
+    
 }

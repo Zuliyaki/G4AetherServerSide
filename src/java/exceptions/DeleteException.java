@@ -7,7 +7,7 @@ package exceptions;
 
 /**
  *
- * @author unaiz
+ * @author unaib
  */
 public class DeleteException extends Exception {
 
@@ -27,4 +27,5 @@ public class DeleteException extends Exception {
     public DeleteException(String msg) {
         super(msg);
     }
+    
 }

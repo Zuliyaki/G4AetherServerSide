@@ -6,86 +6,109 @@
 package service;
 
 import entities.User;
+import exceptions.CreateException;
+import exceptions.DeleteException;
+import exceptions.UpdateException;
+import exceptions.UserException;
 import java.util.List;
-import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import java.util.logging.Logger;
+import javax.ejb.EJB;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import userService.UserInterface;
 
 /**
  *
- * @author 2dam
+ * @author unaibAndLeire
  */
-@Stateless
 @Path("entities.user")
-public class UserFacadeREST extends AbstractFacade<User> {
+public class UserFacadeREST {
 
-    @PersistenceContext(unitName = "G4AetherPU")
-    private EntityManager em;
+    @EJB
+    private UserInterface userEJB;
 
-    public UserFacadeREST() {
-        super(User.class);
-    }
+    private static final Logger LOGGER = Logger.getLogger(UserFacadeREST.class.getName());
 
     @POST
-    @Override
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void create(User entity) {
-        super.create(entity);
+        try {
+            userEJB.createUser(entity);
+        } catch (CreateException ex) {
+            LOGGER.severe(ex.getMessage());
+            throw new InternalServerErrorException(ex.getMessage());
+        }
     }
 
     @PUT
-    @Path("{id}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void edit(@PathParam("id") String id, User entity) {
-        super.edit(entity);
+    public void edit(@PathParam("dni") String dniUser, User entity) {
+        try {
+            userEJB.updateUser(entity, dniUser);
+        } catch (UpdateException ex) {
+            LOGGER.severe(ex.getMessage());
+            throw new InternalServerErrorException(ex.getMessage());
+        }
     }
 
     @DELETE
-    @Path("{id}")
-    public void remove(@PathParam("id") String id) {
-        super.remove(super.find(id));
+    @Path("{dni}")
+    public void remove(@PathParam("dni") String dniUser) {
+        try {
+            userEJB.deleteUser(dniUser);
+        } catch (DeleteException ex) {
+            LOGGER.severe(ex.getMessage());
+            throw new InternalServerErrorException(ex.getMessage());
+        }
     }
 
     @GET
-    @Path("{id}")
+    @Path("logInUser/{dniUser}/{passwordUser}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public User find(@PathParam("id") String id) {
-        return super.find(id);
+    public User logInUser(@PathParam("dniUser") String dniUser, @PathParam("passwordUser") String passwordUser) {
+        User user = null;
+        try {
+            user = userEJB.logInUser(dniUser, passwordUser);
+        } catch (UserException ex) {
+            LOGGER.severe(ex.getMessage());
+            throw new InternalServerErrorException(ex.getMessage());
+        }
+        return user;
     }
 
     @GET
-    @Override
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<User> findAll() {
-        return super.findAll();
+    public List<User> findAllUsers() {
+        List<User> users = null;
+        try {
+            users = userEJB.findAllUsers();
+        } catch (UserException ex) {
+            LOGGER.severe(ex.getMessage());
+            throw new InternalServerErrorException(ex.getMessage());
+        }
+        return users;
     }
 
     @GET
-    @Path("{from}/{to}")
+    @Path("{dni}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<User> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
-        return super.findRange(new int[]{from, to});
+    public User findUserByDni(@PathParam("dni") String dniUser) {
+        User user = null;
+        try {
+            user = userEJB.findUserByDni(dniUser);
+        } catch (UserException ex) {
+            LOGGER.severe(ex.getMessage());
+            throw new InternalServerErrorException(ex.getMessage());
+        }
+        return user;
     }
 
-    @GET
-    @Path("count")
-    @Produces(MediaType.TEXT_PLAIN)
-    public String countREST() {
-        return String.valueOf(super.count());
-    }
-
-    @Override
-    protected EntityManager getEntityManager() {
-        return em;
-    }
-    
 }

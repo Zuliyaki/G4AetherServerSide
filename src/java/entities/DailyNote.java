@@ -28,26 +28,37 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "dailynote", schema = "aether")
 @NamedQueries({
     @NamedQuery(
-        name = "getAllNotesByPatient", query = "SELECT dn FROM DailyNote dn, User us WHERE us.dni=:idUser"
-    )
-})/*
-    ,
-    @NamedQuery(
-            name = "createNewDailyNote", query = "INSERT INTO DailyNote(dnPatient, dnNoteText, noteComment, dnNoteStatus, dnNoteDate, dnNoteDateLastEdited, dnDayScore, dnNoteReadable) SELECT :dnPatient, :dnNoteText, :noteComment, :dnNoteStatus, :dnNoteDate, :dnNoteDateLastEdited, :dnDayScore, :dnNoteReadable"
+            name = "findAllNotes", query = "SELECT dn FROM DailyNote dn"
     )
     ,
     @NamedQuery(
-            name = "modifyDailyNote", query = "UPDATE DailyNote dn SET dn.dnNoteText WHERE dn.dnPatient.id=:idPatient and dn.dailynote.id=:idNote"
+            name = "findDailyNoteById", query = "SELECT dn FROM DailyNote dn WHERE dn.id=:idDailyNote"
     )
     ,
     @NamedQuery(
-            name = "deleteDailyNote", query = "DELETE FROM DailyNote dn WHERE dn.id=:idDailyNote"
+            name = "findAllNotesByPatient", query = "SELECT dn FROM DailyNote dn WHERE dn.dnPatient.dni=:idUser"
     )
     ,
     @NamedQuery(
-            name = "addCommentOnDailyNote", query = "UPDATE DailyNote dn SET dn.dnNoteComment=:noteComent WHERE dn.id=:idDailyNote"
+            name = "findPatientNoteByDate", query = "SELECT dn FROM DailyNote dn WHERE dn.dnPatient.dni=:idUser and dn.dnNoteDate=:noteDate"
     )
-})*/
+    ,
+    @NamedQuery(
+            name = "findPatientNotesBetweenDates", query = "SELECT dn FROM DailyNote dn WHERE dn.dnPatient.dni=:idUser and dn.dnNoteDate BETWEEN :noteDateLow AND :noteDateGreat"
+    )
+    ,
+    @NamedQuery(
+            name = "findPatientEditedNotes", query = "SELECT dn FROM DailyNote dn WHERE dn.dnPatient.dni=:idUser and dn.dnNoteDate!=dn.dnNoteDateLastEdited"
+    )
+    ,
+    @NamedQuery(
+            name = "findPatientNotesByNotReadable", query = "SELECT dn FROM DailyNote dn WHERE dn.dnPatient.dni=:idUser and dn.dnNoteReadable = FALSE"
+    )
+    ,
+    @NamedQuery(
+            name = "findPatientNotesBetweenDayScores", query = "SELECT dn FROM DailyNote dn WHERE dn.dnPatient.dni=:idUser and dn.dnDayScore BETWEEN :dayScoreLow AND :dayScoreGreat"
+    )
+})
 @XmlRootElement
 public class DailyNote implements Serializable {
 
