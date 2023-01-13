@@ -5,10 +5,26 @@
  */
 package psychologistService;
 
+import java.util.List;
+import entities.Psychologist;
+import exceptions.CreateException;
+import exceptions.DeleteException;
+import exceptions.UpdateException;
+import exceptions.PsychologistException;
+
 /**
  *
- * @author unaib
+ * @author unaibAndLeire
  */
 public interface PsychologistInterface {
-    
+
+    public void createPsychologist(Psychologist psychologist) throws CreateException;
+
+    public void updatePsychologist(Psychologist psychologist, String dni) throws UpdateException;
+
+    public void deletePsychologist(String dni) throws DeleteException;
+
+    public Psychologist findPsychologistById(String dni) throws PsychologistException;
+
+    public List<Psychologist> findAllPsychologists() throws PsychologistException;
 }

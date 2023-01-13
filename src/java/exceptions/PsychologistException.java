@@ -9,22 +9,22 @@ package exceptions;
  *
  * @author unaib
  */
-public class UserNotFoundException extends Exception {
+public class PsychologistException extends Exception {
 
     /**
-     * Creates a new instance of <code>UserNotFoundException</code> without
+     * Creates a new instance of <code>PsychologistException</code> without
      * detail message.
      */
-    public UserNotFoundException() {
+    public PsychologistException() {
     }
 
     /**
-     * Constructs an instance of <code>UserNotFoundException</code> with the
+     * Constructs an instance of <code>PsychologistException</code> with the
      * specified detail message.
      *
      * @param msg the detail message.
      */
-    public UserNotFoundException(String msg) {
+    public PsychologistException(String msg) {
         super(msg);
     }
 }

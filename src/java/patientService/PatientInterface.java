@@ -5,10 +5,29 @@
  */
 package patientService;
 
+import java.util.List;
+import entities.Patient;
+import exceptions.CreateException;
+import exceptions.DeleteException;
+import exceptions.UpdateException;
+import exceptions.PatientException;
+
 /**
  *
- * @author unaib
+ * @author unaibAndLeire
  */
 public interface PatientInterface {
-    
+
+    public void createPatient(Patient patient) throws CreateException;
+
+    public void updatePatient(Patient patient, String dni) throws UpdateException;
+
+    public void deletePatient(String dni) throws DeleteException;
+
+    public Patient findPatientById(String dni) throws PatientException;
+
+    public List<Patient> findAllPatients() throws PatientException;
+
+    public List<Patient> findAllPatientsByPsychologist(String dniPsychologist) throws PatientException;
+
 }

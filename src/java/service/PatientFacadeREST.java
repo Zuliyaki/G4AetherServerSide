@@ -6,15 +6,13 @@
 package service;
 
 import entities.Patient;
-import entities.User;
 import exceptions.CreateException;
 import exceptions.DeleteException;
 import exceptions.UpdateException;
-import exceptions.UserException;
+import exceptions.PatientException;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
-import javax.persistence.EntityManager;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -29,61 +27,74 @@ import patientService.PatientInterface;
 
 /**
  *
- * @author LeireAndUnaib
+ * @author unaibAndLeire
  */
 @Path("entities.patient")
 public class PatientFacadeREST {
-
+    
     @EJB
     private PatientInterface patientEJB;
-
+    
     private static final Logger LOGGER = Logger.getLogger(PatientFacadeREST.class.getName());
-
-    /*
+    
     @POST
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void createUser(User entity) {
+    public void createPatient(Patient entity) {
         try {
-            userEJB.createUser(entity);
+            patientEJB.createPatient(entity);
         } catch (CreateException ex) {
             LOGGER.severe(ex.getMessage());
             throw new InternalServerErrorException(ex.getMessage());
         }
     }
-
+    
     @PUT
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void editUser(@PathParam("dni") String dni, User entity) {
+    public void editPatient(@PathParam("dni") String dni, Patient entity) {
         try {
-            userEJB.updateUser(entity);
+            patientEJB.updatePatient(entity, dni);
         } catch (UpdateException ex) {
             LOGGER.severe(ex.getMessage());
             throw new InternalServerErrorException(ex.getMessage());
         }
     }
-
+    
     @DELETE
     @Path("{dni}")
-    public void removeUser(@PathParam("dni") String dni) {
+    public void removePatient(@PathParam("dni") String dni) {
         try {
-            userEJB.deleteUser(dni);
+            patientEJB.deletePatient(dni);
         } catch (DeleteException ex) {
             LOGGER.severe(ex.getMessage());
             throw new InternalServerErrorException(ex.getMessage());
         }
     }
-
+    
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<User> findAllUsers() {
-        List<User> users = null;
+    public List<Patient> findAllPatients() {
+        List<Patient> patients = null;
         try {
-            users = userEJB.findAllUsers();
-        } catch (UserException ex) {
+            patients = patientEJB.findAllPatients();
+        } catch (PatientException ex) {
             LOGGER.severe(ex.getMessage());
             throw new InternalServerErrorException(ex.getMessage());
         }
-        return users;
+        return patients;
     }
-     */
+    
+    @GET
+    @Path("findPatientsByPsychologist/{dniPsychologist}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<Patient> findAllPatientsByPsychologist(@PathParam("dniPsychologist") String dniPsychologist) {
+        List<Patient> patients = null;
+        try {
+            patients = patientEJB.findAllPatientsByPsychologist(dniPsychologist);
+        } catch (PatientException ex) {
+            LOGGER.severe(ex.getMessage());
+            throw new InternalServerErrorException(ex.getMessage());
+        }
+        return patients;
+    }
+    
 }

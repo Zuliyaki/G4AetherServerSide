@@ -7,7 +7,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * 
- * @author unaibAndLeire
+ * @author Leire
  */
 @Entity
 @DiscriminatorValue("admin")

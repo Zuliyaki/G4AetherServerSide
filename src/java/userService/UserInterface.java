@@ -7,18 +7,27 @@ package userService;
 
 import entities.User;
 import java.util.List;
-import exceptions.UserNotFoundException;
+import exceptions.CreateException;
+import exceptions.DeleteException;
+import exceptions.UpdateException;
+import exceptions.UserException;
 
 /**
  *
- * @author Leire
+ * @author unaibAndLeire
  */
 public interface UserInterface {
 
-    public User logInUser(String dniUser, String passwordUser) throws UserNotFoundException;
+    public void createUser(User user) throws CreateException;
 
-    public List<User> findAllUsers() throws UserNotFoundException;
+    public void updateUser(User user, String dniUser) throws UpdateException;
 
-    public User findUserByDni(String dniUser) throws UserNotFoundException;
-    
+    public void deleteUser(String dniUser) throws DeleteException;
+
+    public User logInUser(String dniUser, String passwordUser) throws UserException;
+
+    public List<User> findAllUsers() throws UserException;
+
+    public User findUserByDni(String dniUser) throws UserException;
+
 }

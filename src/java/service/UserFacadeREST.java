@@ -10,12 +10,9 @@ import exceptions.CreateException;
 import exceptions.DeleteException;
 import exceptions.UpdateException;
 import exceptions.UserException;
-import exceptions.UserNotFoundException;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
-import javax.persistence.EntityManager;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -40,6 +37,39 @@ public class UserFacadeREST {
 
     private static final Logger LOGGER = Logger.getLogger(UserFacadeREST.class.getName());
 
+    @POST
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void create(User entity) {
+        try {
+            userEJB.createUser(entity);
+        } catch (CreateException ex) {
+            LOGGER.severe(ex.getMessage());
+            throw new InternalServerErrorException(ex.getMessage());
+        }
+    }
+
+    @PUT
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void edit(@PathParam("dni") String dniUser, User entity) {
+        try {
+            userEJB.updateUser(entity, dniUser);
+        } catch (UpdateException ex) {
+            LOGGER.severe(ex.getMessage());
+            throw new InternalServerErrorException(ex.getMessage());
+        }
+    }
+
+    @DELETE
+    @Path("{dni}")
+    public void remove(@PathParam("dni") String dniUser) {
+        try {
+            userEJB.deleteUser(dniUser);
+        } catch (DeleteException ex) {
+            LOGGER.severe(ex.getMessage());
+            throw new InternalServerErrorException(ex.getMessage());
+        }
+    }
+
     @GET
     @Path("logInUser/{dniUser}/{passwordUser}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -47,7 +77,7 @@ public class UserFacadeREST {
         User user = null;
         try {
             user = userEJB.logInUser(dniUser, passwordUser);
-        } catch (UserNotFoundException ex) {
+        } catch (UserException ex) {
             LOGGER.severe(ex.getMessage());
             throw new InternalServerErrorException(ex.getMessage());
         }
@@ -60,7 +90,7 @@ public class UserFacadeREST {
         List<User> users = null;
         try {
             users = userEJB.findAllUsers();
-        } catch (UserNotFoundException ex) {
+        } catch (UserException ex) {
             LOGGER.severe(ex.getMessage());
             throw new InternalServerErrorException(ex.getMessage());
         }
@@ -68,13 +98,13 @@ public class UserFacadeREST {
     }
 
     @GET
-    @Path("findUsersByDni/{dniUser}")
+    @Path("{dni}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public User findUserByDni(@PathParam("dniUser") String dniUser) {
+    public User findUserByDni(@PathParam("dni") String dniUser) {
         User user = null;
         try {
             user = userEJB.findUserByDni(dniUser);
-        } catch (UserNotFoundException ex) {
+        } catch (UserException ex) {
             LOGGER.severe(ex.getMessage());
             throw new InternalServerErrorException(ex.getMessage());
         }

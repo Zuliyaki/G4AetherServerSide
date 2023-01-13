@@ -6,15 +6,13 @@
 package service;
 
 import entities.Psychologist;
-import entities.User;
 import exceptions.CreateException;
 import exceptions.DeleteException;
 import exceptions.UpdateException;
-import exceptions.UserException;
+import exceptions.PsychologistException;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
-import javax.persistence.EntityManager;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -29,23 +27,22 @@ import psychologistService.PsychologistInterface;
 
 /**
  *
- * @author LeireAndUnaib
+ * @author unaibAndLeire
  */
 @Path("entities.psychologist")
 public class PsychologistFacadeREST {
 
     @EJB
+    
     private PsychologistInterface psychologistEJB;
 
     private static final Logger LOGGER = Logger.getLogger(PsychologistFacadeREST.class.getName());
 
-
-    /*
     @POST
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void createUser(User entity) {
+    public void createPsychologist(Psychologist entity) {
         try {
-            userEJB.createUser(entity);
+            psychologistEJB.createPsychologist(entity);
         } catch (CreateException ex) {
             LOGGER.severe(ex.getMessage());
             throw new InternalServerErrorException(ex.getMessage());
@@ -54,9 +51,9 @@ public class PsychologistFacadeREST {
 
     @PUT
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void editUser(@PathParam("dni") String dni, User entity) {
+    public void editPsychologist(@PathParam("dni") String dni, Psychologist entity) {
         try {
-            userEJB.updateUser(entity);
+            psychologistEJB.updatePsychologist(entity, dni);
         } catch (UpdateException ex) {
             LOGGER.severe(ex.getMessage());
             throw new InternalServerErrorException(ex.getMessage());
@@ -65,9 +62,9 @@ public class PsychologistFacadeREST {
 
     @DELETE
     @Path("{dni}")
-    public void removeUser(@PathParam("dni") String dni) {
+    public void removePsychologist(@PathParam("dni") String dni) {
         try {
-            userEJB.deleteUser(dni);
+            psychologistEJB.deletePsychologist(dni);
         } catch (DeleteException ex) {
             LOGGER.severe(ex.getMessage());
             throw new InternalServerErrorException(ex.getMessage());
@@ -76,15 +73,14 @@ public class PsychologistFacadeREST {
 
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<User> findAllUsers() {
-        List<User> users = null;
+    public List<Psychologist> findAllPsychologists() {
+        List<Psychologist> users = null;
         try {
-            users = userEJB.findAllUsers();
-        } catch (UserException ex) {
+            users = psychologistEJB.findAllPsychologists();
+        } catch (PsychologistException ex) {
             LOGGER.severe(ex.getMessage());
             throw new InternalServerErrorException(ex.getMessage());
         }
         return users;
     }
-     */
 }

@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     )
     ,
     @NamedQuery(
-            name = "findUserByDni", query = "SELECT u FROM User u WHERE u.dni=:dni"
+            name = "findUserByDni", query = "SELECT u FROM User u WHERE u.dni=:dniUser"
     )
 })
 @XmlRootElement
