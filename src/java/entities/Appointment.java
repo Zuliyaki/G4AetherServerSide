@@ -2,22 +2,37 @@ package entities;
 
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
+/**
+ *
+ * @author Janam
+ */
 @Entity
+
 @Table(name = "appointment", schema = "aether")
-//@DiscriminatorValue("appointment")
+
+@NamedQueries({
+    @NamedQuery(name = "getAllAppointments", query = "SELECT a FROM Appointment a")
+    ,
+    @NamedQuery(name = "getAppointmentById", query = "SELECT a FROM Appointment a WHERE a.idAppointment = :idAppointment")
+    ,
+    @NamedQuery(name = "getAppointmentByDate", query = "SELECT a FROM Appointment a WHERE a.appointmentDate = :appointmentDate")
+    ,
+    @NamedQuery(name = "getAppointmentByChange", query = "SELECT a FROM Appointment a WHERE a.appointmentChange = :appointmentChange")
+})
+
 @XmlRootElement
 public class Appointment implements Serializable {
 
@@ -46,7 +61,7 @@ public class Appointment implements Serializable {
     }
 
     /**
-     * Costructor with parameters
+     * Constructor with parameters
      *
      * @param idAppointmet
      * @param appointmentDate
@@ -63,9 +78,8 @@ public class Appointment implements Serializable {
     }
 
     //Getters & Setters
-    
     /**
-     * 
+     *
      * @return idAppointment
      */
     public Long getidAppointment() {
@@ -73,23 +87,23 @@ public class Appointment implements Serializable {
     }
 
     /**
-     * 
-     * @param idMentalDisease 
+     *
+     * @param idAppointment
      */
     public void setidAppointment(Long idAppointment) {
         this.idAppointment = idAppointment;
     }
 
     /**
-     * 
-     * @param appointmentDate 
+     *
+     * @param appointmentDate
      */
     public void setAppointmentDate(Date appointmentDate) {
         this.appointmentDate = appointmentDate;
     }
 
     /**
-     * 
+     *
      * @return appointmentDate
      */
     public Date getAppointmentDate() {
@@ -97,15 +111,15 @@ public class Appointment implements Serializable {
     }
 
     /**
-     * 
-     * @param appointmentChange 
+     *
+     * @param appointmentChange
      */
     public void setAppointmentChange(Boolean appointmentChange) {
         this.appointmentChange = appointmentChange;
     }
 
     /**
-     * 
+     *
      * @return appointmentChange
      */
     public Boolean getAppointmentChange() {
@@ -113,15 +127,15 @@ public class Appointment implements Serializable {
     }
 
     /**
-     * 
-     * @param patient 
+     *
+     * @param patient
      */
     public void setPatient(Patient patient) {
         this.patient = patient;
     }
 
     /**
-     * 
+     *
      * @return patient
      */
     public Patient getPatient() {
@@ -129,19 +143,57 @@ public class Appointment implements Serializable {
     }
 
     /**
-     * 
-     * @param psychologist 
+     *
+     * @param psychologist
      */
     public void setPsychologist(Psychologist psychologist) {
         this.psychologist = psychologist;
     }
 
     /**
-     * 
+     *
      * @return psychologist
      */
     public Psychologist getPsychologist() {
         return psychologist;
     }
 
+    /**
+     * HasCode
+     *
+     * @return
+     */
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (idAppointment != null ? idAppointment.hashCode() : 0);
+        return hash;
+    }
+
+    /**
+     *
+     * @param object
+     * @return
+     */
+    @Override
+    public boolean equals(Object object) {
+
+        if (!(object instanceof Appointment)) {
+            return false;
+        }
+        Appointment other = (Appointment) object;
+        if ((this.idAppointment == null && other.idAppointment != null) || (this.idAppointment != null && !this.idAppointment.equals(other.idAppointment))) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     *
+     * @return
+     */
+    @Override
+    public String toString() {
+        return "Appointment{" + "idAppointment=" + idAppointment + ", appointmentChange=" + appointmentChange + ", appointmentDate=" + appointmentDate + ", patient=" + patient + ", psychologist=" + psychologist + '}';
+    }
 }
