@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package exceptions;
+package dailyNotesService;
 /**
- * This package contains the exceptions
+ * This package contains the services of Daily Notes
  */

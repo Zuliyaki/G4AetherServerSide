@@ -5,6 +5,7 @@ import java.util.Objects;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 @Entity
 @Table(name = "treatment", schema = "aether")
@@ -16,14 +17,16 @@ public class Treatment implements Serializable {
     private TreatmentId treatmentId;
 
     @ManyToOne
-    @NotNull
     @MapsId("diagnosisId")
     private Diagnosis diagnosis;
 
     @ManyToOne
-    @NotNull
     @MapsId("medicationId")
     private Medication medication;
+
+    
+    public Treatment() {
+    }
 
     public Treatment(TreatmentId treatmentId, Diagnosis diagnosis, Medication medication) {
         this.treatmentId = treatmentId;
@@ -38,7 +41,6 @@ public class Treatment implements Serializable {
     public void setTreatmentId(TreatmentId treatmentId) {
         this.treatmentId = treatmentId;
     }
-
     public Diagnosis getDiagnosis() {
         return diagnosis;
     }
@@ -46,7 +48,7 @@ public class Treatment implements Serializable {
     public void setDiagnosis(Diagnosis diagnosis) {
         this.diagnosis = diagnosis;
     }
-
+     
     public Medication getMedication() {
         return medication;
     }
@@ -54,15 +56,38 @@ public class Treatment implements Serializable {
     public void setMedication(Medication medication) {
         this.medication = medication;
     }
-    
 
-
-    /**
-     * Empty constructor
-     */
-    public Treatment() {
-        super();
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 37 * hash + Objects.hashCode(this.treatmentId);
+        hash = 37 * hash + Objects.hashCode(this.diagnosis);
+        hash = 37 * hash + Objects.hashCode(this.medication);
+        return hash;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Treatment other = (Treatment) obj;
+        if (!Objects.equals(this.treatmentId, other.treatmentId)) {
+            return false;
+        }
+        if (!Objects.equals(this.diagnosis, other.diagnosis)) {
+            return false;
+        }
+        if (!Objects.equals(this.medication, other.medication)) {
+            return false;
+        }
+        return true;
+    }
 
 }

@@ -6,86 +6,123 @@
 package service;
 
 import entities.MentalDisease;
+import exceptions.CreateException;
+import exceptions.DeleteException;
+import exceptions.UpdateException;
+import exceptions.MentalDiseaseException;
 import java.util.List;
-import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import java.util.logging.Logger;
+import javax.ejb.EJB;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import mentalDiseaseService.MentalDiseaseInterface;
 
 /**
  *
- * @author unaib
+ * @author Leire
  */
-@Stateless
 @Path("entities.mentaldisease")
-public class MentalDiseaseFacadeREST extends AbstractFacade<MentalDisease> {
+public class MentalDiseaseFacadeREST {
 
-    @PersistenceContext(unitName = "G4AetherPU")
-    private EntityManager em;
+    @EJB
+    private MentalDiseaseInterface mentalDiseaseEJB;
 
-    public MentalDiseaseFacadeREST() {
-        super(MentalDisease.class);
-    }
+    private static final Logger LOGGER = Logger.getLogger(MentalDiseaseFacadeREST.class.getName());
 
     @POST
-    @Override
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void create(MentalDisease entity) {
-        super.create(entity);
+        try {
+            mentalDiseaseEJB.createMentalDisease(entity);
+        } catch (CreateException ex) {
+            LOGGER.severe(ex.getMessage());
+            throw new InternalServerErrorException(ex.getMessage());
+        }
     }
 
     @PUT
-    @Path("{id}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void edit(@PathParam("id") Long id, MentalDisease entity) {
-        super.edit(entity);
+    public void edit(@PathParam("id") Long idMentalDisease, MentalDisease entity) {
+        try {
+            mentalDiseaseEJB.updateMentalDisease(entity);
+        } catch (UpdateException ex) {
+            LOGGER.severe(ex.getMessage());
+            throw new InternalServerErrorException(ex.getMessage());
+        }
     }
 
     @DELETE
     @Path("{id}")
-    public void remove(@PathParam("id") Long id) {
-        super.remove(super.find(id));
+    public void remove(@PathParam("id") Long idMentalDisease) {
+        try {
+            mentalDiseaseEJB.deleteMentalDisease(idMentalDisease);
+        } catch (DeleteException ex) {
+            LOGGER.severe(ex.getMessage());
+            throw new InternalServerErrorException(ex.getMessage());
+        }
+    }
+
+    @GET
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<MentalDisease> getAllMentalDiseases() {
+        List<MentalDisease> mentalDiseases = null;
+        try {
+            mentalDiseases = mentalDiseaseEJB.getAllMentalDiseases();
+        } catch (MentalDiseaseException ex) {
+            LOGGER.severe(ex.getMessage());
+            throw new InternalServerErrorException(ex.getMessage());
+        }
+        return mentalDiseases;
+    }
+
+    @GET
+    @Path("getAllByName")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<MentalDisease> getAllMentalDiseasesOrderByName() {
+        List<MentalDisease> mentalDiseases = null;
+        try {
+            mentalDiseases = mentalDiseaseEJB.getAllMentalDiseasesOrderByName();
+        } catch (MentalDiseaseException ex) {
+            LOGGER.severe(ex.getMessage());
+            throw new InternalServerErrorException(ex.getMessage());
+        }
+        return mentalDiseases;
+    }
+
+    @GET
+    @Path("getByName/{name}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public MentalDisease getMentalDiseasesByName(@PathParam("name") String mdName) {
+        MentalDisease mentalDisease = null;
+        try {
+            mentalDisease = mentalDiseaseEJB.getMentalDiseasesByName(mdName);
+        } catch (MentalDiseaseException ex) {
+            LOGGER.severe(ex.getMessage());
+            throw new InternalServerErrorException(ex.getMessage());
+        }
+        return mentalDisease;
     }
 
     @GET
     @Path("{id}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public MentalDisease find(@PathParam("id") Long id) {
-        return super.find(id);
+    public MentalDisease getMentalDiseasesById(@PathParam("id") Long idMentalDisease) {
+        MentalDisease mentalDisease = null;
+        try {
+            mentalDisease = mentalDiseaseEJB.getMentalDiseasesById(idMentalDisease);
+        } catch (MentalDiseaseException ex) {
+            LOGGER.severe(ex.getMessage());
+            throw new InternalServerErrorException(ex.getMessage());
+        }
+        return mentalDisease;
     }
 
-    @GET
-    @Override
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<MentalDisease> findAll() {
-        return super.findAll();
-    }
-
-    @GET
-    @Path("{from}/{to}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<MentalDisease> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
-        return super.findRange(new int[]{from, to});
-    }
-
-    @GET
-    @Path("count")
-    @Produces(MediaType.TEXT_PLAIN)
-    public String countREST() {
-        return String.valueOf(super.count());
-    }
-
-    @Override
-    protected EntityManager getEntityManager() {
-        return em;
-    }
-    
 }

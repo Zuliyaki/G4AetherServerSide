@@ -7,25 +7,25 @@ package exceptions;
 
 /**
  *
- * @author unaib
+ * @author Leire
  */
-public class CreateException extends Exception {
+public class MentalDiseaseException extends Exception {
 
     /**
-     * Creates a new instance of <code>CreationException</code> without detail
-     * message.
+     * Creates a new instance of <code>MentalDiseaseException</code> without
+     * detail message.
      */
-    public CreateException() {
+    public MentalDiseaseException() {
     }
 
     /**
-     * Constructs an instance of <code>CreationException</code> with the
+     * Constructs an instance of <code>MentalDiseaseException</code> with the
      * specified detail message.
      *
      * @param msg the detail message.
      */
-    public CreateException(String msg) {
+    public MentalDiseaseException(String msg) {
         super(msg);
     }
-    
+
 }

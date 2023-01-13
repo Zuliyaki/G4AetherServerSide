@@ -8,11 +8,27 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
+/**
+ *
+ * @author unaibAndLeire
+ */
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Table(name = "user", schema = "aether")
 @DiscriminatorColumn(name = "user_type",
         discriminatorType = DiscriminatorType.STRING)
+@NamedQueries({
+    @NamedQuery(
+            name = "singIn", query = "SELECT u FROM User u WHERE u.dni=:dniUser AND u.password=:passwordUser"
+    )
+    ,@NamedQuery(
+            name = "findAllUsers", query = "SELECT u FROM User u"
+    )
+    ,
+    @NamedQuery(
+            name = "findUserByDni", query = "SELECT u FROM User u WHERE u.dni=:dniUser"
+    )
+})
 @XmlRootElement
 public class User implements Serializable {
 
