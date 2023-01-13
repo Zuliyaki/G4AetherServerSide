@@ -3,24 +3,35 @@ package entities;
 import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.*;
+import static javax.persistence.FetchType.EAGER;
+import static javax.persistence.FetchType.LAZY;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 @Entity
 @Table(name = "treatment", schema = "aether")
+@NamedQueries({
+    @NamedQuery(
+            name = "findAllTreatments", query = "SELECT tr FROM Treatment tr"
+    )
+    ,
+    @NamedQuery(
+            name = "findTreatmentsByDiagnosisId", query = "SELECT tr FROM Treatment tr WHERE tr.diagnosis=:diagnosis"
+    )
+})
 @XmlRootElement
 public class Treatment implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     private TreatmentId treatmentId;
-
-    @ManyToOne
+    
+    @ManyToOne(targetEntity=Diagnosis.class)
     @MapsId("diagnosisId")
     private Diagnosis diagnosis;
 
-    @ManyToOne
+    @ManyToOne(targetEntity= Medication.class)
     @MapsId("medicationId")
     private Medication medication;
 
@@ -79,12 +90,6 @@ public class Treatment implements Serializable {
         }
         final Treatment other = (Treatment) obj;
         if (!Objects.equals(this.treatmentId, other.treatmentId)) {
-            return false;
-        }
-        if (!Objects.equals(this.diagnosis, other.diagnosis)) {
-            return false;
-        }
-        if (!Objects.equals(this.medication, other.medication)) {
             return false;
         }
         return true;

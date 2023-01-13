@@ -4,29 +4,26 @@ import java.io.Serializable;
 import java.util.Objects;
 import java.util.Set;
 import javax.persistence.*;
+import static javax.persistence.FetchType.EAGER;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 @Entity
 @Table(name = "medication", schema = "aether")
-/*@NamedQueries({
+@NamedQueries({
     @NamedQuery(
-            name = "getAllNotesByPatient", query = "SELECT dn FROM dailynote dn WHERE dn.user.id=:idUser"
-    ),
-    @NamedQuery(
-            name = "createNewDailyNote", query = "INSERT INTO dailynote VALUES (:dnPatient, :dnNoteText, :noteComment, :dnNoteStatus, :dnNoteDate, :dnNoteDateLastEdited, :dnDayScore, :dnNoteReadable)"
-    ),
-    @NamedQuery(
-            name = "modifyDailyNote", query = "UPDATE WHERE dn.dnPatient.id=:idPatient and dn.dailynote.id=:idNote"
-    ),
-    @NamedQuery(
-            name = "deleteDailyNote", query = ""
-    ),
-    @NamedQuery(
-            name = "addCommentOnDailyNote", query = ""
+            name = "findAllMedication", query = "SELECT med FROM Medication med"
     )
- */
+    ,
+    @NamedQuery(
+            name = "findMedicationById", query = "SELECT med FROM Medication med WHERE med.medicationId=:medicationId"
+    )
+    ,
+    @NamedQuery(
+            name = "findMedicationByName", query = "SELECT med FROM Medication med WHERE med.medicationName=:medicationName"
+    )
+})
 @XmlRootElement
 public class Medication implements Serializable {
 
@@ -38,7 +35,8 @@ public class Medication implements Serializable {
     private String description;
     @Enumerated(EnumType.STRING)
     private EnumMedType typeOfMedication;
-    @OneToMany(mappedBy = "medication")
+    
+    @OneToMany(targetEntity = Treatment.class, mappedBy = "medication")
     private Set<Treatment> treatments;
 
     /**
@@ -49,7 +47,7 @@ public class Medication implements Serializable {
     }
 
     public Medication(Long medicationId, String medicationName, String description, EnumMedType typeOfMedication, Set<Treatment> treatments) {
-        this.medicationId = medicationId;
+       // this.medicationId = medicationId;
         this.medicationName = medicationName;
         this.description = description;
         this.typeOfMedication = typeOfMedication;

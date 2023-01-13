@@ -5,8 +5,16 @@
  */
 package service;
 
+import DiagnosisService.DiagnosisInterface;
+import MedicationService.MedicationInterface;
+import entities.Diagnosis;
 import entities.Medication;
+import exceptions.DiagnosisNotFoundException;
+import exceptions.MedicationNotFoundException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -22,70 +30,81 @@ import javax.ws.rs.core.MediaType;
 
 /**
  *
- * @author 2dam
+ * @author unaiz
  */
-@Stateless
+
 @Path("entities.medication")
-public class MedicationFacadeREST extends AbstractFacade<Medication> {
+public class MedicationFacadeREST{
+  /**
+     * The EJB interface
+     */
+    @EJB
+    private MedicationInterface ejb;
 
-    @PersistenceContext(unitName = "G4AetherPU")
-    private EntityManager em;
-
-    public MedicationFacadeREST() {
-        super(Medication.class);
-    }
-
-    @POST
-    @Override
-    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void create(Medication entity) {
-        super.create(entity);
-    }
-
-    @PUT
-    @Path("{id}")
-    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void edit(@PathParam("id") Long id, Medication entity) {
-        super.edit(entity);
-    }
-
-    @DELETE
-    @Path("{id}")
-    public void remove(@PathParam("id") Long id) {
-        super.remove(super.find(id));
-    }
+    private Logger LOGGER = Logger.getLogger(DiagnosisFacadeREST.class.getName());
+  
 
     @GET
     @Path("{id}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Medication find(@PathParam("id") Long id) {
-        return super.find(id);
+          Medication medication = null;
+        try {
+            LOGGER.log(Level.INFO, "getting medication by id");
+            medication = ejb.findMedicationById(id);
+        } catch (MedicationNotFoundException ex) {
+            LOGGER.severe(ex.getMessage());
+            // throw new InternalServerErrorException(ex.getMessage());        
+        }
+        return medication;
+
     }
 
     @GET
-    @Override
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public List<Medication> findAll() {
-        return super.findAll();
+        List<Medication>  medications = null;
+        try {
+            LOGGER.log(Level.INFO, "getting all medications");
+            medications = ejb.findAllMedication();
+        } catch (MedicationNotFoundException ex) {
+            LOGGER.severe(ex.getMessage());
+            // throw new InternalServerErrorException(ex.getMessage());        
+        }
+        return medications;
+    }
+    
+     @GET
+    @Path("searchbyname/{id}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Medication find(@PathParam("id") String name) {
+          Medication medication = null;
+        try {
+            LOGGER.log(Level.INFO, "getting medication by id");
+            medication = ejb.findMedicationByName(name);
+        } catch (MedicationNotFoundException ex) {
+            LOGGER.severe(ex.getMessage());
+            // throw new InternalServerErrorException(ex.getMessage());        
+        }
+        return medication;
+
     }
 
     @GET
     @Path("{from}/{to}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public List<Medication> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
-        return super.findRange(new int[]{from, to});
+       // return super.findRange(new int[]{from, to});
+       return null;
     }
 
     @GET
     @Path("count")
     @Produces(MediaType.TEXT_PLAIN)
     public String countREST() {
-        return String.valueOf(super.count());
+        return null;
+        // return String.valueOf(super.count());
     }
 
-    @Override
-    protected EntityManager getEntityManager() {
-        return em;
-    }
     
 }

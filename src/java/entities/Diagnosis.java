@@ -6,12 +6,34 @@ import java.util.Date;
 import java.util.Objects;
 import java.util.Set;
 import javax.persistence.*;
+import static javax.persistence.FetchType.EAGER;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 @Entity
 @Table(name = "diagnosis", schema = "aether")
+@NamedQueries({
+    @NamedQuery(
+            name = "findAllDiagnosis", query = "SELECT dia FROM Diagnosis dia"
+    )
+    ,
+    @NamedQuery(
+            name = "findDiagnosisById", query = "SELECT dia FROM Diagnosis dia WHERE dia.diagnosisId=:diagnosisId"
+    )
+    ,
+    @NamedQuery(
+            name = "findAllDiagnosisByPatient", query = "SELECT dia FROM Diagnosis dia WHERE dia.patient.dni=:patient"
+    )
+    ,
+    @NamedQuery(
+            name = "findPatientDiagnosisByDate", query = "SELECT dia FROM Diagnosis dia WHERE dia.patient.dni=:patient and dia.diagnosisDate BETWEEN :diaDateLow AND :diaDateGreat"
+    )
+    ,
+    @NamedQuery(
+            name = "findAllIfPatientOnTeraphy", query = "SELECT dia FROM Diagnosis dia WHERE dia.patient.dni=:patient and dia.onTherapy=true"
+    )
+})
 @XmlRootElement
 public class Diagnosis implements Serializable {
 
@@ -29,7 +51,7 @@ public class Diagnosis implements Serializable {
     private Psychologist psychologist;
     @ManyToOne
     private MentalDisease mentalDisease;
-    @OneToMany(mappedBy = "diagnosis")
+    @OneToMany(targetEntity = Treatment.class, mappedBy = "diagnosis")
     private Set<Treatment> treatments;
     private Boolean onTherapy;
 
@@ -41,7 +63,7 @@ public class Diagnosis implements Serializable {
     }
 
     public Diagnosis(Long diagnosisId, Date diagnosisDate, Date lastDiagnosisChangeDate, Patient patient, Psychologist psychologist, MentalDisease mentalDisease, Set<Treatment> treatments, Boolean onTherapy) {
-        this.diagnosisId = diagnosisId;
+      //   this.diagnosisId = diagnosisId;
         this.diagnosisDate = diagnosisDate;
         this.lastDiagnosisChangeDate = lastDiagnosisChangeDate;
         this.patient = patient;
@@ -145,27 +167,7 @@ public class Diagnosis implements Serializable {
         if (!Objects.equals(this.diagnosisId, other.diagnosisId)) {
             return false;
         }
-        if (!Objects.equals(this.diagnosisDate, other.diagnosisDate)) {
-            return false;
-        }
-        if (!Objects.equals(this.lastDiagnosisChangeDate, other.lastDiagnosisChangeDate)) {
-            return false;
-        }
-        if (!Objects.equals(this.patient, other.patient)) {
-            return false;
-        }
-        if (!Objects.equals(this.psychologist, other.psychologist)) {
-            return false;
-        }
-        if (!Objects.equals(this.mentalDisease, other.mentalDisease)) {
-            return false;
-        }
-        if (!Objects.equals(this.treatments, other.treatments)) {
-            return false;
-        }
-        if (!Objects.equals(this.onTherapy, other.onTherapy)) {
-            return false;
-        }
+      
         return true;
     }
 
