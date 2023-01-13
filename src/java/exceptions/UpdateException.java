@@ -7,7 +7,7 @@ package exceptions;
 
 /**
  *
- * @author Usuario
+ * @author unaib
  */
 public class UpdateException extends Exception {
 
