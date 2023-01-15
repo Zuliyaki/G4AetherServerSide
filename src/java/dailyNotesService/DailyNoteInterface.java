@@ -40,5 +40,5 @@ public interface DailyNoteInterface {
     public List<DailyNote> findPatientNotesByNotReadable(String idPatient) throws DailyNoteNotFoundException;
 
     public List<DailyNote> findPatientNotesBetweenDayScores(String idPatient, Double dayScoreLow, Double dayScoreGreat) throws DailyNoteNotFoundException;
-    
+
 }

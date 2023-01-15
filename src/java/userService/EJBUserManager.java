@@ -10,7 +10,6 @@ import exceptions.CreateException;
 import exceptions.DeleteException;
 import exceptions.UpdateException;
 import exceptions.UserException;
-import exceptions.UserException;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -26,7 +25,6 @@ public class EJBUserManager implements UserInterface {
     @PersistenceContext(unitName = "G4AetherPU")
     private EntityManager entityManager;
 
-    
     @Override
     public void createUser(User user) throws CreateException {
         try {
@@ -37,7 +35,7 @@ public class EJBUserManager implements UserInterface {
     }
 
     @Override
-     public void updateUser(User user, String dniUser) throws UpdateException {
+    public void updateUser(User user, String dniUser) throws UpdateException {
         try {
             if (!entityManager.contains(user)) {
                 entityManager.merge(user);
@@ -56,7 +54,7 @@ public class EJBUserManager implements UserInterface {
             throw new DeleteException(e.getMessage());
         }
     }
-    
+
     /**
      * Check if a user exists
      *

@@ -36,7 +36,7 @@ public class EJBPsychologistManager implements PsychologistInterface {
 
     @Override
     public void updatePsychologist(Psychologist psychologist, String dni) throws UpdateException {
-     try {
+        try {
             if (!entityManager.contains(psychologist)) {
                 entityManager.merge(psychologist);
             }
@@ -48,13 +48,13 @@ public class EJBPsychologistManager implements PsychologistInterface {
 
     @Override
     public void deletePsychologist(String dni) throws DeleteException {
-       try {
+        try {
             entityManager.remove(entityManager.merge(findPsychologistById(dni)));
         } catch (Exception e) {
             throw new DeleteException(e.getMessage());
         }
     }
-    
+
     @Override
     public Psychologist findPsychologistById(String dni) throws PsychologistException {
         Psychologist psychologist;

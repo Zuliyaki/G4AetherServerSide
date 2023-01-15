@@ -5,8 +5,8 @@
  */
 package service;
 
-import DiagnosisService.DiagnosisInterface;
-import MedicationService.MedicationInterface;
+import diagnosisService.DiagnosisInterface;
+import medicationService.MedicationInterface;
 import entities.Diagnosis;
 import entities.Medication;
 import exceptions.DiagnosisNotFoundException;
