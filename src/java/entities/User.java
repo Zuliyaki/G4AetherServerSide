@@ -21,7 +21,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(
             name = "singIn", query = "SELECT u FROM User u WHERE u.dni=:dniUser AND u.password=:passwordUser"
     )
-    ,@NamedQuery(
+    ,
+    @NamedQuery(
             name = "findAllUsers", query = "SELECT u FROM User u"
     )
     ,
