@@ -40,7 +40,7 @@ public class DiagnosisFacadeREST {
     @EJB
     private DiagnosisInterface ejb;
 
-    private Logger LOGGER = Logger.getLogger(DiagnosisFacadeREST.class.getName());
+     private static final Logger LOGGER = Logger.getLogger(DiagnosisFacadeREST.class.getName());
 
     @POST
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -94,7 +94,6 @@ public class DiagnosisFacadeREST {
     }
 
     @GET
-    @Path("all")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public List<Diagnosis> findAllDiagnosis() {
         List<Diagnosis> diagnosises = null;

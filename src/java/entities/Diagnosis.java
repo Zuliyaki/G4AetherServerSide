@@ -63,7 +63,7 @@ public class Diagnosis implements Serializable {
     }
 
     public Diagnosis(Long diagnosisId, Date diagnosisDate, Date lastDiagnosisChangeDate, Patient patient, Psychologist psychologist, MentalDisease mentalDisease, Set<Treatment> treatments, Boolean onTherapy) {
-      //   this.diagnosisId = diagnosisId;
+        this.diagnosisId = diagnosisId;
         this.diagnosisDate = diagnosisDate;
         this.lastDiagnosisChangeDate = lastDiagnosisChangeDate;
         this.patient = patient;
