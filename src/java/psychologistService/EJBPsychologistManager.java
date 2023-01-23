@@ -35,7 +35,7 @@ public class EJBPsychologistManager implements PsychologistInterface {
     }
 
     @Override
-    public void updatePsychologist(Psychologist psychologist, String dni) throws UpdateException {
+    public void updatePsychologist(Psychologist psychologist) throws UpdateException {
         try {
             if (!entityManager.contains(psychologist)) {
                 entityManager.merge(psychologist);
@@ -75,6 +75,19 @@ public class EJBPsychologistManager implements PsychologistInterface {
             throw new PsychologistException(e.getMessage());
         }
         return psychologists;
+    }
+
+    @Override
+    public void sendRecoveryEmail(Psychologist psychologist) throws PsychologistException {
+        String newPassword = null;
+        try {
+            newPassword = emailRecovery.AetherEmailRecovery.sendEmail(psychologist.getEmail());
+            newPassword = hashPassword.HashPassword.hashPassword(newPassword.getBytes());
+            psychologist.setPassword(newPassword);
+            updatePsychologist(psychologist);
+        } catch (Exception e) {
+            throw new PsychologistException(e.getMessage());
+        }
     }
 
 }

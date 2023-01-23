@@ -11,6 +11,7 @@ import exceptions.DeleteException;
 import exceptions.UpdateException;
 import exceptions.PsychologistException;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ws.rs.Consumes;
@@ -33,7 +34,7 @@ import psychologistService.PsychologistInterface;
 public class PsychologistFacadeREST {
 
     @EJB
-    
+
     private PsychologistInterface psychologistEJB;
 
     private static final Logger LOGGER = Logger.getLogger(PsychologistFacadeREST.class.getName());
@@ -51,9 +52,9 @@ public class PsychologistFacadeREST {
 
     @PUT
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void editPsychologist(@PathParam("dni") String dni, Psychologist entity) {
+    public void editPsychologist(Psychologist entity) {
         try {
-            psychologistEJB.updatePsychologist(entity, dni);
+            psychologistEJB.updatePsychologist(entity);
         } catch (UpdateException ex) {
             LOGGER.severe(ex.getMessage());
             throw new InternalServerErrorException(ex.getMessage());
@@ -68,6 +69,17 @@ public class PsychologistFacadeREST {
         } catch (DeleteException ex) {
             LOGGER.severe(ex.getMessage());
             throw new InternalServerErrorException(ex.getMessage());
+        }
+    }
+
+    @PUT
+    @Path("sendRecoveryEmail")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void sendRecoveryEmail(Psychologist entity) {
+        try {
+            psychologistEJB.sendRecoveryEmail(entity);
+        } catch (PsychologistException ex) {
+            Logger.getLogger(PsychologistFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
