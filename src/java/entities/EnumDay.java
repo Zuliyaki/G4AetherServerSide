@@ -7,5 +7,6 @@ public enum EnumDay {
     THURSDAY,
     FRIDAY,
     SATURDAY,
-    SUNDAY;
+    SUNDAY,
+    PLACEHOLDER;
 }
