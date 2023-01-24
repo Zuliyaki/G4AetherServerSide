@@ -94,4 +94,17 @@ public class EJBTreatmentManager implements TreatmentInterface {
         }
         return treatments;
     }
+
+    @Override
+    public List<Treatment> findAllTreatments() throws TreatmentNotFoundException {
+          List<Treatment> treatments;
+        try {
+            treatments = em.createNamedQuery("findAllTreatments").getResultList();
+                     
+
+        } catch (Exception e) {
+            throw new TreatmentNotFoundException(e.getMessage());
+        }
+        return treatments;
+    }
 }

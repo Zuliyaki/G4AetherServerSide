@@ -29,6 +29,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.PathSegment;
 
 /**
  *
@@ -51,7 +52,6 @@ public class TreatmentFacadeREST {
      *
      * @return
      */
-    /*
     private TreatmentId getPrimaryKey(PathSegment pathSegment) {
         /*
          * pathSemgent represents a URI path segment and any associated matrix parameters.
@@ -59,10 +59,8 @@ public class TreatmentFacadeREST {
          * Here 'somePath' is a result of getPath() method invocation and
          * it is ignored in the following code.
          * Matrix parameters are used as field names to build a primary key instance.
-     */
- /*
-        
-        
+         */
+
         entities.TreatmentId key = new entities.TreatmentId();
         javax.ws.rs.core.MultivaluedMap<String, String> map = pathSegment.getMatrixParameters();
         java.util.List<String> diagnosisId = map.get("diagnosisId");
@@ -82,9 +80,9 @@ public class TreatmentFacadeREST {
             key.setDayTime(entities.EnumDayTime.valueOf(dayTime.get(0)));
         }
         return key;
-          
+
     }
-     */
+
     @POST
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void createTreatment(Treatment entity) {
@@ -127,31 +125,46 @@ public class TreatmentFacadeREST {
             throw new InternalServerErrorException(ex.getMessage());
         }
     }
-    
+
     @GET
-        @Path("get/{treatmentId}/{MedicationId}/{Day}/{Daytime}")
-        @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-        public Treatment findTreatmentByID(@PathParam("id") Long treatmentId,@PathParam("MedicationId")Long MedicationId,@PathParam("Day") EnumDay Day,@PathParam("Daytime") EnumDayTime Daytime) {
-         Treatment treatment = new Treatment();
-          TreatmentId treatmentid = null;
-           treatmentid.setDay(Day);
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<Treatment> findAllTreatments() {
+        List<Treatment> treatmentents = null;
+
+        try {
+            LOGGER.log(Level.INFO, "getting treatments by ID");
+            treatmentents = ejb.findAllTreatments();
+        } catch (TreatmentNotFoundException ex) {
+            LOGGER.severe(ex.getMessage());
+            throw new InternalServerErrorException(ex.getMessage());
+        }
+        return treatmentents;
+    }
+
+    @GET
+    @Path("get/{treatmentId}/{MedicationId}/{Day}/{Daytime}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Treatment findTreatmentByID(@PathParam("id") Long treatmentId, @PathParam("MedicationId") Long MedicationId, @PathParam("Day") EnumDay Day, @PathParam("Daytime") EnumDayTime Daytime) {
+        Treatment treatment = new Treatment();
+        TreatmentId treatmentid = null;
+        treatmentid.setDay(Day);
         treatmentid.setDayTime(Daytime);
         treatmentid.setDiagnosisId(treatmentId);
         treatmentid.setMedicationId(MedicationId);
         try {
-            LOGGER.log(Level.INFO,"get Treatment by ID");
+            LOGGER.log(Level.INFO, "get Treatment by ID");
             treatment = ejb.findTreatmentByID(treatmentid);
         } catch (TreatmentNotFoundException ex) {
             LOGGER.severe(ex.getMessage());
-            throw new InternalServerErrorException(ex.getMessage());        
+            throw new InternalServerErrorException(ex.getMessage());
         }
         return treatment;
     }
 
     @GET
-        @Path("diagnosis/{id}")
-        @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-        public List<Treatment> findTreatmentsByDiagnosisId(@PathParam("id") Long id) {
+    @Path("diagnosis/{id}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<Treatment> findTreatmentsByDiagnosisId(@PathParam("id") Long id) {
         List<Treatment> treatmentents = null;
 
         try {
@@ -159,8 +172,9 @@ public class TreatmentFacadeREST {
             treatmentents = ejb.findTreatmentsByDiagnosisId(id);
         } catch (TreatmentNotFoundException ex) {
             LOGGER.severe(ex.getMessage());
-            throw new InternalServerErrorException(ex.getMessage());  
+            throw new InternalServerErrorException(ex.getMessage());
         }
         return treatmentents;
     }
+    
 }

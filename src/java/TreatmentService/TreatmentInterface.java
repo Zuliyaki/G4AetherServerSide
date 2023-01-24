@@ -22,13 +22,15 @@ import java.util.List;
  */
 public interface TreatmentInterface {
 
+    public List<Treatment> findAllTreatments() throws TreatmentNotFoundException;
+
     public void createTreatment(Treatment treament) throws CreateException;
 
     public void updateTreatment(Treatment treament) throws UpdateException;
 
     public void deleteTreatment(Treatment treament) throws DeleteException;
 
-    public Treatment findTreatmentByID(TreatmentId treatmentid ) throws TreatmentNotFoundException;
+    public Treatment findTreatmentByID(TreatmentId treatmentid) throws TreatmentNotFoundException;
 
-    public List <Treatment> findTreatmentsByDiagnosisId(Long DiagnosisId) throws TreatmentNotFoundException;
+    public List<Treatment> findTreatmentsByDiagnosisId(Long DiagnosisId) throws TreatmentNotFoundException;
 }
