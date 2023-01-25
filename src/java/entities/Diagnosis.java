@@ -59,7 +59,7 @@ public class Diagnosis implements Serializable {
      * Empty constructor
      */
     public Diagnosis() {
-        super();
+       
     }
 
     public Diagnosis(Long diagnosisId, Date diagnosisDate, Date lastDiagnosisChangeDate, Patient patient, Psychologist psychologist, MentalDisease mentalDisease, Set<Treatment> treatments, Boolean onTherapy) {

@@ -37,6 +37,7 @@ public class Treatment implements Serializable {
 
     
     public Treatment() {
+        
     }
 
     public Treatment(TreatmentId treatmentId, Diagnosis diagnosis, Medication medication) {
@@ -55,7 +56,7 @@ public class Treatment implements Serializable {
     public Diagnosis getDiagnosis() {
         return diagnosis;
     }
-
+    @XmlTransient
     public void setDiagnosis(Diagnosis diagnosis) {
         this.diagnosis = diagnosis;
     }
