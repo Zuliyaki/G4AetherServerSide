@@ -125,7 +125,8 @@ public class DailyNoteFacadeREST {
             Date date = format.parse(dateIntro);
             dailyNote = dailyNoteEJB.findPatientNoteByDate(idPatient, date);
         } catch (ParseException ex) {
-            Logger.getLogger(DailyNoteFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
+            LOGGER.severe(ex.getMessage());
+            throw new InternalServerErrorException(ex.getMessage());
         } catch (DailyNoteNotFoundException ex) {
             LOGGER.severe(ex.getMessage());
             throw new InternalServerErrorException(ex.getMessage());
@@ -144,7 +145,8 @@ public class DailyNoteFacadeREST {
             Date dateGreat = format.parse(dateIntroGreat);
             dailyNotes = dailyNoteEJB.findPatientNotesBetweenDates(idPatient, dateLow, dateGreat);
         } catch (ParseException ex) {
-            Logger.getLogger(DailyNoteFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
+            LOGGER.severe(ex.getMessage());
+            throw new InternalServerErrorException(ex.getMessage());
         } catch (DailyNoteNotFoundException ex) {
             LOGGER.severe(ex.getMessage());
             throw new InternalServerErrorException(ex.getMessage());
