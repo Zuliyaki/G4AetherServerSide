@@ -79,7 +79,7 @@ public class DiagnosisFacadeREST {
     }
 
     @GET
-    @Path("diagnosis/{id}")
+    @Path("diagnosisbyID/{id}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Diagnosis findDiagnosisById(@PathParam("id") Long id) {
         Diagnosis diagnosis = null;
