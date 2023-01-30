@@ -118,12 +118,12 @@ public class DailyNoteFacadeREST {
     @GET
     @Path("findByDate/{patientId}/{date}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public DailyNote findPatientDailyNoteByDate(@PathParam("patientId") String idPatient, @PathParam("date") String dateIntro) {
-        DailyNote dailyNote = null;
+    public List<DailyNote> findPatientDailyNoteByDate(@PathParam("patientId") String idPatient, @PathParam("date") String dateIntro) {
+        List<DailyNote> dailyNotes = null;
         SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
         try {
             Date date = format.parse(dateIntro);
-            dailyNote = dailyNoteEJB.findPatientNoteByDate(idPatient, date);
+            dailyNotes = dailyNoteEJB.findPatientNoteByDate(idPatient, date);
         } catch (ParseException ex) {
             LOGGER.severe(ex.getMessage());
             throw new InternalServerErrorException(ex.getMessage());
@@ -131,7 +131,7 @@ public class DailyNoteFacadeREST {
             LOGGER.severe(ex.getMessage());
             throw new InternalServerErrorException(ex.getMessage());
         }
-        return dailyNote;
+        return dailyNotes;
     }
 
     @GET
