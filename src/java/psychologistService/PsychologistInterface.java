@@ -20,11 +20,18 @@ public interface PsychologistInterface {
 
     public void createPsychologist(Psychologist psychologist) throws CreateException;
 
-    public void updatePsychologist(Psychologist psychologist, String dni) throws UpdateException;
+    public void updatePsychologist(Psychologist psychologist) throws UpdateException;
 
     public void deletePsychologist(String dni) throws DeleteException;
 
     public Psychologist findPsychologistById(String dni) throws PsychologistException;
 
-    public List<Psychologist> findAllPsychologists() throws PsychologistException;
+    public List<Psychologist> findAllPsychologists() throws PsychologistException;  
+
+    public List<Psychologist> findPsychologistsByEmail(String email) throws PsychologistException;    
+    
+    public void sendRecoveryEmail(Psychologist psychologist) throws PsychologistException;
+    
+    public void changePassword(Psychologist psychologist, String oldPassword, String newPassword) throws PsychologistException;
+
 }

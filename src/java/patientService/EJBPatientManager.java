@@ -35,7 +35,7 @@ public class EJBPatientManager implements PatientInterface {
     }
 
     @Override
-    public void updatePatient(Patient patient, String dni) throws UpdateException {
+    public void updatePatient(Patient patient) throws UpdateException {
         try {
             if (!entityManager.contains(patient)) {
                 entityManager.merge(patient);
@@ -86,5 +86,18 @@ public class EJBPatientManager implements PatientInterface {
             throw new PatientException(e.getMessage());
         }
         return patients;
+    }
+
+    @Override
+    public void sendRecoveryEmail(Patient patient) throws PatientException {
+        String newPassword = null;
+        try {
+            newPassword = emailRecovery.AetherEmailRecovery.sendEmail(patient.getEmail());
+            newPassword = hashPassword.HashPassword.hashPassword(newPassword.getBytes());
+            patient.setPassword(newPassword);
+            updatePatient(patient);
+        } catch (Exception e) {
+            throw new PatientException(e.getMessage());
+        }
     }
 }

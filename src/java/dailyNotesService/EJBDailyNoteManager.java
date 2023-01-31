@@ -136,14 +136,14 @@ public class EJBDailyNoteManager implements DailyNoteInterface {
      * @throws DailyNoteNotFoundException
      */
     @Override
-    public DailyNote findPatientNoteByDate(String idPatient, Date date) throws DailyNoteNotFoundException {
-        DailyNote dailyNote;
+    public List<DailyNote> findPatientNoteByDate(String idPatient, Date date) throws DailyNoteNotFoundException {
+        List<DailyNote> dailyNotes;
         try {
-            dailyNote = (DailyNote) entityManager.createNamedQuery("findPatientNoteByDate").setParameter("idUser", idPatient).setParameter("noteDate", date).getSingleResult();
+            dailyNotes = entityManager.createNamedQuery("findPatientNoteByDate").setParameter("idUser", idPatient).setParameter("noteDate", date).getResultList();
         } catch (Exception e) {
             throw new DailyNoteNotFoundException(e.getMessage());
         }
-        return dailyNote;
+        return dailyNotes;
     }
 
     /**
