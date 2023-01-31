@@ -118,19 +118,20 @@ public class DailyNoteFacadeREST {
     @GET
     @Path("findByDate/{patientId}/{date}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public DailyNote findPatientDailyNoteByDate(@PathParam("patientId") String idPatient, @PathParam("date") String dateIntro) {
-        DailyNote dailyNote = null;
+    public List<DailyNote> findPatientDailyNoteByDate(@PathParam("patientId") String idPatient, @PathParam("date") String dateIntro) {
+        List<DailyNote> dailyNotes = null;
         SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
         try {
             Date date = format.parse(dateIntro);
-            dailyNote = dailyNoteEJB.findPatientNoteByDate(idPatient, date);
+            dailyNotes = dailyNoteEJB.findPatientNoteByDate(idPatient, date);
         } catch (ParseException ex) {
-            Logger.getLogger(DailyNoteFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
+            LOGGER.severe(ex.getMessage());
+            throw new InternalServerErrorException(ex.getMessage());
         } catch (DailyNoteNotFoundException ex) {
             LOGGER.severe(ex.getMessage());
             throw new InternalServerErrorException(ex.getMessage());
         }
-        return dailyNote;
+        return dailyNotes;
     }
 
     @GET
@@ -144,7 +145,8 @@ public class DailyNoteFacadeREST {
             Date dateGreat = format.parse(dateIntroGreat);
             dailyNotes = dailyNoteEJB.findPatientNotesBetweenDates(idPatient, dateLow, dateGreat);
         } catch (ParseException ex) {
-            Logger.getLogger(DailyNoteFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
+            LOGGER.severe(ex.getMessage());
+            throw new InternalServerErrorException(ex.getMessage());
         } catch (DailyNoteNotFoundException ex) {
             LOGGER.severe(ex.getMessage());
             throw new InternalServerErrorException(ex.getMessage());

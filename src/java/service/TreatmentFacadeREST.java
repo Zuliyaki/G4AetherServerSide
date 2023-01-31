@@ -5,7 +5,7 @@
  */
 package service;
 
-import TreatmentService.TreatmentInterface;
+import treatmentService.TreatmentInterface;
 import entities.EnumDay;
 import entities.EnumDayTime;
 

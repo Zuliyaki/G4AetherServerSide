@@ -11,6 +11,7 @@ import exceptions.DeleteException;
 import exceptions.UpdateException;
 import exceptions.PatientException;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ws.rs.Consumes;
@@ -31,12 +32,12 @@ import patientService.PatientInterface;
  */
 @Path("entities.patient")
 public class PatientFacadeREST {
-    
+
     @EJB
     private PatientInterface patientEJB;
-    
+
     private static final Logger LOGGER = Logger.getLogger(PatientFacadeREST.class.getName());
-    
+
     @POST
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void createPatient(Patient entity) {
@@ -47,18 +48,18 @@ public class PatientFacadeREST {
             throw new InternalServerErrorException(ex.getMessage());
         }
     }
-    
+
     @PUT
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void editPatient(@PathParam("dni") String dni, Patient entity) {
+    public void editPatient(Patient entity) {
         try {
-            patientEJB.updatePatient(entity, dni);
+            patientEJB.updatePatient(entity);
         } catch (UpdateException ex) {
             LOGGER.severe(ex.getMessage());
             throw new InternalServerErrorException(ex.getMessage());
         }
     }
-    
+
     @DELETE
     @Path("{dni}")
     public void removePatient(@PathParam("dni") String dni) {
@@ -69,7 +70,18 @@ public class PatientFacadeREST {
             throw new InternalServerErrorException(ex.getMessage());
         }
     }
-    
+
+    @PUT
+    @Path("sendRecoveryEmail")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void sendRecoveryEmail(Patient entity) {
+        try {
+            patientEJB.sendRecoveryEmail(entity);
+        } catch (PatientException ex) {
+            Logger.getLogger(PatientFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public List<Patient> findAllPatients() {
@@ -82,7 +94,7 @@ public class PatientFacadeREST {
         }
         return patients;
     }
-    
+
     @GET
     @Path("findPatientsByPsychologist/{dniPsychologist}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -96,5 +108,5 @@ public class PatientFacadeREST {
         }
         return patients;
     }
-    
+
 }

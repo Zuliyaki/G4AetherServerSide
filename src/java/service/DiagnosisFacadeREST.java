@@ -5,7 +5,7 @@
  */
 package service;
 
-import DiagnosisService.DiagnosisInterface;
+import diagnosisService.DiagnosisInterface;
 import entities.Diagnosis;
 import entities.Patient;
 import exceptions.*;
