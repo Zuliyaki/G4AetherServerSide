@@ -6,86 +6,81 @@
 package service;
 
 import entities.Psychologist;
+import exceptions.CreateException;
+import exceptions.DeleteException;
+import exceptions.UpdateException;
+import exceptions.PsychologistException;
 import java.util.List;
-import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import java.util.logging.Logger;
+import javax.ejb.EJB;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import psychologistService.PsychologistInterface;
 
 /**
  *
- * @author unaib
+ * @author unaibAndLeire
  */
-@Stateless
 @Path("entities.psychologist")
-public class PsychologistFacadeREST extends AbstractFacade<Psychologist> {
+public class PsychologistFacadeREST {
 
-    @PersistenceContext(unitName = "G4AetherPU")
-    private EntityManager em;
+    @EJB
+    
+    private PsychologistInterface psychologistEJB;
 
-    public PsychologistFacadeREST() {
-        super(Psychologist.class);
-    }
+    private static final Logger LOGGER = Logger.getLogger(PsychologistFacadeREST.class.getName());
 
     @POST
-    @Override
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void create(Psychologist entity) {
-        super.create(entity);
+    public void createPsychologist(Psychologist entity) {
+        try {
+            psychologistEJB.createPsychologist(entity);
+        } catch (CreateException ex) {
+            LOGGER.severe(ex.getMessage());
+            throw new InternalServerErrorException(ex.getMessage());
+        }
     }
 
     @PUT
-    @Path("{id}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void edit(@PathParam("id") String id, Psychologist entity) {
-        super.edit(entity);
+    public void editPsychologist(@PathParam("dni") String dni, Psychologist entity) {
+        try {
+            psychologistEJB.updatePsychologist(entity, dni);
+        } catch (UpdateException ex) {
+            LOGGER.severe(ex.getMessage());
+            throw new InternalServerErrorException(ex.getMessage());
+        }
     }
 
     @DELETE
-    @Path("{id}")
-    public void remove(@PathParam("id") String id) {
-        super.remove(super.find(id));
+    @Path("{dni}")
+    public void removePsychologist(@PathParam("dni") String dni) {
+        try {
+            psychologistEJB.deletePsychologist(dni);
+        } catch (DeleteException ex) {
+            LOGGER.severe(ex.getMessage());
+            throw new InternalServerErrorException(ex.getMessage());
+        }
     }
 
     @GET
-    @Path("{id}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Psychologist find(@PathParam("id") String id) {
-        return super.find(id);
+    public List<Psychologist> findAllPsychologists() {
+        List<Psychologist> users = null;
+        try {
+            users = psychologistEJB.findAllPsychologists();
+        } catch (PsychologistException ex) {
+            LOGGER.severe(ex.getMessage());
+            throw new InternalServerErrorException(ex.getMessage());
+        }
+        return users;
     }
-
-    @GET
-    @Override
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Psychologist> findAll() {
-        return super.findAll();
-    }
-
-    @GET
-    @Path("{from}/{to}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Psychologist> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
-        return super.findRange(new int[]{from, to});
-    }
-
-    @GET
-    @Path("count")
-    @Produces(MediaType.TEXT_PLAIN)
-    public String countREST() {
-        return String.valueOf(super.count());
-    }
-
-    @Override
-    protected EntityManager getEntityManager() {
-        return em;
-    }
-    
 }

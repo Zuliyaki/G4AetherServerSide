@@ -9,6 +9,9 @@ import java.io.Serializable;
 import java.util.Objects;
 import java.util.logging.Logger;
 import javax.persistence.Embeddable;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -16,43 +19,71 @@ import javax.persistence.Embeddable;
  */
 @Embeddable
 public class TreatmentId implements Serializable {
+    private static final long serialVersionUID = 1L;
 
-    private String diagnosisId;
-    private Integer medicationId;
+    private Long diagnosisId;
+    private Long medicationId;
 
+    @Enumerated(EnumType.STRING)
+    private EnumDay day;
+
+    @Enumerated(EnumType.STRING)
+    private EnumDayTime dayTime;
+
+    //CONSTRUCTOR
     public TreatmentId() {
     }
 
-    public TreatmentId(String diagnosisId, Integer medicationId) {
+    public TreatmentId(Long diagnosisId, Long medicationId, EnumDay day, EnumDayTime dayTime) {
         this.diagnosisId = diagnosisId;
         this.medicationId = medicationId;
+        this.day = day;
+        this.dayTime = dayTime;
     }
-    
+
     //GETTERS AND SETTERS
-    public String getDiagnosisId() {
+    public Long getDiagnosisId() {
         return diagnosisId;
     }
 
-    public void setDiagnosisId(String diagnosisId) {
+    public void setDiagnosisId(Long diagnosisId) {
         this.diagnosisId = diagnosisId;
     }
 
-    public Integer getMedicationId() {
+    public Long getMedicationId() {
         return medicationId;
     }
 
-    public void setMedicationId(Integer medicationId) {
+    public void setMedicationId(Long medicationId) {
         this.medicationId = medicationId;
     }
-    //HASHCODE
+
+    public EnumDay getDay() {
+        return day;
+    }
+
+    public void setDay(EnumDay day) {
+        this.day = day;
+    }
+
+    public EnumDayTime getDayTime() {
+        return dayTime;
+    }
+
+    public void setDayTime(EnumDayTime dayTime) {
+        this.dayTime = dayTime;
+    }
+
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 79 * hash + Objects.hashCode(this.diagnosisId);
-        hash = 79 * hash + Objects.hashCode(this.medicationId);
+        hash = 29 * hash + Objects.hashCode(this.diagnosisId);
+        hash = 29 * hash + Objects.hashCode(this.medicationId);
+        hash = 29 * hash + Objects.hashCode(this.day);
+        hash = 29 * hash + Objects.hashCode(this.dayTime);
         return hash;
     }
-    //EQUALS
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -71,10 +102,15 @@ public class TreatmentId implements Serializable {
         if (!Objects.equals(this.medicationId, other.medicationId)) {
             return false;
         }
+        if (this.day != other.day) {
+            return false;
+        }
+        if (this.dayTime != other.dayTime) {
+            return false;
+        }
         return true;
     }
 
-    
-    
-    
+   
+
 }

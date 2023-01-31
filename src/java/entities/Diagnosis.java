@@ -6,19 +6,42 @@ import java.util.Date;
 import java.util.Objects;
 import java.util.Set;
 import javax.persistence.*;
+import static javax.persistence.FetchType.EAGER;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
-
-
+import javax.xml.bind.annotation.XmlTransient;
 
 @Entity
-@Table(name= "diagnosis", schema= "aether" )
+@Table(name = "diagnosis", schema = "aether")
+@NamedQueries({
+    @NamedQuery(
+            name = "findAllDiagnosis", query = "SELECT dia FROM Diagnosis dia"
+    )
+    ,
+    @NamedQuery(
+            name = "findDiagnosisById", query = "SELECT dia FROM Diagnosis dia WHERE dia.diagnosisId=:diagnosisId"
+    )
+    ,
+    @NamedQuery(
+            name = "findAllDiagnosisByPatient", query = "SELECT dia FROM Diagnosis dia WHERE dia.patient.dni=:patient"
+    )
+    ,
+    @NamedQuery(
+            name = "findPatientDiagnosisByDate", query = "SELECT dia FROM Diagnosis dia WHERE dia.patient.dni=:patient and dia.diagnosisDate BETWEEN :diaDateLow AND :diaDateGreat"
+    )
+    ,
+    @NamedQuery(
+            name = "findAllIfPatientOnTeraphy", query = "SELECT dia FROM Diagnosis dia WHERE dia.patient.dni=:patient and dia.onTherapy=true"
+    )
+})
 @XmlRootElement
-public class Diagnosis implements Serializable{
+public class Diagnosis implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
-    @NotNull
-    private String id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long diagnosisId;
+    @Temporal(TemporalType.DATE)
     private Date diagnosisDate;
     @Temporal(TemporalType.DATE)
     private Date lastDiagnosisChangeDate;
@@ -28,111 +51,107 @@ public class Diagnosis implements Serializable{
     private Psychologist psychologist;
     @ManyToOne
     private MentalDisease mentalDisease;
-    @OneToMany(mappedBy = "diagnosis")
+    @OneToMany(targetEntity = Treatment.class, mappedBy = "diagnosis")
     private Set<Treatment> treatments;
-    @NotNull
     private Boolean onTherapy;
-    
+
     /**
      * Empty constructor
      */
     public Diagnosis() {
-        super();
+       
     }
 
-    /**
-     *Costructor with parameters
-     *
-     * @param id
-     * @param diagnosisDate
-     * @param lastDiagnosisChangeDate
-     * @param patient
-     * @param psychologist
-     * @param mentalDisease
-     * @param onTherapy
-     */
-    public Diagnosis(String id, Date diagnosisDate, Date lastDiagnosisChangeDate, Patient patient,
-                     Psychologist psychologist, MentalDisease mentalDisease, Boolean onTherapy) {
-        this.id = id;
+    public Diagnosis(Long diagnosisId, Date diagnosisDate, Date lastDiagnosisChangeDate, Patient patient, Psychologist psychologist, MentalDisease mentalDisease, Set<Treatment> treatments, Boolean onTherapy) {
+        this.diagnosisId = diagnosisId;
         this.diagnosisDate = diagnosisDate;
         this.lastDiagnosisChangeDate = lastDiagnosisChangeDate;
         this.patient = patient;
         this.psychologist = psychologist;
         this.mentalDisease = mentalDisease;
+        this.treatments = treatments;
         this.onTherapy = onTherapy;
     }
 
-    //Getters & Setters
-    public void setId(String id) {
-        this.id = id;
+    public Long getDiagnosisId() {
+        return diagnosisId;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setDiagnosisDate(Date diagnosisDate) {
-        this.diagnosisDate = diagnosisDate;
+    public void setDiagnosisId(Long diagnosisId) {
+        this.diagnosisId = diagnosisId;
     }
 
     public Date getDiagnosisDate() {
         return diagnosisDate;
     }
 
-    public void setLastDiagnosisChangeDate(Date lastDiagnosisChangeDate) {
-        this.lastDiagnosisChangeDate = lastDiagnosisChangeDate;
+    public void setDiagnosisDate(Date diagnosisDate) {
+        this.diagnosisDate = diagnosisDate;
     }
 
     public Date getLastDiagnosisChangeDate() {
         return lastDiagnosisChangeDate;
     }
 
-    public void setPatient(Patient patient) {
-        this.patient = patient;
+    public void setLastDiagnosisChangeDate(Date lastDiagnosisChangeDate) {
+        this.lastDiagnosisChangeDate = lastDiagnosisChangeDate;
     }
 
     public Patient getPatient() {
         return patient;
     }
 
-    public void setPsychologist(Psychologist psychologist) {
-        this.psychologist = psychologist;
+    public void setPatient(Patient patient) {
+        this.patient = patient;
     }
 
     public Psychologist getPsychologist() {
         return psychologist;
     }
 
-    public void setMentalDisease(MentalDisease mentalDisease) {
-        this.mentalDisease = mentalDisease;
+    public void setPsychologist(Psychologist psychologist) {
+        this.psychologist = psychologist;
     }
 
     public MentalDisease getMentalDisease() {
         return mentalDisease;
     }
 
-    public void setOnTherapy(Boolean onTherapy) {
-        this.onTherapy = onTherapy;
+    public void setMentalDisease(MentalDisease mentalDisease) {
+        this.mentalDisease = mentalDisease;
+    }
+    
+    @XmlTransient
+    public Set<Treatment> getTreatments() {
+        return treatments;
+    }
+
+    public void setTreatments(Set<Treatment> treatments) {
+        this.treatments = treatments;
     }
 
     public Boolean getOnTherapy() {
         return onTherapy;
     }
-    //HASCODE
+
+    public void setOnTherapy(Boolean onTherapy) {
+        this.onTherapy = onTherapy;
+    }
+
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 71 * hash + Objects.hashCode(this.id);
-        hash = 71 * hash + Objects.hashCode(this.diagnosisDate);
-        hash = 71 * hash + Objects.hashCode(this.lastDiagnosisChangeDate);
-        hash = 71 * hash + Objects.hashCode(this.patient);
-        hash = 71 * hash + Objects.hashCode(this.psychologist);
-        hash = 71 * hash + Objects.hashCode(this.mentalDisease);
-        hash = 71 * hash + Objects.hashCode(this.treatments);
-        hash = 71 * hash + Objects.hashCode(this.onTherapy);
+        hash = 67 * hash + Objects.hashCode(this.diagnosisId);
+        hash = 67 * hash + Objects.hashCode(this.diagnosisDate);
+        hash = 67 * hash + Objects.hashCode(this.lastDiagnosisChangeDate);
+        hash = 67 * hash + Objects.hashCode(this.patient);
+        hash = 67 * hash + Objects.hashCode(this.psychologist);
+        hash = 67 * hash + Objects.hashCode(this.mentalDisease);
+        hash = 67 * hash + Objects.hashCode(this.treatments);
+        hash = 67 * hash + Objects.hashCode(this.onTherapy);
         return hash;
     }
-    //EQUALS
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -145,19 +164,16 @@ public class Diagnosis implements Serializable{
             return false;
         }
         final Diagnosis other = (Diagnosis) obj;
-        if (!Objects.equals(this.id, other.id)) {
+        if (!Objects.equals(this.diagnosisId, other.diagnosisId)) {
             return false;
         }
-        if (!Objects.equals(this.mentalDisease, other.mentalDisease)) {
-            return false;
-        }
+      
         return true;
     }
-    //TO STRING
+
     @Override
     public String toString() {
-        return "Diagnosis{" + "id=" + id + ", diagnosisDate=" + diagnosisDate + ", lastDiagnosisChangeDate=" + lastDiagnosisChangeDate + ", patient=" + patient + ", psychologist=" + psychologist + ", mentalDisease=" + mentalDisease + ", treatments=" + treatments + ", onTherapy=" + onTherapy + '}';
+        return "Diagnosis{" + "diagnosisId=" + diagnosisId + ", diagnosisDate=" + diagnosisDate + ", lastDiagnosisChangeDate=" + lastDiagnosisChangeDate + ", patient=" + patient + ", psychologist=" + psychologist + ", mentalDisease=" + mentalDisease + ", treatments=" + treatments + ", onTherapy=" + onTherapy + '}';
     }
-    
-    
+
 }

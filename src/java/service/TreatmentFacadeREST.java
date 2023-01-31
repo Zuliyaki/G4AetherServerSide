@@ -5,15 +5,24 @@
  */
 package service;
 
+import TreatmentService.TreatmentInterface;
+import entities.EnumDay;
+import entities.EnumDayTime;
+
 import entities.Treatment;
 import entities.TreatmentId;
+import exceptions.CreateException;
+import exceptions.DeleteException;
+import exceptions.TreatmentNotFoundException;
+import exceptions.UpdateException;
 import java.util.List;
-import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.ejb.EJB;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -24,93 +33,148 @@ import javax.ws.rs.core.PathSegment;
 
 /**
  *
- * @author unaib
+ * @author unaiz
  */
-@Stateless
 @Path("entities.treatment")
-public class TreatmentFacadeREST extends AbstractFacade<Treatment> {
+public class TreatmentFacadeREST {
 
-    @PersistenceContext(unitName = "G4AetherPU")
-    private EntityManager em;
+    /**
+     * The EJB interface
+     */
+    @EJB
+    private TreatmentInterface ejb;
 
+    private Logger LOGGER = Logger.getLogger(DiagnosisFacadeREST.class.getName());
+
+    /**
+     *
+     * @param entity
+     *
+     * @return
+     */
     private TreatmentId getPrimaryKey(PathSegment pathSegment) {
         /*
          * pathSemgent represents a URI path segment and any associated matrix parameters.
-         * URI path part is supposed to be in form of 'somePath;diagnosisId=diagnosisIdValue;medicationId=medicationIdValue'.
+         * URI path part is supposed to be in form of 'somePath;diagnosisId=diagnosisIdValue;medicationId=medicationIdValue;day=dayValue;dayTime=dayTimeValue'.
          * Here 'somePath' is a result of getPath() method invocation and
          * it is ignored in the following code.
          * Matrix parameters are used as field names to build a primary key instance.
          */
+
         entities.TreatmentId key = new entities.TreatmentId();
         javax.ws.rs.core.MultivaluedMap<String, String> map = pathSegment.getMatrixParameters();
         java.util.List<String> diagnosisId = map.get("diagnosisId");
         if (diagnosisId != null && !diagnosisId.isEmpty()) {
-            key.setDiagnosisId(diagnosisId.get(0));
+            key.setDiagnosisId(new java.lang.Long(diagnosisId.get(0)));
         }
         java.util.List<String> medicationId = map.get("medicationId");
         if (medicationId != null && !medicationId.isEmpty()) {
-            key.setMedicationId(new java.lang.Integer(medicationId.get(0)));
+            key.setMedicationId(new java.lang.Long(medicationId.get(0)));
+        }
+        java.util.List<String> day = map.get("day");
+        if (day != null && !day.isEmpty()) {
+            key.setDay(entities.EnumDay.valueOf(day.get(0)));
+        }
+        java.util.List<String> dayTime = map.get("dayTime");
+        if (dayTime != null && !dayTime.isEmpty()) {
+            key.setDayTime(entities.EnumDayTime.valueOf(dayTime.get(0)));
         }
         return key;
-    }
 
-    public TreatmentFacadeREST() {
-        super(Treatment.class);
     }
 
     @POST
-    @Override
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void create(Treatment entity) {
-        super.create(entity);
+    public void createTreatment(Treatment entity) {
+        try {
+            LOGGER.log(Level.INFO, "creating treatment");
+            ejb.createTreatment(entity);
+        } catch (CreateException ex) {
+            LOGGER.severe(ex.getMessage());
+            throw new InternalServerErrorException(ex.getMessage());
+        }
     }
 
     @PUT
-    @Path("{id}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void edit(@PathParam("id") PathSegment id, Treatment entity) {
-        super.edit(entity);
+    public void updateTreatment(Treatment entity) {
+        try {
+            LOGGER.log(Level.INFO, "upadting treatment");
+            ejb.updateTreatment(entity);
+        } catch (UpdateException ex) {
+            LOGGER.severe(ex.getMessage());
+            throw new InternalServerErrorException(ex.getMessage());
+        }
     }
 
+    /**
+     *
+     * @param treatmentId
+     * @param MedicationId
+     * @param Day
+     * @param Daytime
+     */
     @DELETE
-    @Path("{id}")
-    public void remove(@PathParam("id") PathSegment id) {
-        entities.TreatmentId key = getPrimaryKey(id);
-        super.remove(super.find(key));
+
+    public void deleteTreatment(Treatment treatment) {
+
+        try {
+            ejb.deleteTreatment(treatment);
+        } catch (DeleteException ex) {
+            LOGGER.severe(ex.getMessage());
+            throw new InternalServerErrorException(ex.getMessage());
+        }
     }
 
     @GET
-    @Path("{id}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Treatment find(@PathParam("id") PathSegment id) {
-        entities.TreatmentId key = getPrimaryKey(id);
-        return super.find(key);
+    public List<Treatment> findAllTreatments() {
+        List<Treatment> treatmentents = null;
+
+        try {
+            LOGGER.log(Level.INFO, "getting treatments by ID");
+            treatmentents = ejb.findAllTreatments();
+        } catch (TreatmentNotFoundException ex) {
+            LOGGER.severe(ex.getMessage());
+            throw new InternalServerErrorException(ex.getMessage());
+        }
+        return treatmentents;
     }
 
     @GET
-    @Override
+    @Path("get/{treatmentId}/{MedicationId}/{Day}/{Daytime}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Treatment> findAll() {
-        return super.findAll();
+    public Treatment findTreatmentByID(@PathParam("id") Long treatmentId, @PathParam("MedicationId") Long MedicationId, @PathParam("Day") EnumDay Day, @PathParam("Daytime") EnumDayTime Daytime) {
+        Treatment treatment = new Treatment();
+        TreatmentId treatmentid = null;
+        treatmentid.setDay(Day);
+        treatmentid.setDayTime(Daytime);
+        treatmentid.setDiagnosisId(treatmentId);
+        treatmentid.setMedicationId(MedicationId);
+        try {
+            LOGGER.log(Level.INFO, "get Treatment by ID");
+            treatment = ejb.findTreatmentByID(treatmentid);
+        } catch (TreatmentNotFoundException ex) {
+            LOGGER.severe(ex.getMessage());
+            throw new InternalServerErrorException(ex.getMessage());
+        }
+        return treatment;
     }
 
     @GET
-    @Path("{from}/{to}")
+    @Path("diagnosis/{id}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Treatment> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
-        return super.findRange(new int[]{from, to});
-    }
+    public List<Treatment> findTreatmentsByDiagnosisId(@PathParam("id") Long id) {
+        List<Treatment> treatmentents = null;
 
-    @GET
-    @Path("count")
-    @Produces(MediaType.TEXT_PLAIN)
-    public String countREST() {
-        return String.valueOf(super.count());
-    }
-
-    @Override
-    protected EntityManager getEntityManager() {
-        return em;
+        try {
+            LOGGER.log(Level.INFO, "getting treatments by ID");
+            treatmentents = ejb.findTreatmentsByDiagnosisId(id);
+        } catch (TreatmentNotFoundException ex) {
+            LOGGER.severe(ex.getMessage());
+            throw new InternalServerErrorException(ex.getMessage());
+        }
+        return treatmentents;
     }
     
 }

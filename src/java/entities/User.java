@@ -2,28 +2,41 @@ package entities;
 
 import java.io.Serializable;
 
-import java.time.LocalDate;
-
 import java.util.Date;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
-@MappedSuperclass
+/**
+ *
+ * @author unaibAndLeire
+ */
+@Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Table(name = "user", schema = "aether")
 @DiscriminatorColumn(name = "user_type",
         discriminatorType = DiscriminatorType.STRING)
+@NamedQueries({
+    @NamedQuery(
+            name = "singIn", query = "SELECT u FROM User u WHERE u.dni=:dniUser AND u.password=:passwordUser"
+    )
+    ,@NamedQuery(
+            name = "findAllUsers", query = "SELECT u FROM User u"
+    )
+    ,
+    @NamedQuery(
+            name = "findUserByDni", query = "SELECT u FROM User u WHERE u.dni=:dniUser"
+    )
+})
 @XmlRootElement
 public class User implements Serializable {
 
     @Id
-    @NotNull
     private String dni;
     @NotNull
     private String fullName;
-    @NotNull
+    @Temporal(TemporalType.DATE)
     private Date birthDate;
     @NotNull
     private String password;
@@ -31,8 +44,6 @@ public class User implements Serializable {
     private Integer phoneNumber;
     @NotNull
     private String email;
-    @NotNull
-    private EnumUserType userType;
 
     /**
      * Empty constructor

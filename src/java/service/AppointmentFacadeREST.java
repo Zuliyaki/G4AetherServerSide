@@ -1,18 +1,23 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package service;
 
+import appointmentService.AppointmentInterface;
 import entities.Appointment;
+import exceptions.AppointmentNotFoundException;
+import exceptions.CreateException;
+import exceptions.DeleteException;
+import exceptions.UpdateException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -22,70 +27,139 @@ import javax.ws.rs.core.MediaType;
 
 /**
  *
- * @author unaib
+ * @author Janam
  */
 @Stateless
 @Path("entities.appointment")
-public class AppointmentFacadeREST extends AbstractFacade<Appointment> {
+public class AppointmentFacadeREST {
 
-    @PersistenceContext(unitName = "G4AetherPU")
-    private EntityManager em;
+    @EJB
+    private AppointmentInterface appointmentEJB;
 
-    public AppointmentFacadeREST() {
-        super(Appointment.class);
-    }
+    private static final Logger LOGGER = Logger.getLogger(AppointmentFacadeREST.class.getName());
 
+    /**
+     * 
+     * @param entity 
+     */
     @POST
-    @Override
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void create(Appointment entity) {
-        super.create(entity);
+        try {
+            appointmentEJB.createAppointment(entity);
+        } catch (CreateException ex) {
+            LOGGER.severe(ex.getMessage());
+            throw new InternalServerErrorException(ex.getMessage());
+        }
     }
 
+    /**
+     * 
+     * @param idAppointment
+     * @param entity 
+     */
     @PUT
-    @Path("{id}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void edit(@PathParam("id") Long id, Appointment entity) {
-        super.edit(entity);
+    public void edit(@PathParam("id") Long idAppointment, Appointment entity) {
+        try {
+            appointmentEJB.updateAppointment(entity);
+        } catch (UpdateException ex) {
+            LOGGER.severe(ex.getMessage());
+            throw new InternalServerErrorException(ex.getMessage());
+        }
     }
 
+    /**
+     * 
+     * @param idAppointment 
+     */
     @DELETE
     @Path("{id}")
-    public void remove(@PathParam("id") Long id) {
-        super.remove(super.find(id));
+    public void remove(@PathParam("id") Long idAppointment) {
+        try {
+            appointmentEJB.deleteAppointment(idAppointment);
+        } catch (DeleteException ex) {
+            LOGGER.severe(ex.getMessage());
+            throw new InternalServerErrorException(ex.getMessage());
+        }
     }
 
+    /**
+     * 
+     * @param idAppointment
+     * @return 
+     */
     @GET
     @Path("{id}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Appointment find(@PathParam("id") Long id) {
-        return super.find(id);
+    public Appointment getAppointmentById(@PathParam("id") Long idAppointment) {
+        Appointment appointment = null;
+        try {
+            appointment = appointmentEJB.getAppointmentById(idAppointment);
+        } catch (AppointmentNotFoundException ex) {
+            LOGGER.severe(ex.getMessage());
+            throw new InternalServerErrorException(ex.getMessage());
+        }
+        return appointment;
     }
 
+    /**
+     * 
+     * @return 
+     */
     @GET
-    @Override
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Appointment> findAll() {
-        return super.findAll();
+    public List<Appointment> getAllAppointments() {
+        List<Appointment> appointments = null;
+        try {
+            appointments = appointmentEJB.getAllAppointments();
+        } catch (AppointmentNotFoundException ex) {
+            LOGGER.severe(ex.getMessage());
+            throw new InternalServerErrorException(ex.getMessage());
+        }
+        return appointments;
     }
 
+    /**
+     * 
+     * @param appointmentdate
+     * @return 
+     */
     @GET
-    @Path("{from}/{to}")
+    @Path("getAppointmentByDate/{appointmentDate}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Appointment> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
-        return super.findRange(new int[]{from, to});
+    public Appointment getAppointmentByDate(@PathParam("appointmentDate") String appointmentdate) {
+        Appointment appointments = null;
+        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+        try {
+            Date date = format.parse(appointmentdate);
+            appointments = appointmentEJB.getAppointmentByDate(date);
+        } catch (ParseException ex) {
+            Logger.getLogger(AppointmentFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (AppointmentNotFoundException ex) {
+            LOGGER.severe(ex.getMessage());
+            throw new InternalServerErrorException(ex.getMessage());
+        }
+        return appointments;
     }
 
+    /**
+     * 
+     * @param appointmentchange
+     * @return 
+     */
     @GET
-    @Path("count")
-    @Produces(MediaType.TEXT_PLAIN)
-    public String countREST() {
-        return String.valueOf(super.count());
+    @Path("getAppointmentByChange/{appointmentchange}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<Appointment> getAppointmentByChange(@PathParam("appointmentchange") Boolean appointmentchange
+    ) {
+        List<Appointment> appointments = null;
+        try {
+            appointments = appointmentEJB.getAppointmentByChange(appointmentchange);
+        } catch (AppointmentNotFoundException ex) {
+            LOGGER.severe(ex.getMessage());
+            throw new InternalServerErrorException(ex.getMessage());
+        }
+        return appointments;
     }
-
-    @Override
-    protected EntityManager getEntityManager() {
-        return em;
-    }
-    
 }

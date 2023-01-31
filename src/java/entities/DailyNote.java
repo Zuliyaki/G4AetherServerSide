@@ -24,25 +24,41 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author unaib
  */
-/*@NamedQueries({
-    @NamedQuery(
-            name = "getAllNotesByPatient", query = "SELECT dn FROM dailynote dn WHERE dn.user.id=:idUser"
-    ),
-    @NamedQuery(
-            name = "createNewDailyNote", query = "INSERT INTO dailynote VALUES (:patient, :noteText, :noteComment, :noteStatus, :noteDate, :noteDateLastEdited, :dayScore, :noteReadable)"
-    ),
-    @NamedQuery(
-            name = "modifyDailyNote", query = "UPDATE WHERE dn.patient.id=:idPatient and dn.dailynote.id=:idNote"
-    ),
-    @NamedQuery(
-            name = "deleteDailyNote", query = ""
-    ),
-    @NamedQuery(
-            name = "addCommentOnDailyNote", query = ""
-    )
-})*/
 @Entity
 @Table(name = "dailynote", schema = "aether")
+@NamedQueries({
+    @NamedQuery(
+            name = "findAllNotes", query = "SELECT dn FROM DailyNote dn"
+    )
+    ,
+    @NamedQuery(
+            name = "findDailyNoteById", query = "SELECT dn FROM DailyNote dn WHERE dn.id=:idDailyNote"
+    )
+    ,
+    @NamedQuery(
+            name = "findAllNotesByPatient", query = "SELECT dn FROM DailyNote dn WHERE dn.dnPatient.dni=:idUser"
+    )
+    ,
+    @NamedQuery(
+            name = "findPatientNoteByDate", query = "SELECT dn FROM DailyNote dn WHERE dn.dnPatient.dni=:idUser and dn.dnNoteDate=:noteDate"
+    )
+    ,
+    @NamedQuery(
+            name = "findPatientNotesBetweenDates", query = "SELECT dn FROM DailyNote dn WHERE dn.dnPatient.dni=:idUser and dn.dnNoteDate BETWEEN :noteDateLow AND :noteDateGreat"
+    )
+    ,
+    @NamedQuery(
+            name = "findPatientEditedNotes", query = "SELECT dn FROM DailyNote dn WHERE dn.dnPatient.dni=:idUser and dn.dnNoteDate!=dn.dnNoteDateLastEdited"
+    )
+    ,
+    @NamedQuery(
+            name = "findPatientNotesByNotReadable", query = "SELECT dn FROM DailyNote dn WHERE dn.dnPatient.dni=:idUser and dn.dnNoteReadable = FALSE"
+    )
+    ,
+    @NamedQuery(
+            name = "findPatientNotesBetweenDayScores", query = "SELECT dn FROM DailyNote dn WHERE dn.dnPatient.dni=:idUser and dn.dnDayScore BETWEEN :dayScoreLow AND :dayScoreGreat"
+    )
+})
 @XmlRootElement
 public class DailyNote implements Serializable {
 
@@ -52,45 +68,48 @@ public class DailyNote implements Serializable {
      * Auto generated daily note id
      */
     @Id
-    @NotNull
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     /**
      * Patient that wrote the note
      */
     @ManyToOne
-    private Patient patient;
+    @NotNull
+    private Patient dnPatient;
     /**
      * Content of the note
      */
-    private String noteText;
+    @NotNull
+    private String dnNoteText;
     /**
      * Comment the psychologist can do about the note
      */
-    private String noteComment;
+    private String dnNoteComment;
     /**
      * Enum for the note if was readen or not
      */
     @Enumerated(EnumType.STRING)
-    private EnumReadedStatus noteStatus;
+    private EnumReadedStatus dnNoteStatus;
     /**
      * Date of creation of the note
      */
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date noteDate;
+    @NotNull
+    @Temporal(TemporalType.DATE)
+    private Date dnNoteDate;
     /**
      * Date of the last time the note was edited
      */
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date noteDateLastEdited;
+    @Temporal(TemporalType.DATE)
+    private Date dnNoteDateLastEdited;
     /**
      * Score of the day [1-100] depending how it was
      */
-    private Double dayScore;
+    @NotNull
+    private Double dnDayScore;
     /**
-     * Lets the patient choose if the psychologist can read the note
+     * Lets the dnPatient choose if the psychologist can read the note
      */
-    private Boolean noteReadable;
+    private Boolean dnNoteReadable;
 
     //Costructors
     /**
@@ -111,31 +130,31 @@ public class DailyNote implements Serializable {
      */
     public DailyNote(Patient patient, EnumReadedStatus noteStatus, Date noteDate, Date noteDateLastEdited,
             Double dayScore, Boolean noteReadable) {
-        this.patient = patient;
-        this.noteStatus = noteStatus;
-        this.noteDate = noteDate;
-        this.noteDateLastEdited = noteDateLastEdited;
-        this.dayScore = dayScore;
-        this.noteReadable = noteReadable;
+        this.dnPatient = patient;
+        this.dnNoteStatus = noteStatus;
+        this.dnNoteDate = noteDate;
+        this.dnNoteDateLastEdited = noteDateLastEdited;
+        this.dnDayScore = dayScore;
+        this.dnNoteReadable = noteReadable;
     }
 
     //Getters & Setters
     /**
-     * Sets the patient
+     * Sets the dnPatient
      *
      * @param patient
      */
     public void setPatient(Patient patient) {
-        this.patient = patient;
+        this.dnPatient = patient;
     }
 
     /**
-     * Get the patient
+     * Get the dnPatient
      *
      * @return
      */
     public Patient getPatient() {
-        return patient;
+        return dnPatient;
     }
 
     /**
@@ -144,7 +163,7 @@ public class DailyNote implements Serializable {
      * @param noteText
      */
     public void setNoteText(String noteText) {
-        this.noteText = noteText;
+        this.dnNoteText = noteText;
     }
 
     /**
@@ -153,7 +172,7 @@ public class DailyNote implements Serializable {
      * @return
      */
     public String getNoteText() {
-        return noteText;
+        return dnNoteText;
     }
 
     /**
@@ -162,7 +181,7 @@ public class DailyNote implements Serializable {
      * @param noteComent
      */
     public void setNoteComent(String noteComent) {
-        this.noteComment = noteComent;
+        this.dnNoteComment = noteComent;
     }
 
     /**
@@ -171,7 +190,7 @@ public class DailyNote implements Serializable {
      * @return
      */
     public String getNoteComent() {
-        return noteComment;
+        return dnNoteComment;
     }
 
     /**
@@ -180,7 +199,7 @@ public class DailyNote implements Serializable {
      * @param noteStatus
      */
     public void setNoteStatus(EnumReadedStatus noteStatus) {
-        this.noteStatus = noteStatus;
+        this.dnNoteStatus = noteStatus;
     }
 
     /**
@@ -189,7 +208,7 @@ public class DailyNote implements Serializable {
      * @return
      */
     public EnumReadedStatus getNoteStatus() {
-        return noteStatus;
+        return dnNoteStatus;
     }
 
     /**
@@ -198,7 +217,7 @@ public class DailyNote implements Serializable {
      * @param noteDate
      */
     public void setNoteDate(Date noteDate) {
-        this.noteDate = noteDate;
+        this.dnNoteDate = noteDate;
     }
 
     /**
@@ -207,7 +226,7 @@ public class DailyNote implements Serializable {
      * @return
      */
     public Date getNoteDate() {
-        return noteDate;
+        return dnNoteDate;
     }
 
     /**
@@ -216,7 +235,7 @@ public class DailyNote implements Serializable {
      * @param noteDateLastEdited
      */
     public void setNoteDateLastEdited(Date noteDateLastEdited) {
-        this.noteDateLastEdited = noteDateLastEdited;
+        this.dnNoteDateLastEdited = noteDateLastEdited;
     }
 
     /**
@@ -225,7 +244,7 @@ public class DailyNote implements Serializable {
      * @return
      */
     public Date getNoteDateLastEdited() {
-        return noteDateLastEdited;
+        return dnNoteDateLastEdited;
     }
 
     /**
@@ -234,7 +253,7 @@ public class DailyNote implements Serializable {
      * @param dayScore
      */
     public void setDayScore(Double dayScore) {
-        this.dayScore = dayScore;
+        this.dnDayScore = dayScore;
     }
 
     /**
@@ -243,7 +262,7 @@ public class DailyNote implements Serializable {
      * @return
      */
     public Double getDayScore() {
-        return dayScore;
+        return dnDayScore;
     }
 
     /**
@@ -252,7 +271,7 @@ public class DailyNote implements Serializable {
      * @param noteReadable
      */
     public void setNoteReadable(Boolean noteReadable) {
-        this.noteReadable = noteReadable;
+        this.dnNoteReadable = noteReadable;
     }
 
     /**
@@ -261,7 +280,7 @@ public class DailyNote implements Serializable {
      * @return
      */
     public Boolean getNoteReadable() {
-        return noteReadable;
+        return dnNoteReadable;
     }
 
     /**
@@ -286,7 +305,7 @@ public class DailyNote implements Serializable {
     public int hashCode() {
         int hash = 5;
         hash = 73 * hash + Objects.hashCode(this.id);
-        hash = 73 * hash + Objects.hashCode(this.noteDate);
+        hash = 73 * hash + Objects.hashCode(this.dnNoteDate);
         return hash;
     }
 
@@ -311,7 +330,7 @@ public class DailyNote implements Serializable {
         if (!Objects.equals(this.id, other.id)) {
             return false;
         }
-        if (!Objects.equals(this.noteDate, other.noteDate)) {
+        if (!Objects.equals(this.dnNoteDate, other.dnNoteDate)) {
             return false;
         }
         return true;

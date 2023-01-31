@@ -20,43 +20,52 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 @Entity
 @Table(name = "mentaldisease", schema = "aether")
+@NamedQueries({
+    @NamedQuery(
+            name = "getAllMentalDiseases", query = "SELECT md FROM MentalDisease md"
+    )
+    ,
+    @NamedQuery(
+            name = "getAllMentalDiseasesOrderByName", query = "SELECT md FROM MentalDisease md ORDER BY md.mdName ASC"
+    )
+    , 
+    @NamedQuery(
+            name = "getMentalDiseasesByName", query = "SELECT md FROM MentalDisease md WHERE md.mdName=:mdName"
+    )
+    , 
+    @NamedQuery(
+            name = "getMentalDiseasesById", query = "SELECT md FROM MentalDisease md WHERE md.idMentalDisease=:idMentalDisease"
+    )
+})
 @XmlRootElement
 public class MentalDisease implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @NotNull
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long idMentalDisease;
 
-    @NotNull
     @ManyToOne
     private Admin mdadmin;
 
-    @NotNull
     @Enumerated(EnumType.STRING)
     private EnumMentalDisease mdType;
 
-    @NotNull
     @Column(name = "name")
     private String mdName;
 
-    @NotNull
     @Column(name = "description")
     private String mdDescription;
 
-    @NotNull
-    @Column(name = "sympton")
+    @Column(name = "symptons")
     private String mdSympton;
 
-    @NotNull
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date mdAddDate;
 
     @OneToMany(mappedBy = "mentalDisease")
@@ -104,7 +113,7 @@ public class MentalDisease implements Serializable {
         return mdadmin;
     }
 
-    public void setAdmin(Admin admin) {
+    public void setAdmin(Admin mdadmin) {
         this.mdadmin = mdadmin;
     }
 
