@@ -34,7 +34,6 @@ import psychologistService.PsychologistInterface;
 public class PsychologistFacadeREST {
 
     @EJB
-
     private PsychologistInterface psychologistEJB;
 
     private static final Logger LOGGER = Logger.getLogger(PsychologistFacadeREST.class.getName());
@@ -89,6 +88,19 @@ public class PsychologistFacadeREST {
         List<Psychologist> users = null;
         try {
             users = psychologistEJB.findAllPsychologists();
+        } catch (PsychologistException ex) {
+            LOGGER.severe(ex.getMessage());
+            throw new InternalServerErrorException(ex.getMessage());
+        }
+        return users;
+    }
+
+    @GET
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<Psychologist> findPsychologistsByEmail(String emailIntro) {
+        List<Psychologist> users = null;
+        try {
+            users = psychologistEJB.findPsychologistsByEmail(emailIntro);
         } catch (PsychologistException ex) {
             LOGGER.severe(ex.getMessage());
             throw new InternalServerErrorException(ex.getMessage());

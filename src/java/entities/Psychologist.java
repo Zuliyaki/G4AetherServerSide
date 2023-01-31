@@ -16,6 +16,9 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(
             name = "findAllPsychologists", query = "SELECT u FROM User u, Psychologist p WHERE u.dni=p.dni"
+    ),
+    @NamedQuery(
+            name = "findPsychologistsByEmail", query = "SELECT u FROM User u, Psychologist p WHERE u.dni=p.dni and p.email=:emailIntro"
     )
 })
 @XmlRootElement

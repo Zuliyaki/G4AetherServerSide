@@ -10,6 +10,8 @@ import exceptions.CreateException;
 import exceptions.DeleteException;
 import exceptions.UpdateException;
 import exceptions.PsychologistException;
+import hashPassword.HashPassword;
+import emailRecovery.AetherEmailRecovery;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -78,8 +80,35 @@ public class EJBPsychologistManager implements PsychologistInterface {
     }
 
     @Override
+    public List<Psychologist> findPsychologistsByEmail(String emailIntro) throws PsychologistException {
+        List<Psychologist> psychologists = null;
+        try {
+            psychologists = entityManager.createNamedQuery("findPsychologistsByEmail").setParameter("emailIntro", emailIntro).getResultList();
+            sendRecoveryEmail(psychologists.get(0));
+        } catch (Exception e) {
+            throw new PsychologistException(e.getMessage());
+        }
+        return psychologists;
+    }
+
+    //
+    @Override
     public void sendRecoveryEmail(Psychologist psychologist) throws PsychologistException {
         String newPassword = null;
+        try {
+            newPassword = AetherEmailRecovery.sendEmail(psychologist.getEmail());
+            newPassword = HashPassword.hashPassword(newPassword.getBytes());
+            psychologist.setPassword(newPassword);
+            updatePsychologist(psychologist);
+        } catch (Exception e) {
+            throw new PsychologistException(e.getMessage());
+        }
+    }
+
+    //
+    @Override
+    public void changePassword(Psychologist psychologist, String oldPassword, String newPassword) throws PsychologistException {
+        /*String newPassword = null;
         try {
             newPassword = emailRecovery.AetherEmailRecovery.sendEmail(psychologist.getEmail());
             newPassword = hashPassword.HashPassword.hashPassword(newPassword.getBytes());
@@ -87,7 +116,7 @@ public class EJBPsychologistManager implements PsychologistInterface {
             updatePsychologist(psychologist);
         } catch (Exception e) {
             throw new PsychologistException(e.getMessage());
-        }
+        }*/
     }
 
 }
