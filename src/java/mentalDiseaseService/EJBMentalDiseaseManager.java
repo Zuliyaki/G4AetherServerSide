@@ -115,10 +115,10 @@ public class EJBMentalDiseaseManager implements MentalDiseaseInterface {
      * @throws MentalDiseaseException
      */
     @Override
-    public MentalDisease getMentalDiseasesByName(String mdName) throws MentalDiseaseException {
-        MentalDisease mentalDisease;
+    public List<MentalDisease> getMentalDiseasesByName(String mdName) throws MentalDiseaseException {
+        List<MentalDisease> mentalDisease;
         try {
-            mentalDisease = (MentalDisease) entityManager.createNamedQuery("getMentalDiseasesByName").setParameter("mdName", mdName).getSingleResult();
+            mentalDisease =entityManager.createNamedQuery("getMentalDiseasesByName").setParameter("mdName", mdName).getResultList();
         } catch (Exception e) {
             throw new MentalDiseaseException(e.getMessage());
         }
@@ -136,7 +136,7 @@ public class EJBMentalDiseaseManager implements MentalDiseaseInterface {
     public MentalDisease getMentalDiseasesById(Long idMentalDisease) throws MentalDiseaseException {
         MentalDisease mentalDisease;
         try {
-            mentalDisease = (MentalDisease) entityManager.find(MentalDisease.class, idMentalDisease);
+            mentalDisease = entityManager.find(MentalDisease.class, idMentalDisease);
         } catch (Exception e) {
             throw new MentalDiseaseException(e.getMessage());
         }

@@ -100,8 +100,8 @@ public class MentalDiseaseFacadeREST {
     @GET
     @Path("getByName/{name}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public MentalDisease getMentalDiseasesByName(@PathParam("name") String mdName) {
-        MentalDisease mentalDisease = null;
+    public List<MentalDisease> getMentalDiseasesByName(@PathParam("name") String mdName) {
+        List<MentalDisease> mentalDisease = null;
         try {
             mentalDisease = mentalDiseaseEJB.getMentalDiseasesByName(mdName);
         } catch (MentalDiseaseException ex) {

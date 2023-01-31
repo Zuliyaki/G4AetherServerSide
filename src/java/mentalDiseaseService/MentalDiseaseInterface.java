@@ -23,15 +23,13 @@ public interface MentalDiseaseInterface {
     public void updateMentalDisease(MentalDisease mentalDisease) throws UpdateException;
 
     public void deleteMentalDisease(Long idMentalDisease) throws DeleteException;
-    
+
     public List<MentalDisease> getAllMentalDiseases() throws MentalDiseaseException;
-    
+
     public List<MentalDisease> getAllMentalDiseasesOrderByName() throws MentalDiseaseException;
-    
-    public MentalDisease getMentalDiseasesByName(String mdName) throws MentalDiseaseException;
+
+    public List<MentalDisease> getMentalDiseasesByName(String mdName) throws MentalDiseaseException;
 
     public MentalDisease getMentalDiseasesById(Long idMentalDisease) throws MentalDiseaseException;
-
-   
 
 }
