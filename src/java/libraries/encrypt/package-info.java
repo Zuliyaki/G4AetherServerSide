@@ -3,7 +3,4 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package patientService;
-/**
- * This package contains the services of Patient
- */
+package encrypt;

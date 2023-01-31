@@ -20,7 +20,7 @@ public interface PatientInterface {
 
     public void createPatient(Patient patient) throws CreateException;
 
-    public void updatePatient(Patient patient, String dni) throws UpdateException;
+    public void updatePatient(Patient patient) throws UpdateException;
 
     public void deletePatient(String dni) throws DeleteException;
 
@@ -29,5 +29,7 @@ public interface PatientInterface {
     public List<Patient> findAllPatients() throws PatientException;
 
     public List<Patient> findAllPatientsByPsychologist(String dniPsychologist) throws PatientException;
+
+    public void sendRecoveryEmail(Patient patient) throws PatientException;
 
 }
