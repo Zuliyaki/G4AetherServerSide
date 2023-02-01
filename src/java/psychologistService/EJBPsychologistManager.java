@@ -78,7 +78,7 @@ public class EJBPsychologistManager implements PsychologistInterface {
         }
         return psychologists;
     }
-
+/*
     @Override
     public List<Psychologist> findPsychologistsByEmail(String emailIntro) throws PsychologistException {
         List<Psychologist> psychologists = null;
@@ -90,7 +90,7 @@ public class EJBPsychologistManager implements PsychologistInterface {
         }
         return psychologists;
     }
-
+*/
     //
     @Override
     public void sendRecoveryEmail(Psychologist psychologist) throws PsychologistException {

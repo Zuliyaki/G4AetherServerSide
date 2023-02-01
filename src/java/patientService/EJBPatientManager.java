@@ -10,7 +10,16 @@ import exceptions.CreateException;
 import exceptions.DeleteException;
 import exceptions.UpdateException;
 import exceptions.PatientException;
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.security.KeyFactory;
+import java.security.MessageDigest;
+import java.security.PrivateKey;
+import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.List;
+import javax.crypto.Cipher;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -28,6 +37,30 @@ public class EJBPatientManager implements PatientInterface {
     @Override
     public void createPatient(Patient patient) throws CreateException {
         try {
+            MessageDigest messageDigest;
+            String passwordResumen;
+            byte[] decodedMessage = null;
+
+            //Decrypt
+            byte fileKey[] = fileReader(".\\Servidor\\PrivateKeyServidor.key");
+            KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+            PKCS8EncodedKeySpec pKCS8EncodedKeySpec = new PKCS8EncodedKeySpec(fileKey);
+            PrivateKey privateKey = keyFactory.generatePrivate(pKCS8EncodedKeySpec);
+
+            Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
+            cipher.init(Cipher.DECRYPT_MODE, privateKey);
+            byte password[] = patient.getPassword().getBytes();
+            decodedMessage = cipher.doFinal(password);
+
+            //Hash
+            messageDigest = MessageDigest.getInstance("SHA");
+            byte dataBytes[] = decodedMessage;
+            messageDigest.update(dataBytes);
+            byte newPasswordResumen[] = messageDigest.digest();
+            passwordResumen = new String(newPasswordResumen);
+
+            patient.setPassword(passwordResumen);
+
             entityManager.persist(patient);
         } catch (Exception e) {
             throw new CreateException(e.getMessage());
@@ -99,5 +132,16 @@ public class EJBPatientManager implements PatientInterface {
         } catch (Exception e) {
             throw new PatientException(e.getMessage());
         }
+    }
+
+    private byte[] fileReader(String path) {
+        byte ret[] = null;
+        File file = new File(path);
+        try {
+            ret = Files.readAllBytes(file.toPath());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return ret;
     }
 }

@@ -28,7 +28,7 @@ public interface PsychologistInterface {
 
     public List<Psychologist> findAllPsychologists() throws PsychologistException;  
 
-    public List<Psychologist> findPsychologistsByEmail(String email) throws PsychologistException;    
+    //public List<Psychologist> findPsychologistsByEmail(String email) throws PsychologistException;    
     
     public void sendRecoveryEmail(Psychologist psychologist) throws PsychologistException;
     

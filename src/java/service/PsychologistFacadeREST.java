@@ -94,7 +94,7 @@ public class PsychologistFacadeREST {
         }
         return users;
     }
-
+/*
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public List<Psychologist> findPsychologistsByEmail(String emailIntro) {
@@ -106,5 +106,5 @@ public class PsychologistFacadeREST {
             throw new InternalServerErrorException(ex.getMessage());
         }
         return users;
-    }
+    }*/
 }
