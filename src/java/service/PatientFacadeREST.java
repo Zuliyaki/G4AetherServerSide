@@ -41,6 +41,7 @@ public class PatientFacadeREST {
     @POST
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void createPatient(Patient entity) {
+        LOGGER.info(entity.getDni());
         try {
             patientEJB.createPatient(entity);
         } catch (CreateException ex) {

@@ -12,17 +12,27 @@ import exceptions.UpdateException;
 import exceptions.PatientException;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.security.InvalidKeyException;
 import java.security.KeyFactory;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
+import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import service.PatientFacadeREST;
 
 /**
  *
@@ -33,38 +43,59 @@ public class EJBPatientManager implements PatientInterface {
 
     @PersistenceContext(unitName = "G4AetherPU")
     private EntityManager entityManager;
+    private static final Logger LOGGER = Logger.getLogger(EJBPatientManager.class.getName());
 
     @Override
     public void createPatient(Patient patient) throws CreateException {
+        MessageDigest messageDigest = null;
+        byte[] decodedMessage = null;
+        String passwordResumen;
+
+        byte fileKey[] = fileReader("//Server//PrivateKeyServidor.key");
+
+        KeyFactory keyFactory = null;
         try {
-            MessageDigest messageDigest;
-            String passwordResumen;
-            byte[] decodedMessage = null;
+            keyFactory = KeyFactory.getInstance("RSA");
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(EJBPatientManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        PKCS8EncodedKeySpec PKCS8EncodedKeySpec = new PKCS8EncodedKeySpec(fileKey);
+        PrivateKey privateKey = null;
+        try {
+            privateKey = keyFactory.generatePrivate(PKCS8EncodedKeySpec);
+        } catch (InvalidKeySpecException ex) {
+            Logger.getLogger(EJBPatientManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
-            //Decrypt
-            byte fileKey[] = fileReader("/Server/PrivateKeyServidor.key");
-            KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-            PKCS8EncodedKeySpec pKCS8EncodedKeySpec = new PKCS8EncodedKeySpec(fileKey);
-            PrivateKey privateKey = keyFactory.generatePrivate(pKCS8EncodedKeySpec);
-
-            Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
+        Cipher cipher = null;
+        try {
+            cipher = Cipher.getInstance("RSA/ECB/NoPadding");
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(EJBPatientManager.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSuchPaddingException ex) {
+            Logger.getLogger(EJBPatientManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
             cipher.init(Cipher.DECRYPT_MODE, privateKey);
-            byte password[] = patient.getPassword().getBytes();
-            decodedMessage = cipher.doFinal(password);
+        } catch (InvalidKeyException ex) {
+            Logger.getLogger(EJBPatientManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
+        try {
             //Hash
             messageDigest = MessageDigest.getInstance("SHA");
-            byte dataBytes[] = decodedMessage;
-            messageDigest.update(dataBytes);
-            byte newPasswordResumen[] = messageDigest.digest();
-            passwordResumen = new String(newPasswordResumen);
-
-            patient.setPassword(passwordResumen);
-
-            entityManager.persist(patient);
-        } catch (Exception e) {
-            throw new CreateException(e.getMessage());
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(EJBPatientManager.class.getName()).log(Level.SEVERE, null, ex);
         }
+        byte dataBytes[] = decodedMessage;
+        messageDigest.update(dataBytes);
+        byte newPasswordResumen[] = messageDigest.digest();
+        passwordResumen = new String(newPasswordResumen);
+
+        patient.setPassword(passwordResumen);
+
+        entityManager.persist(patient);
+
     }
 
     @Override
