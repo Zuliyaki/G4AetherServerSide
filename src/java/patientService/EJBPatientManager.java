@@ -42,7 +42,7 @@ public class EJBPatientManager implements PatientInterface {
             byte[] decodedMessage = null;
 
             //Decrypt
-            byte fileKey[] = fileReader(".\\Servidor\\PrivateKeyServidor.key");
+            byte fileKey[] = fileReader("/Server/PrivateKeyServidor.key");
             KeyFactory keyFactory = KeyFactory.getInstance("RSA");
             PKCS8EncodedKeySpec pKCS8EncodedKeySpec = new PKCS8EncodedKeySpec(fileKey);
             PrivateKey privateKey = keyFactory.generatePrivate(pKCS8EncodedKeySpec);
