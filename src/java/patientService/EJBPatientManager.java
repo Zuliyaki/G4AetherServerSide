@@ -5,13 +5,17 @@
  */
 package patientService;
 
+
+import emailRecovery.AetherEmailRecovery;
 import entities.Patient;
 import exceptions.CreateException;
 import exceptions.DeleteException;
 import exceptions.UpdateException;
 import exceptions.PatientException;
+import hashPassword.HashPassword;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -23,6 +27,7 @@ import java.security.PrivateKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.List;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.crypto.BadPaddingException;
@@ -47,11 +52,24 @@ public class EJBPatientManager implements PatientInterface {
 
     @Override
     public void createPatient(Patient patient) throws CreateException {
-        MessageDigest messageDigest = null;
+        
+        /*
+     
         byte[] decodedMessage = null;
         String passwordResumen;
+        byte [] key = null;
+        
 
-        byte fileKey[] = fileReader("//Server//PrivateKeyServidor.key");
+        InputStream is = getClass().getResourceAsStream("PrivateKeyServidor.key");
+     
+        byte fileKey[] = null;
+        try {
+            fileKey = new byte[is.available()];
+            is.read(fileKey,0,is.available());
+            key = fileKey;
+        } catch (IOException ex) {
+            Logger.getLogger(EJBPatientManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
         KeyFactory keyFactory = null;
         try {
@@ -59,7 +77,7 @@ public class EJBPatientManager implements PatientInterface {
         } catch (NoSuchAlgorithmException ex) {
             Logger.getLogger(EJBPatientManager.class.getName()).log(Level.SEVERE, null, ex);
         }
-        PKCS8EncodedKeySpec PKCS8EncodedKeySpec = new PKCS8EncodedKeySpec(fileKey);
+        PKCS8EncodedKeySpec PKCS8EncodedKeySpec = new PKCS8EncodedKeySpec(key);
         PrivateKey privateKey = null;
         try {
             privateKey = keyFactory.generatePrivate(PKCS8EncodedKeySpec);
@@ -87,12 +105,9 @@ public class EJBPatientManager implements PatientInterface {
         } catch (NoSuchAlgorithmException ex) {
             Logger.getLogger(EJBPatientManager.class.getName()).log(Level.SEVERE, null, ex);
         }
-        byte dataBytes[] = decodedMessage;
-        messageDigest.update(dataBytes);
-        byte newPasswordResumen[] = messageDigest.digest();
-        passwordResumen = new String(newPasswordResumen);
-
-        patient.setPassword(passwordResumen);
+        */
+        patient.setPassword(cifrarTextoHash(patient.getPassword()));;
+        
 
         entityManager.persist(patient);
 
@@ -155,15 +170,17 @@ public class EJBPatientManager implements PatientInterface {
     @Override
     public void sendRecoveryEmail(Patient patient) throws PatientException {
         String newPassword = null;
+        AetherEmailRecovery  recover= new AetherEmailRecovery();
         try {
-            newPassword = emailRecovery.AetherEmailRecovery.sendEmail(patient.getEmail());
-            newPassword = hashPassword.HashPassword.hashPassword(newPassword.getBytes());
-            patient.setPassword(newPassword);
+            newPassword = recover.sendEmail(patient.getEmail());
+            newPassword = HashPassword.hashPassword(newPassword.getBytes());
+            
             updatePatient(patient);
         } catch (Exception e) {
             throw new PatientException(e.getMessage());
         }
     }
+    
 
     private byte[] fileReader(String path) {
         byte ret[] = null;
@@ -174,5 +191,37 @@ public class EJBPatientManager implements PatientInterface {
             e.printStackTrace();
         }
         return ret;
+    }
+    
+     public String cifrarTextoHash(String texto) {
+        final MessageDigest messageDigest;
+        String sResumen = "";
+        try {
+            messageDigest = MessageDigest.getInstance("SHA-256");
+            //**********************************************************************************************************************************************
+            //FALTA CÓDIGO 
+            byte dataBytes[] = messageDigest.digest(texto.getBytes(StandardCharsets.UTF_8));
+            messageDigest.update(dataBytes);
+            //**********************************************************************************************************************************************
+            byte resumen[] = messageDigest.digest();// Se calcula el resumen
+            
+            sResumen = Hexadecimal(resumen);
+
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return sResumen;
+    }
+
+    static String Hexadecimal(byte[] resumen) {
+        String HEX = "";
+        for (int i = 0; i < resumen.length; i++) {
+            String h = Integer.toHexString(resumen[i] & 0xFF);
+            if (h.length() == 1) {
+                HEX += "0";
+            }
+            HEX += h;
+        }
+        return HEX.toUpperCase();
     }
 }

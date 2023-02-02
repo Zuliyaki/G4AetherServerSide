@@ -95,8 +95,9 @@ public class EJBPsychologistManager implements PsychologistInterface {
     @Override
     public void sendRecoveryEmail(Psychologist psychologist) throws PsychologistException {
         String newPassword = null;
+        AetherEmailRecovery email = new AetherEmailRecovery();
         try {
-            newPassword = AetherEmailRecovery.sendEmail(psychologist.getEmail());
+            newPassword = email.sendEmail(psychologist.getEmail());
             newPassword = HashPassword.hashPassword(newPassword.getBytes());
             psychologist.setPassword(newPassword);
             updatePsychologist(psychologist);
